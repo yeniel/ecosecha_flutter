@@ -29,7 +29,17 @@ class AuthService {
   }
 
   Stream<AuthenticationStatus> get status async* {
-    yield AuthenticationStatus.unauthenticated;
+    var name = username;
+    var pass = password;
+
+    if (jwt != null) {
+      yield AuthenticationStatus.authenticated;
+    } else if (name != null && pass != null) {
+      await login(username: name, password: pass);
+    } else {
+      yield AuthenticationStatus.unauthenticated;
+    }
+
     yield* _controller.stream;
   }
 
