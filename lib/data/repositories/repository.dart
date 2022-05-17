@@ -1,16 +1,21 @@
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
-import 'package:injectable/injectable.dart';
 
-@Injectable()
 class Repository {
   Repository({required this.apiClient, required this.authService});
 
   ApiClient apiClient;
   AuthService authService;
   UserDto? _userDto;
+  OrderDto? _orderDto;
 
   User? get user => _userDto?.toModel();
+
+  Order? get order {
+    _orderDto?.items.removeWhere((element) => element.id == 0);
+
+    return _orderDto?.toModel();
+  }
 
   Future<void> fetchAll() async {
     Map<String, String> body;
@@ -29,10 +34,9 @@ class Repository {
       var json = await apiClient.post(path: 'all', body: body);
 
       _userDto = UserDto.fromJson(json['mdoConsumidor']);
+      _orderDto = OrderDto.fromJson(json['mdoPedidosExtras']);
     }
 
     return Future.value(null);
   }
-
-
 }

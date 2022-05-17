@@ -1,0 +1,9 @@
+{
+  "loginHead": "Login",
+  "loginBody": "Utiliza el usuario y contraseña que recibiste en el email de Ecosecha",
+  "user": "user",
+  "invalidUser": "invalid username",
+  "password": "password",
+  "invalidPassword": "invalid password",
+  "login": "login"
+}

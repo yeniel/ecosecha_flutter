@@ -29,10 +29,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
 
   cupertino_icons: ^1.0.2
-  get_it: ^7.2.0
-  injectable: ^1.5.3
   flutter_bloc: ^8.0.1
   auto_route: ^4.0.0
   http: ^0.13.4
@@ -65,6 +66,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

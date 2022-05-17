@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:http/http.dart' as http;
-import 'package:injectable/injectable.dart';
 
-@Injectable(as: ApiClient)
 class HttpApiClient implements ApiClient {
   final String _host = 'http://46.26.119.128:8081/';
   final String _basePath = 'WebServicesGneisServer/rest/';

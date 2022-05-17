@@ -1,10 +1,14 @@
 part of 'order_bloc.dart';
 
-abstract class OrderState extends Equatable {
-  const OrderState();
-}
+class OrderState extends Equatable {
+  OrderState({this.order = Order.empty});
 
-class OrderInitial extends OrderState {
+  final Order order;
+
+  OrderState copyWith({Order? order}) {
+    return OrderState(order: order ?? Order.empty);
+  }
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [order];
 }

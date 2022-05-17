@@ -6,8 +6,8 @@ class User extends Equatable {
   final int id;
   final String? name;
 
+  static const empty = User(id: 0);
+
   @override
   List<Object> get props => [id];
-
-  static const empty = User(id: 0);
 }

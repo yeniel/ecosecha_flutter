@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
-import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-@Injectable()
 class AuthService {
   AuthService({required this.apiClient}) {
     _initSharedPreferences();
@@ -83,14 +81,34 @@ class AuthService {
     var body = {'usuario': username, 'password': password};
 
     return apiClient.post(path: 'loginuser', body: body).then((json) {
-      _jwtDto = JwtDto.fromJson(json);
-      _username = username;
-      _password = password;
+      _saveJwt(json);
+      _saveUsername(username);
+      _savePassword(password);
       _controller.add(AuthenticationStatus.authenticated);
     });
   }
 
   void logout() {
     _controller.add(AuthenticationStatus.unauthenticated);
+  }
+
+  void _saveJwt(json) {
+    _jwtDto = JwtDto.fromJson(json);
+
+    var jwtValue = _jwtDto?.value;
+
+    if (jwtValue != null) {
+      _prefs?.setString(jwtKey, jwtValue);
+    }
+  }
+
+  void _saveUsername(username) {
+    _username = username;
+    _prefs?.setString(usernameKey, username);
+  }
+
+  void _savePassword(password) {
+    _password = password;
+    _prefs?.setString(passwordKey, password);
   }
 }

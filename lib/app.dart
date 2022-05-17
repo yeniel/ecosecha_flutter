@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'data/data.dart';
 import 'domain/domain.dart';
@@ -9,19 +11,16 @@ import 'presentation/login/login.dart';
 import 'presentation/splash/splash.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key, required this.authService, required this.repository}) : super(key: key);
-
-  final AuthService authService;
-  final Repository repository;
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authService,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(authService: authService, repository: repository),
-        child: AppView(),
+    return BlocProvider(
+      create: (_) => AuthenticationBloc(
+        authService: context.read<AuthService>(),
+        repository: context.read<Repository>(),
       ),
+      child: AppView(),
     );
   }
 }
@@ -43,6 +42,16 @@ class _AppViewState extends State<AppView> {
         primarySwatch: Colors.blue,
       ),
       navigatorKey: _navigatorKey,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''),
+        const Locale('es', ''),
+      ],
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
