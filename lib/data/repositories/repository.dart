@@ -1,27 +1,30 @@
+import 'dart:async';
+
 import 'package:ecosecha_flutter/data/data.dart';
+import 'package:ecosecha_flutter/data/repositories/api_errors.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 
 class Repository {
-  Repository({required this.apiClient, required this.authService});
+  Repository({required this.apiClient, required this.authRepository});
 
   ApiClient apiClient;
-  AuthService authService;
+  AuthRepository authRepository;
   UserDto? _userDto;
   OrderDto? _orderDto;
 
-  User? get user => _userDto?.toModel();
+  User? get user => Mappers.toUser(userDto: _userDto);
 
   Order? get order {
     _orderDto?.items.removeWhere((element) => element.id == 0);
 
-    return _orderDto?.toModel();
+    return Mappers.toOrder(orderDto: _orderDto, userDto: _userDto);
   }
 
   Future<void> fetchAll() async {
     Map<String, String> body;
-    var jwt = authService.jwt?.value;
-    var username = authService.username;
-    var password = authService.password;
+    var jwt = authRepository.jwt?.value;
+    var username = authRepository.username;
+    var password = authRepository.password;
 
     if (jwt != null && username != null && password != null) {
       body = {
@@ -31,10 +34,15 @@ class Repository {
         'token': jwt,
       };
 
-      var json = await apiClient.post(path: 'all', body: body);
-
-      _userDto = UserDto.fromJson(json['mdoConsumidor']);
-      _orderDto = OrderDto.fromJson(json['mdoPedidosExtras']);
+      return apiClient.post(path: 'all', body: body).then((json) {
+        _userDto = UserDto.fromJson(json['mdoConsumidor']);
+        _orderDto = OrderDto.fromJson(json['mdoPedidosExtras']);
+      }).catchError((error) async {
+        if (error is ExpiredToken) {
+          await authRepository.renewToken();
+          unawaited(fetchAll());
+        }
+      });
     }
 
     return Future.value(null);

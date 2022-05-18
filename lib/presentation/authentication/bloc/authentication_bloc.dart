@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:ecosecha_flutter/data/repositories/auth/auth_service.dart';
+import 'package:ecosecha_flutter/data/repositories/auth_repository.dart';
 import 'package:ecosecha_flutter/data/repositories/repository.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:equatable/equatable.dart';
@@ -11,26 +11,26 @@ part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({required AuthService authService, required Repository repository})
-      : _authService = authService,
+  AuthenticationBloc({required AuthRepository authRepository, required Repository repository})
+      : _authRepository = authRepository,
         _repository = repository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
 
-    _authenticationStatusSubscription = _authService.status.listen(
+    _authenticationStatusSubscription = _authRepository.status.listen(
       (status) => add(AuthenticationStatusChanged(status)),
     );
   }
 
-  final AuthService _authService;
+  final AuthRepository _authRepository;
   final Repository _repository;
   late StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
 
   @override
   Future<void> close() {
     _authenticationStatusSubscription.cancel();
-    _authService.dispose();
+    _authRepository.dispose();
     return super.close();
   }
 
@@ -54,7 +54,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     AuthenticationLogoutRequested event,
     Emitter<AuthenticationState> emit,
   ) {
-    _authService.logout();
+    _authRepository.logout();
   }
 
   Future<User?> _tryGetUser() async {

@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:ecosecha_flutter/data/repositories/auth/auth_service.dart';
+import 'package:ecosecha_flutter/data/repositories/auth_repository.dart';
 import 'package:ecosecha_flutter/presentation//login/login.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
@@ -9,15 +9,15 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
-    required AuthService authService,
-  })  : _authService = authService,
+    required AuthRepository authRepository,
+  })  : _authRepository = authRepository,
         super(const LoginState()) {
     on<LoginUsernameChanged>(_onUsernameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onSubmitted);
   }
 
-  final AuthService _authService;
+  final AuthRepository _authRepository;
 
   void _onUsernameChanged(
     LoginUsernameChanged event,
@@ -48,7 +48,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       try {
-        await _authService.login(
+        await _authRepository.login(
           username: state.username.value,
           password: state.password.value,
         );

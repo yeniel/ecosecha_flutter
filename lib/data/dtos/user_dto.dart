@@ -1,11 +1,16 @@
-import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_dto.g.dart';
 
 @JsonSerializable()
 class UserDto {
-  const UserDto({required this.id, required this.name});
+  const UserDto({
+    required this.id,
+    required this.name,
+    required this.emails,
+    required this.deliveryGroup,
+    required this.warningMessage,
+  });
 
   factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
 
@@ -15,9 +20,14 @@ class UserDto {
   @JsonKey(name: 'nombre')
   final String name;
 
-  Map<String, dynamic> toJson() => _$UserDtoToJson(this);
+  @JsonKey(name: 'cuentasCorreo')
+  final List<String> emails;
 
-  User toModel() {
-    return User(id: id, name: name);
-  }
+  @JsonKey(name: 'nombreGrupo')
+  final String deliveryGroup;
+
+  @JsonKey(name: 'validacion')
+  final String warningMessage;
+
+  Map<String, dynamic> toJson() => _$UserDtoToJson(this);
 }

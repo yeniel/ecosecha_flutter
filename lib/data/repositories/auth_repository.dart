@@ -4,8 +4,8 @@ import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthService {
-  AuthService({required this.apiClient}) {
+class AuthRepository {
+  AuthRepository({required this.apiClient}) {
     _initSharedPreferences();
   }
 
@@ -86,6 +86,14 @@ class AuthService {
       _savePassword(password);
       _controller.add(AuthenticationStatus.authenticated);
     });
+  }
+
+  Future<void> renewToken() async {
+    if (username != null && password != null) {
+      await login(username: username!, password: password!);
+    }
+
+    return Future.error({});
   }
 
   void logout() {

@@ -1,4 +1,3 @@
-import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'order_item_dto.g.dart';
@@ -22,8 +21,4 @@ class OrderItemDto {
 
   @JsonKey(name: 'precio', defaultValue: 0.0)
   final double price;
-
-  OrderItem toModel() {
-    return OrderItem(id: id, name: name, quantity: quantity.toInt(), price: price);
-  }
 }

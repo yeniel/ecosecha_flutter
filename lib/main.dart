@@ -13,13 +13,13 @@ void main() async {
       await SharedPreferences.getInstance();
 
       var apiClient = HttpApiClient();
-      var authService = AuthService(apiClient: apiClient);
-      var repository = Repository(apiClient: apiClient, authService: authService);
+      var authRepository = AuthRepository(apiClient: apiClient);
+      var repository = Repository(apiClient: apiClient, authRepository: authRepository);
 
       runApp(
         MultiRepositoryProvider(
           providers: [
-            RepositoryProvider(create: (context) => authService),
+            RepositoryProvider(create: (context) => authRepository),
             RepositoryProvider(create: (context) => repository),
           ],
           child: const App(),
