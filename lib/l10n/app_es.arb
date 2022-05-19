@@ -10,5 +10,9 @@
   "order": "pedido",
   "order_delivery_address_label": "Entregar en ",
   "order_delivery_date_label": "El día ",
-  "order_quantity_label": " ud."
+  "order_quantity_label": " ud.",
+  "order_price_per_unit_label": " /ud.",
+  "total": "total ",
+  "add": "añadir",
+  "baskets": "cestas"
 }

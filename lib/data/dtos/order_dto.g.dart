@@ -7,15 +7,13 @@ part of 'order_dto.dart';
 // **************************************************************************
 
 OrderDto _$OrderDtoFromJson(Map<String, dynamic> json) => OrderDto(
-      items: (json['articulos'] as List<dynamic>)
-          .map((e) => OrderItemDto.fromJson(e as Map<String, dynamic>))
+      products: (json['articulos'] as List<dynamic>)
+          .map((e) => OrderProductDto.fromJson(e as Map<String, dynamic>))
           .toList(),
       date: json['fecha'] as String,
-      basket: json['cesta'] as String,
     );
 
 Map<String, dynamic> _$OrderDtoToJson(OrderDto instance) => <String, dynamic>{
-      'articulos': instance.items,
+      'articulos': instance.products,
       'fecha': instance.date,
-      'cesta': instance.basket,
     };

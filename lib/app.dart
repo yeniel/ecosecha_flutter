@@ -39,8 +39,23 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
+      // theme: ThemeData(
+      //   colorScheme: const ColorScheme(
+      //     brightness: Brightness.light,
+      //     primary: Constants.acelga,
+      //     onPrimary: Colors.white,
+      //     secondary: Constants.acelga,
+      //     onSecondary: Colors.white,
+      //     error: Constants.rabano,
+      //     onError: Colors.white,
+      //     background: Colors,
+      //     onBackground: onBackground,
+      //     surface: surface,
+      //     onSurface: onSurface,
+      //   ),
+      // ),
       navigatorKey: _navigatorKey,
       localizationsDelegates: [
         AppLocalizations.delegate,

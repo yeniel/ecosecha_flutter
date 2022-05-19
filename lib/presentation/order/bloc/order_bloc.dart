@@ -19,6 +19,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   void _onOrderRequested(OrderRequestedEvent event, Emitter<OrderState> emit) {
     var order = _repository.order;
 
-    emit(state.copyWith(order: order));
+    if (order != null) {
+      var totalPrice =
+          order.products.map((e) => e.quantity * e.product.price).reduce((value, element) => value + element);
+
+      emit(state.copyWith(order: order, totalPrice: totalPrice));
+    }
   }
 }

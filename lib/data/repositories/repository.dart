@@ -11,13 +11,30 @@ class Repository {
   AuthRepository authRepository;
   UserDto? _userDto;
   OrderDto? _orderDto;
+  List<ProductDto>? _basketDtoList;
+  List<ProductDto>? _extraDtoList;
+  List<ProductDto>? _productDtoList;
 
   User? get user => Mappers.toUser(userDto: _userDto);
 
   Order? get order {
-    _orderDto?.items.removeWhere((element) => element.id == 0);
+    _orderDto?.products.removeWhere((element) => element.id == 0);
 
-    return Mappers.toOrder(orderDto: _orderDto, userDto: _userDto);
+    return Mappers.toOrder(
+      orderDto: _orderDto,
+      userDto: _userDto,
+      productDtoList: _productDtoList,
+    );
+  }
+
+  List<Product>? get products => (baskets ?? []) + (extras ?? []);
+
+  List<Product>? get baskets {
+    return Mappers.toProductList(productDtoList: _basketDtoList);
+  }
+
+  List<Product>? get extras {
+    return Mappers.toProductList(productDtoList: _extraDtoList);
   }
 
   Future<void> fetchAll() async {
@@ -37,6 +54,24 @@ class Repository {
       return apiClient.post(path: 'all', body: body).then((json) {
         _userDto = UserDto.fromJson(json['mdoConsumidor']);
         _orderDto = OrderDto.fromJson(json['mdoPedidosExtras']);
+
+        var basketsJson = json['mdoProductosCambios'];
+
+        if (basketsJson != null && basketsJson is List<dynamic>) {
+          _basketDtoList = basketsJson.map((e) {
+            return ProductDto.fromJson(e);
+          }).toList();
+        }
+
+        var extrasJson = json['mdoProductosExtras'];
+
+        if (extrasJson != null && extrasJson is List<dynamic>) {
+          _extraDtoList = extrasJson.map((e) {
+            return ProductDto.fromJson(e);
+          }).toList();
+        }
+
+        _productDtoList = (_basketDtoList ?? []) + (_extraDtoList ?? []);
       }).catchError((error) async {
         if (error is ExpiredToken) {
           await authRepository.renewToken();

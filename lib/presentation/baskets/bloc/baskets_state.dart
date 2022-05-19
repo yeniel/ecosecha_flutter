@@ -1,10 +1,14 @@
 part of 'baskets_bloc.dart';
 
-abstract class BasketsState extends Equatable {
-  const BasketsState();
-}
+class BasketsState extends Equatable {
+  BasketsState({this.baskets = const []});
 
-class BasketsInitial extends BasketsState {
+  final List<Product> baskets;
+
+  BasketsState copyWith({List<Product>? baskets}) {
+    return BasketsState(baskets: baskets ?? []);
+  }
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [baskets];
 }

@@ -2,14 +2,14 @@ import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class Order extends Equatable {
-  const Order({required this.items, required this.date, required this.deliveryGroup});
+  const Order({required this.products, required this.date, required this.deliveryGroup});
 
-  final List<OrderItem> items;
+  final List<OrderProduct> products;
   final String date;
   final String deliveryGroup;
 
-  static const empty = Order(items: [], date: '', deliveryGroup: '');
+  static const empty = Order(products: [], date: '', deliveryGroup: '');
 
   @override
-  List<Object> get props => [items, date, deliveryGroup];
+  List<Object> get props => [products, date, deliveryGroup];
 }
