@@ -10,7 +10,7 @@ part 'order_state.dart';
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
   OrderBloc({required Repository repository})
       : _repository = repository,
-        super(OrderState(order: Order.empty)) {
+        super(OrderState()) {
     on<OrderRequestedEvent>(_onOrderRequested);
   }
 

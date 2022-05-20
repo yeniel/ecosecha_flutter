@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:ecosecha_flutter/data/data.dart';
-import 'package:ecosecha_flutter/data/repositories/api_errors.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
 

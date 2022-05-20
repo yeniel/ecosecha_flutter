@@ -1,3 +1,12 @@
-- El logo está en la web
+- Actualizar fetchAll. Implementar un tiempo de cache o un pull to refresh, porque puede haber cambiado desde la web
+y no solo desde dentro de la app, en este caso si llamaríamos de nuevo al fetchAll directamente
+- Imagen por defecto cuando el producto no la tenga por ejemplo el tomate en rama id:17841
 - AppBars
 - Currency
+- Notificaciones
+  - Si no ha cambiado la cesta por defecto
+  - Plazo para hacer pedido
+- Buscar en Tap de Extras
+- Buscar global
+- Registro de nuevos usuarios
+- Onboarding

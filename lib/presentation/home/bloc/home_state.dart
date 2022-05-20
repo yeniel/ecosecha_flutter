@@ -1,6 +1,6 @@
 part of 'home_bloc.dart';
 
-enum HomeTab { order, baskets, extras, account }
+enum HomeTab { order, baskets, products, account }
 
 abstract class HomeState extends Equatable {
   const HomeState({

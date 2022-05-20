@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
 import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:ecosecha_flutter/presentation/widgets/elevated_icon_button.dart';
+import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -108,21 +108,14 @@ class OrderProductWidget extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 64,
-                  child: CachedNetworkImage(
-                    imageUrl: orderProduct.product.image,
-                    placeholder: (context, url) => const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                  ),
-                ),
+                ProductImage.small(imageUrl: orderProduct.product.image),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        orderProduct.product.description,
+                        orderProduct.product.name,
                         style: textTheme.bodyText1,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,

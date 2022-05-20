@@ -2,7 +2,7 @@
     package="com.yeniellandestoy.ecosecha.ecosecha_flutter">
    <application
         android:label="ecosecha_flutter"
-        android:name="${applicationName}"
+        android:name="Ecosecha"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

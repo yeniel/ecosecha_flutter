@@ -10,7 +10,7 @@ part 'baskets_state.dart';
 class BasketsBloc extends Bloc<BasketsEvent, BasketsState> {
   BasketsBloc({required Repository repository})
       : _repository = repository,
-        super(BasketsState(baskets: [])) {
+        super(BasketsState()) {
     on<BasketsRequestedEvent>(_onBasketsRequested);
   }
 

@@ -6,7 +6,7 @@ part 'product_dto.g.dart';
 class ProductDto {
   const ProductDto({
     required this.id,
-    required this.description,
+    required this.name,
     required this.price,
     required this.origin,
     required this.image,
@@ -21,7 +21,7 @@ class ProductDto {
   final int id;
 
   @JsonKey(name: 'descripcion')
-  final String description;
+  final String name;
 
   @JsonKey(name: 'precio')
   final double price;

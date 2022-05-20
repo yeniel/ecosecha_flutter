@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:ecosecha_flutter/data/data.dart';
-import 'package:ecosecha_flutter/data/repositories/api_errors.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 
 class Repository {
@@ -14,27 +13,48 @@ class Repository {
   List<ProductDto>? _basketDtoList;
   List<ProductDto>? _extraDtoList;
   List<ProductDto>? _productDtoList;
+  List<FamilyDto>? _familyDtoList;
 
   User? get user => Mappers.toUser(userDto: _userDto);
 
   Order? get order {
-    _orderDto?.products.removeWhere((element) => element.id == 0);
+    if (_orderDto != null && _userDto != null && _productDtoList != null) {
+      _orderDto!.products.removeWhere((element) => element.id == 0);
 
-    return Mappers.toOrder(
-      orderDto: _orderDto,
-      userDto: _userDto,
-      productDtoList: _productDtoList,
-    );
+      return Mappers.toOrder(
+        orderDto: _orderDto!,
+        userDto: _userDto!,
+        productDtoList: _productDtoList!,
+      );
+    }
+
+    return null;
   }
 
-  List<Product>? get products => (baskets ?? []) + (extras ?? []);
+  List<Product> get products => (baskets ?? []) + (extras ?? []);
 
   List<Product>? get baskets {
-    return Mappers.toProductList(productDtoList: _basketDtoList);
+    if (_basketDtoList != null) {
+      return Mappers.toProductList(productDtoList: _basketDtoList!);
+    }
+
+    return null;
   }
 
   List<Product>? get extras {
-    return Mappers.toProductList(productDtoList: _extraDtoList);
+    if (_extraDtoList != null) {
+      return Mappers.toProductList(productDtoList: _extraDtoList!);
+    }
+
+    return null;
+  }
+
+  List<ProductCategory>? get categoryMenu {
+    if (_familyDtoList != null) {
+      return Mappers.toCategoryMenuItemList(familyDtoList: _familyDtoList!);
+    }
+
+    return null;
   }
 
   Future<void> fetchAll() async {
@@ -71,6 +91,14 @@ class Repository {
           }).toList();
         }
 
+        var familiesJson = json['mdoFamilias'];
+
+        if (familiesJson != null && familiesJson is List<dynamic>) {
+          _familyDtoList = familiesJson.map((e) {
+            return FamilyDto.fromJson(e);
+          }).toList();
+        }
+
         _productDtoList = (_basketDtoList ?? []) + (_extraDtoList ?? []);
       }).catchError((error) async {
         if (error is ExpiredToken) {
@@ -81,5 +109,9 @@ class Repository {
     }
 
     return Future.value(null);
+  }
+
+  List<Product> getProductsOfCategory(ProductCategory category) {
+    return extras?.where((product) => product.categoryId == category.id).toList() ?? [];
   }
 }
