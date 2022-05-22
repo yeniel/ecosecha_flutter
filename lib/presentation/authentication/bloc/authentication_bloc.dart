@@ -43,8 +43,12 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
-        return emit(
-            user != null ? AuthenticationState.authenticated(user) : const AuthenticationState.unauthenticated());
+
+        if (user != null) {
+          return emit(AuthenticationState.authenticated(user));
+        } else {
+          return emit(const AuthenticationState.unauthenticated());
+        }
       default:
         return emit(const AuthenticationState.unknown());
     }

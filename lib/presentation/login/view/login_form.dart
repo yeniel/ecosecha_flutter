@@ -1,4 +1,5 @@
 import 'package:ecosecha_flutter/presentation/login/login.dart';
+import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -51,8 +52,7 @@ class _UsernameInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           key: const Key('loginForm_usernameInput_textField'),
-          onChanged: (username) =>
-              context.read<LoginBloc>().add(LoginUsernameChanged(username)),
+          onChanged: (username) => context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           decoration: InputDecoration(
             labelText: S.user,
             errorText: state.username.invalid ? S.invalidUser : null,
@@ -73,8 +73,7 @@ class _PasswordInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           key: const Key('loginForm_passwordInput_textField'),
-          onChanged: (password) =>
-              context.read<LoginBloc>().add(LoginPasswordChanged(password)),
+          onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
           obscureText: true,
           decoration: InputDecoration(
             labelText: S.password,
@@ -94,17 +93,19 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
-            ? const Center(child: CircularProgressIndicator())
-            : ElevatedButton(
-                key: const Key('loginForm_continue_raisedButton'),
-                child: Text(S.login),
-                onPressed: state.status.isValidated
-                    ? () {
-                        context.read<LoginBloc>().add(const LoginSubmitted());
-                      }
-                    : null,
-              );
+        if (state.status.isSubmissionInProgress || state.status.isSubmissionSuccess) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return ElevatedButton(
+            key: const Key('loginForm_continue_raisedButton'),
+            child: Text(S.login.capitalizeSentence),
+            onPressed: state.status.isValidated
+                ? () {
+                    context.read<LoginBloc>().add(const LoginSubmitted());
+                  }
+                : null,
+          );
+        }
       },
     );
   }
