@@ -16,7 +16,9 @@ class ProductImage extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         placeholder: (context, url) => const CircularProgressIndicator(),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
+        errorWidget: (context, url, error) => Image.asset(
+          'assets/product_default.jpeg',
+        ),
         height: height,
         width: width,
         fit: BoxFit.cover,

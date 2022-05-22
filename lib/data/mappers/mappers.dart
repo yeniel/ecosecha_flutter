@@ -42,9 +42,7 @@ class Mappers {
   static _getProductImageUrl(ProductDto productDto) {
     var imageUrl = 'http://pedidos.ecosecha.org/imagenes/';
 
-    if (productDto.image.isEmpty) {
-      imageUrl = 'http://pedidos.ecosecha.org/img/default.jpg';
-    } else if (productDto.image.startsWith('/')) {
+    if (productDto.image.startsWith('/')) {
       var file = File(productDto.image);
 
       imageUrl += basename(file.path);
