@@ -1,12 +1,18 @@
-- Implementar pull to refresh. https://pub.dev/packages/pull_to_refresh
 - Detalle de cestas
+    - Crear BasketProductDto para el mdoComposicionCesta
+    - Se enlaza por el codigoCatalgo que es el codigo del producto cesta
+    - No se puede poner imagen solo el titulo y la procedencia.
+
+
 - En account puedo poner los datos de soporte
     "telefonoEmpresa": " 914741984",
     "web": " http://www.pedidos.ecosecha.org"
-- Currency
+- Modificar pedido
 - Notificaciones
   - Si no ha cambiado la cesta por defecto
   - Plazo para hacer pedido
+- En account poner configuración de notificaciones
+- Implementar pull to refresh. https://pub.dev/packages/pull_to_refresh
 - Buscar en Tap de Extras
 - Buscar global
 - Registro de nuevos usuarios

@@ -1,6 +1,7 @@
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/presentation/baskets/bloc/baskets_bloc.dart';
 import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
+import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,9 +29,6 @@ class BasketsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
-    var S = AppLocalizations.of(context)!;
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
@@ -42,10 +40,10 @@ class BasketsView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: MediaQuery.of(context).viewPadding.top + 20),
-                  Text(S.baskets.capitalizeSentence, style: textTheme.headline4),
+                  const BasketsHeader(),
                   const SizedBox(height: 8),
                   Expanded(
-                    child: ProductGridView(products: state.baskets),
+                    child: ProductGridView(products: state.products),
                   ),
                 ],
               ),
@@ -53,6 +51,31 @@ class BasketsView extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class BasketsHeader extends StatelessWidget {
+  const BasketsHeader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var S = AppLocalizations.of(context)!;
+
+    return BlocBuilder<BasketsBloc, BasketsState>(
+      builder: (context, state) {
+        var title = S.baskets.capitalizeSentence;
+
+        if (state.selectedBasket != null) {
+          title = state.selectedBasket!.name;
+        }
+
+        return Header(
+          title: title,
+          showBack: state.selectedBasket != null,
+          onBack: () => context.read<BasketsBloc>().add(const BackToBasketsEvent()),
+        );
+      },
     );
   }
 }

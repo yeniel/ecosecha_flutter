@@ -1,7 +1,9 @@
 import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:ecosecha_flutter/presentation/baskets/bloc/baskets_bloc.dart';
 import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductGridView extends StatelessWidget {
@@ -34,39 +36,42 @@ class ProductView extends StatelessWidget {
     var S = AppLocalizations.of(context)!;
     var textTheme = Theme.of(context).textTheme;
 
-    return GridTile(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ProductImage(imageUrl: product.image),
-          const SizedBox(height: 8),
-          Text(
-            product.name,
-            style: textTheme.bodyText1,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 3,
-          ),
-          const Spacer(),
-          Row(
-            children: [
-              Text(
-                '${product.price}€',
-                style: textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(S.order_price_per_unit_label, style: textTheme.bodyText1),
-            ],
-          ),
-          OutlinedButton(
-            onPressed: () => {},
-            child: Text(S.add.capitalizeSentence),
-            style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+    return GestureDetector(
+      child: GridTile(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ProductImage(imageUrl: product.image),
+            const SizedBox(height: 8),
+            Text(
+              product.name,
+              style: textTheme.bodyText1,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+            ),
+            const Spacer(),
+            Row(
+              children: [
+                Text(
+                  '${product.price}€',
+                  style: textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                Text(S.order_price_per_unit_label, style: textTheme.bodyText1),
+              ],
+            ),
+            OutlinedButton(
+              onPressed: () => {},
+              child: Text(S.add.capitalizeSentence),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+      onTap: () => context.read<BasketsBloc>().add(BasketTapEvent(basket: product)),
     );
   }
 }

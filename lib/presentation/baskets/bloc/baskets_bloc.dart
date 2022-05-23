@@ -12,6 +12,8 @@ class BasketsBloc extends Bloc<BasketsEvent, BasketsState> {
       : _repository = repository,
         super(BasketsState()) {
     on<BasketsRequestedEvent>(_onBasketsRequested);
+    on<BasketTapEvent>(_onBasketTapped);
+    on<BackToBasketsEvent>(_onBackToBaskets);
   }
 
   final Repository _repository;
@@ -19,6 +21,18 @@ class BasketsBloc extends Bloc<BasketsEvent, BasketsState> {
   void _onBasketsRequested(BasketsRequestedEvent event, Emitter<BasketsState> emit) {
     var baskets = _repository.baskets;
 
-    emit(state.copyWith(baskets: baskets));
+    emit(state.copyWith(products: baskets));
+  }
+
+  void _onBasketTapped(BasketTapEvent event, Emitter<BasketsState> emit) {
+    var basketProducts = _repository.getProductsOfBasket(event.basket);
+
+    emit(state.copyWith(products: basketProducts));
+  }
+
+  void _onBackToBaskets(BackToBasketsEvent event, Emitter<BasketsState> emit) {
+    var baskets = _repository.baskets;
+
+    emit(state.copyWith(selectedBasket: null, products: baskets));
   }
 }

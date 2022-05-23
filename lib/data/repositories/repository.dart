@@ -114,4 +114,8 @@ class Repository {
   List<Product> getProductsOfCategory(ProductCategory category) {
     return extras?.where((product) => product.categoryId == category.id).toList() ?? [];
   }
+
+  List<Product> getProductsOfBasket(Product basket) {
+    return [];
+  }
 }

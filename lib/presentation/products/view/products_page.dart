@@ -1,7 +1,7 @@
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/products/bloc/products_bloc.dart';
-import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
+import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,7 +69,6 @@ class ProductsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
     var S = AppLocalizations.of(context)!;
 
     return BlocBuilder<ProductsBloc, ProductsState>(
@@ -80,15 +79,10 @@ class ProductsHeader extends StatelessWidget {
           title = state.selectedCategory!.name;
         }
 
-        return Row(
-          children: [
-            if (state.selectedCategory != null)
-              IconButton(
-                onPressed: () => context.read<ProductsBloc>().add(const BackToCategoriesEvent()),
-                icon: const Icon(Icons.arrow_back_ios, size: 32),
-              ),
-            Text(title.capitalizeFirstOfEach, style: textTheme.headline4),
-          ],
+        return Header(
+          title: title,
+          showBack: state.selectedCategory != null,
+          onBack: () => context.read<ProductsBloc>().add(const BackToCategoriesEvent()),
         );
       },
     );
