@@ -1,12 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  const Header({Key? key, required this.title, this.showBack = false, required this.onBack}) : super(key: key);
+  const Header({Key? key, required this.title, this.showBack = false, this.onBack}) : super(key: key);
 
   final String title;
   final bool showBack;
-  final VoidCallback onBack;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,15 @@ class Header extends StatelessWidget {
             onPressed: onBack,
             icon: const Icon(Icons.arrow_back_ios, size: 32),
           ),
-        Text(title.capitalizeFirstOfEach, style: textTheme.headline4),
+        Expanded(
+          child: AutoSizeText(
+            title.capitalizeFirstOfEach,
+            style: textTheme.headline4,
+            minFontSize: 12,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }

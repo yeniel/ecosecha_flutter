@@ -26,6 +26,7 @@ class Mappers {
 
       return Product(
         id: productDto.id,
+        basketId: productDto.basketId,
         name: productDto.name,
         price: productDto.price,
         origin: productDto.origin,
@@ -140,5 +141,16 @@ class Mappers {
       default:
         return 'none';
     }
+  }
+
+  static List<BasketProduct> toBasketProductList({required List<BasketProductDto> basketProductDtoList}) {
+    return basketProductDtoList
+        .map((e) => BasketProduct(
+              quantity: int.parse(e.quantity),
+              basketId: int.parse(e.basketId),
+              name: e.name,
+              origin: e.origin,
+            ))
+        .toList();
   }
 }

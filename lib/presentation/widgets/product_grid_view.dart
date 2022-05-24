@@ -1,9 +1,8 @@
 import 'package:ecosecha_flutter/domain/domain.dart';
-import 'package:ecosecha_flutter/presentation/baskets/bloc/baskets_bloc.dart';
+import 'package:ecosecha_flutter/presentation/basket_product_list/view/basket_product_list_page.dart';
 import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductGridView extends StatelessWidget {
@@ -71,7 +70,11 @@ class ProductView extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () => context.read<BasketsBloc>().add(BasketTapEvent(basket: product)),
+      onTap: () {
+        if (product.type == ProductType.basket) {
+          Navigator.of(context).push(BasketProductListPage.route(basket: product));
+        }
+      }
     );
   }
 }

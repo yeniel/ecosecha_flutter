@@ -29,6 +29,8 @@ class BasketsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var S = AppLocalizations.of(context)!;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
@@ -40,7 +42,7 @@ class BasketsView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: MediaQuery.of(context).viewPadding.top + 20),
-                  const BasketsHeader(),
+                  Header(title: S.baskets.capitalizeSentence),
                   const SizedBox(height: 8),
                   Expanded(
                     child: ProductGridView(products: state.products),
@@ -51,31 +53,6 @@ class BasketsView extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-}
-
-class BasketsHeader extends StatelessWidget {
-  const BasketsHeader({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var S = AppLocalizations.of(context)!;
-
-    return BlocBuilder<BasketsBloc, BasketsState>(
-      builder: (context, state) {
-        var title = S.baskets.capitalizeSentence;
-
-        if (state.selectedBasket != null) {
-          title = state.selectedBasket!.name;
-        }
-
-        return Header(
-          title: title,
-          showBack: state.selectedBasket != null,
-          onBack: () => context.read<BasketsBloc>().add(const BackToBasketsEvent()),
-        );
-      },
     );
   }
 }

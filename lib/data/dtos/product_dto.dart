@@ -6,6 +6,7 @@ part 'product_dto.g.dart';
 class ProductDto {
   const ProductDto({
     required this.id,
+    required this.basketId,
     required this.name,
     required this.price,
     required this.origin,
@@ -19,6 +20,9 @@ class ProductDto {
 
   @JsonKey(name: 'id')
   final int id;
+
+  @JsonKey(name: 'codigo')
+  final String basketId;
 
   @JsonKey(name: 'descripcion')
   final String name;

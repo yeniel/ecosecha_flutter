@@ -1,6 +1,7 @@
 library domain;
 
 export 'models/authentication_status.dart';
+export 'models/basket_product.dart';
 export 'models/order.dart';
 export 'models/order_product.dart';
 export 'models/product.dart';

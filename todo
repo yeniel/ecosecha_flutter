@@ -1,9 +1,5 @@
-- Detalle de cestas
-    - Crear BasketProductDto para el mdoComposicionCesta
-    - Se enlaza por el codigoCatalgo que es el codigo del producto cesta
-    - No se puede poner imagen solo el titulo y la procedencia.
-
-
+- Hacer el ProductPAge como el BasketProductListPage, el detalle de una categoría en un widget aparte
+- Detalle de cestas que estén en el Pedido
 - En account puedo poner los datos de soporte
     "telefonoEmpresa": " 914741984",
     "web": " http://www.pedidos.ecosecha.org"

@@ -3,7 +3,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("-build_runner", nargs='?', const="y", help="Execute command flutter pub run build_runner build")
+parser.add_argument("-build_runner", nargs='?', const="y", help="Execute command flutter pub run build_runner build --delete-conflicting-outputs")
 parser.add_argument("-icons", nargs='?', const="y", help="Execute command flutter pub run flutter_launcher_icons:main")
 parser.add_argument("-clean", nargs='?', const="y", help="Execute command flutter clean")
 
@@ -11,7 +11,7 @@ args = parser.parse_args()
 
 if args.build_runner == "y":
 	print("Running build_runner...")
-	output = exec("flutter pub run build_runner build")
+	output = exec("flutter pub run build_runner build --delete-conflicting-outputs")
 	print(output, flush=True)
 
 if args.icons == "y":

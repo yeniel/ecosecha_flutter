@@ -14,6 +14,7 @@ class Repository {
   List<ProductDto>? _extraDtoList;
   List<ProductDto>? _productDtoList;
   List<FamilyDto>? _familyDtoList;
+  List<BasketProductDto>? _basketProductDtoList;
 
   User? get user => Mappers.toUser(userDto: _userDto);
 
@@ -57,6 +58,20 @@ class Repository {
     return null;
   }
 
+  List<Product> getProductsOfCategory(ProductCategory category) {
+    return extras?.where((product) => product.categoryId == category.id).toList() ?? [];
+  }
+
+  List<BasketProduct>? getProductsOfBasket(Product basket) {
+    var _productDtoList = _basketProductDtoList?.where((element) => element.basketId == basket.basketId).toList();
+
+    if (_productDtoList != null) {
+      return Mappers.toBasketProductList(basketProductDtoList: _productDtoList);
+    }
+
+    return null;
+  }
+
   Future<void> fetchAll() async {
     Map<String, String> body;
     var jwt = authRepository.jwt?.value;
@@ -72,34 +87,13 @@ class Repository {
       };
 
       return apiClient.post(path: 'all', body: body).then((json) {
-        _userDto = UserDto.fromJson(json['mdoConsumidor']);
-        _orderDto = OrderDto.fromJson(json['mdoPedidosExtras']);
-
-        var basketsJson = json['mdoProductosCambios'];
-
-        if (basketsJson != null && basketsJson is List<dynamic>) {
-          _basketDtoList = basketsJson.map((e) {
-            return ProductDto.fromJson(e);
-          }).toList();
-        }
-
-        var extrasJson = json['mdoProductosExtras'];
-
-        if (extrasJson != null && extrasJson is List<dynamic>) {
-          _extraDtoList = extrasJson.map((e) {
-            return ProductDto.fromJson(e);
-          }).toList();
-        }
-
-        var familiesJson = json['mdoFamilias'];
-
-        if (familiesJson != null && familiesJson is List<dynamic>) {
-          _familyDtoList = familiesJson.map((e) {
-            return FamilyDto.fromJson(e);
-          }).toList();
-        }
-
-        _productDtoList = (_basketDtoList ?? []) + (_extraDtoList ?? []);
+        _setUserDto(json);
+        _setOrderDto(json);
+        _setBasketDtoList(json);
+        _setExtraDtoList(json);
+        _setFamilyDtoList(json);
+        _setProductDtoList(json);
+        _setBasketProductDtoList(json);
       }).catchError((error) async {
         if (error is ExpiredToken) {
           await authRepository.renewToken();
@@ -111,11 +105,55 @@ class Repository {
     return Future.value(null);
   }
 
-  List<Product> getProductsOfCategory(ProductCategory category) {
-    return extras?.where((product) => product.categoryId == category.id).toList() ?? [];
+  void _setUserDto(Map<String, dynamic> json) {
+    _userDto = UserDto.fromJson(json['mdoConsumidor']);
   }
 
-  List<Product> getProductsOfBasket(Product basket) {
-    return [];
+  void _setOrderDto(Map<String, dynamic> json) {
+    _orderDto = OrderDto.fromJson(json['mdoPedidosExtras']);
+  }
+
+  void _setBasketDtoList(Map<String, dynamic> json) {
+    var basketsJson = json['mdoProductosCambios'];
+
+    if (basketsJson != null && basketsJson is List<dynamic>) {
+      _basketDtoList = basketsJson.map((e) {
+        return ProductDto.fromJson(e);
+      }).toList();
+    }
+  }
+
+  void _setExtraDtoList(Map<String, dynamic> json) {
+    var extrasJson = json['mdoProductosExtras'];
+
+    if (extrasJson != null && extrasJson is List<dynamic>) {
+      _extraDtoList = extrasJson.map((e) {
+        return ProductDto.fromJson(e);
+      }).toList();
+    }
+  }
+
+  void _setFamilyDtoList(Map<String, dynamic> json) {
+    var familiesJson = json['mdoFamilias'];
+
+    if (familiesJson != null && familiesJson is List<dynamic>) {
+      _familyDtoList = familiesJson.map((e) {
+        return FamilyDto.fromJson(e);
+      }).toList();
+    }
+  }
+
+  void _setProductDtoList(Map<String, dynamic> json) {
+    _productDtoList = (_basketDtoList ?? []) + (_extraDtoList ?? []);
+  }
+
+  void _setBasketProductDtoList(Map<String, dynamic> json) {
+    var basketProductsJson = json['mdoComposicionCesta'];
+
+    if (basketProductsJson != null && basketProductsJson is List<dynamic>) {
+      _basketProductDtoList = basketProductsJson.map((e) {
+        return BasketProductDto.fromJson(e);
+      }).toList();
+    }
   }
 }
