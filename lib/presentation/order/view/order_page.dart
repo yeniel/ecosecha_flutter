@@ -1,5 +1,6 @@
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:ecosecha_flutter/presentation/basket_product_list/view/basket_product_list_page.dart';
 import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
 import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:ecosecha_flutter/presentation/widgets/elevated_icon_button.dart';
@@ -80,12 +81,9 @@ class OrderProductsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          for (var product in products) OrderProductWidget(orderProduct: product),
-        ],
-      ),
+    return ListView.builder(
+      itemCount: products.length,
+      itemBuilder: (BuildContext context, int index) => OrderProductWidget(orderProduct: products[index]),
     );
   }
 }
@@ -100,79 +98,86 @@ class OrderProductWidget extends StatelessWidget {
     var S = AppLocalizations.of(context)!;
     var textTheme = Theme.of(context).textTheme;
 
-    return Container(
-      height: 80,
-      child: Column(
-        children: [
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ProductImage.small(imageUrl: orderProduct.product.image),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        orderProduct.product.name,
-                        style: textTheme.bodyText1,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                      ),
-                      const Spacer(),
-                      Row(
-                        children: [
-                          Text(
-                            '${orderProduct.product.price}€',
-                            style: textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          Text(S.order_price_per_unit_label, style: textTheme.bodyText1),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      orderProduct.quantity.toString() + S.order_quantity_label,
-                      style: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.right,
-                    ),
-                    const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+    return GestureDetector(
+      child: Container(
+        height: 80,
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ProductImage.small(imageUrl: orderProduct.product.image),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 56,
-                          height: 32,
-                          child: ElevatedIconButton(
-                            onPressed: () => {},
-                            icon: Icons.remove,
-                          ),
+                        Text(
+                          orderProduct.product.name,
+                          style: textTheme.bodyText1,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
                         ),
-                        const SizedBox(width: 8),
-                        Container(
-                          width: 56,
-                          height: 32,
-                          child: ElevatedIconButton(
-                            onPressed: () => {},
-                            icon: Icons.add,
-                          ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Text(
+                              '${orderProduct.product.price}€',
+                              style: textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            Text(S.order_price_per_unit_label, style: textTheme.bodyText1),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                )
-              ],
+                  ),
+                  const SizedBox(height: 4),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        orderProduct.quantity.toString() + S.order_quantity_label,
+                        style: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.right,
+                      ),
+                      const Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            width: 56,
+                            height: 32,
+                            child: ElevatedIconButton(
+                              onPressed: () => {},
+                              icon: Icons.remove,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 56,
+                            height: 32,
+                            child: ElevatedIconButton(
+                              onPressed: () => {},
+                              icon: Icons.add,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          const Divider(),
-        ],
+            const Divider(),
+          ],
+        ),
       ),
+      onTap: () {
+        if (orderProduct.product.type == ProductType.basket) {
+          Navigator.of(context).push(BasketProductListPage.route(basket: orderProduct.product));
+        }
+      },
     );
   }
 }
