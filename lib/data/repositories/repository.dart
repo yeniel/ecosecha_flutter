@@ -50,7 +50,7 @@ class Repository {
     return null;
   }
 
-  List<ProductCategory>? get categoryMenu {
+  List<ProductCategory>? get categories {
     if (_familyDtoList != null) {
       return Mappers.toCategoryMenuItemList(familyDtoList: _familyDtoList!);
     }

@@ -24,4 +24,6 @@ class BasketProductDto {
 
   @JsonKey(name: 'procedencia')
   final String origin;
+
+  Map<String, dynamic> toJson() => _$BasketProductDtoToJson(this);
 }

@@ -1,5 +1,6 @@
 import 'package:ecosecha_flutter/presentation/account/view/account_page.dart';
 import 'package:ecosecha_flutter/presentation/baskets/view/baskets_page.dart';
+import 'package:ecosecha_flutter/presentation/categories/view/categories_page.dart';
 import 'package:ecosecha_flutter/presentation/home/bloc/home_bloc.dart';
 import 'package:ecosecha_flutter/presentation/order/view/order_page.dart';
 import 'package:ecosecha_flutter/presentation/products/view/products_page.dart';
@@ -30,7 +31,7 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       body: IndexedStack(
         index: selectedTab.index,
-        children: const [OrderPage(), BasketsPage(), ProductsPage(), AccountPage()],
+        children: const [OrderPage(), BasketsPage(), CategoriesPage(), AccountPage()],
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),

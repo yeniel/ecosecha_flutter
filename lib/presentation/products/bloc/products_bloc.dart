@@ -7,30 +7,19 @@ part 'products_event.dart';
 part 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  ProductsBloc({required Repository repository}) : _repository = repository,
-        super(ProductsState()) {
+  ProductsBloc({ProductCategory? category, required Repository repository})
+      : _repository = repository,
+        _category = category ?? ProductCategory.empty(),
+        super(ProductsState(category: category ?? ProductCategory.empty())) {
     on<ProductsRequestedEvent>(_onProductsRequested);
-    on<CategorySelectedEvent>(_onCategorySelected);
-    on<BackToCategoriesEvent>(_onBackToCategories);
   }
 
   final Repository _repository;
+  final ProductCategory _category;
 
   void _onProductsRequested(ProductsRequestedEvent event, Emitter<ProductsState> emit) {
-    var categoryMenu = _repository.categoryMenu;
+    var products = _repository.getProductsOfCategory(_category);
 
-    if (categoryMenu != null) {
-      emit(state.copyWith(categories: categoryMenu));
-    }
-  }
-
-  void _onCategorySelected(CategorySelectedEvent event, Emitter<ProductsState> emit) {
-    var products = _repository.getProductsOfCategory(event.selectedCategory);
-
-    emit(state.copyWith(selectedCategory: event.selectedCategory, products: products));
-  }
-
-  void _onBackToCategories(BackToCategoriesEvent event, Emitter<ProductsState> emit) {
-    emit(state.copyWith(selectedCategory: null, products: []));
+    emit(state.copyWith(products: products));
   }
 }

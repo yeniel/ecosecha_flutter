@@ -13,6 +13,10 @@ class ProductCategory extends Equatable {
   final int family;
   final String icon;
 
+  static ProductCategory empty() {
+    return const ProductCategory(id: 0, name: '', family: 0, icon: '');
+  }
+
   @override
   List<Object> get props => [id, name, family];
 }
