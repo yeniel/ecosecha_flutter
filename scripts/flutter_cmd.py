@@ -28,3 +28,7 @@ if args.clean == "y":
 
 	exec("xcrun simctl terminate booted com.yeniellandestoy.ecosecha.ecosechaFlutter")
 	exec("xcrun simctl uninstall booted com.yeniellandestoy.ecosecha.ecosechaFlutter")
+
+	print("\nFlutter pug get...")
+	
+	exec("flutter pub get")
