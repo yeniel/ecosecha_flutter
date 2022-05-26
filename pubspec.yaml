@@ -43,6 +43,7 @@ flutter:
 
   assets:
     - assets/product_default.jpeg
+    - assets/app_icon.png
 
 flutter_icons:
   android: true

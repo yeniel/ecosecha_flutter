@@ -3,7 +3,6 @@ import 'package:ecosecha_flutter/presentation/baskets/view/baskets_page.dart';
 import 'package:ecosecha_flutter/presentation/categories/view/categories_page.dart';
 import 'package:ecosecha_flutter/presentation/home/bloc/home_bloc.dart';
 import 'package:ecosecha_flutter/presentation/order/view/order_page.dart';
-import 'package:ecosecha_flutter/presentation/products/view/products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
