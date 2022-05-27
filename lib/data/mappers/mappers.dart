@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
-import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:path/path.dart';
 
 class Mappers {
@@ -57,8 +56,8 @@ class Mappers {
   static List<Product> toProductList({required List<ProductDto> productDtoList}) {
     return productDtoList
         .map((productDto) {
-      return toProduct(productDto: productDto);
-    })
+          return toProduct(productDto: productDto);
+        })
         .whereType<Product>()
         .toList();
   }
@@ -97,13 +96,13 @@ class Mappers {
   static List<ProductCategory> toCategoryMenuItemList({required List<FamilyDto> familyDtoList}) {
     return familyDtoList
         .map((familyDto) {
-      return familyDto.categories
-          .map((categoryDto) {
-        return toCategoryMenuItem(categoryDto: categoryDto, familyId: familyDto.id);
-      })
-          .whereType<ProductCategory>()
-          .toList();
-    })
+          return familyDto.categories
+              .map((categoryDto) {
+                return toCategoryMenuItem(categoryDto: categoryDto, familyId: familyDto.id);
+              })
+              .whereType<ProductCategory>()
+              .toList();
+        })
         .expand((element) => element.toList())
         .whereType<ProductCategory>()
         .toList();
@@ -162,8 +161,12 @@ class Mappers {
 
   static Product _getRelatedProduct({required BasketProductDto basketProductDto, required List<Product> productList}) {
     var basketMainProductName = basketProductDto.name.split(' ').first;
+    var emptyProduct = Product.empty(image: Constants.productDefaultImage);
 
-    return productList.firstWhere((product) => product.name.contains(basketMainProductName));
+    return productList.firstWhere(
+      (product) => product.name.contains(basketMainProductName),
+      orElse: () => emptyProduct,
+    );
   }
 
   static List<Order> toOrderHistoryList({required List<OrderHistoryDto> orderHistoryDtoList}) {

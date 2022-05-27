@@ -1,7 +1,6 @@
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/basket_product_list/bloc/basket_product_list_bloc.dart';
-import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +53,7 @@ class BasketProductListView extends StatelessWidget {
                   const SizedBox(height: 8),
                   Expanded(
                     child: ListView.builder(
+                      padding: EdgeInsets.zero,
                       itemCount: state.products.length,
                       itemBuilder: (BuildContext context, int index) =>
                           BasketProductView(basketProduct: state.products[index]),

@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
+import 'package:ecosecha_flutter/domain/extensions.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {

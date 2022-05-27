@@ -2,7 +2,6 @@ import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/categories/bloc/categories_bloc.dart';
 import 'package:ecosecha_flutter/presentation/products/view/products_page.dart';
-import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,6 +47,7 @@ class CategoriesView extends StatelessWidget {
                 child: BlocBuilder<CategoriesBloc, CategoriesState>(
                   builder: (context, state) {
                     return ListView.builder(
+                        padding: EdgeInsets.zero,
                         itemCount: state.categories.length,
                         itemBuilder: (BuildContext context, int index) =>
                             CategoryMenuItemView(category: state.categories[index]),

@@ -2,7 +2,6 @@ import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/basket_product_list/view/basket_product_list_page.dart';
 import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
-import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:ecosecha_flutter/presentation/widgets/elevated_icon_button.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +81,7 @@ class OrderProductsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       itemCount: products.length,
       itemBuilder: (BuildContext context, int index) => OrderProductWidget(orderProduct: products[index]),
     );

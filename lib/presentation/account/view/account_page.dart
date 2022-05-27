@@ -1,6 +1,6 @@
 import 'package:ecosecha_flutter/data/data.dart';
+import 'package:ecosecha_flutter/domain/extensions.dart';
 import 'package:ecosecha_flutter/presentation/account/bloc/account_bloc.dart';
-import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,6 +47,7 @@ class AccountView extends StatelessWidget {
                 child: BlocBuilder<AccountBloc, AccountState>(
                   builder: (context, state) {
                     return ListView(
+                      padding: EdgeInsets.zero,
                       children: [
                         ListTile(
                           leading: const Icon(Icons.account_box_rounded),

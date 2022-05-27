@@ -1,5 +1,7 @@
 library domain;
 
+export 'constants.dart';
+export 'extensions.dart';
 export 'models/authentication_status.dart';
 export 'models/basket_product.dart';
 export 'models/order.dart';

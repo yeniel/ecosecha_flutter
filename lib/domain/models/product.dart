@@ -24,14 +24,14 @@ class Product extends Equatable {
   final ProductType type;
   final int categoryId;
 
-  static Product empty({ProductType type = ProductType.basket}) {
+  static Product empty({ProductType type = ProductType.basket, String image = ''}) {
     return Product(
       id: 0,
       basketId: '0',
       name: '',
       price: 0.0,
       origin: '',
-      image: '',
+      image: image,
       measureUnit: '',
       type: type,
       categoryId: 0,
