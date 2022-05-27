@@ -3,6 +3,7 @@ import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/basket_product_list/bloc/basket_product_list_bloc.dart';
 import 'package:ecosecha_flutter/presentation/utils/extensions.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
+import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,17 +80,28 @@ class BasketProductView extends StatelessWidget {
       children: [
         Row(
           children: [
-            const FaIcon(FontAwesomeIcons.carrot),
+            ProductImage.small(imageUrl: basketProduct.product.image),
             const SizedBox(width: 8),
-            Text(basketProduct.name),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            const FaIcon(FontAwesomeIcons.truck),
-            const SizedBox(width: 8),
-            Text(basketProduct.origin),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const FaIcon(FontAwesomeIcons.carrot, size: 24),
+                    const SizedBox(width: 8),
+                    Text(basketProduct.name),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const FaIcon(FontAwesomeIcons.truck, size: 24),
+                    const SizedBox(width: 8),
+                    Text(basketProduct.origin),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
         const Divider(),
