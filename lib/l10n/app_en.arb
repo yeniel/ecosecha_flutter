@@ -15,5 +15,11 @@
   "total": "total ",
   "add": "add",
   "baskets": "baskets",
-  "categories": "categories"
+  "categories": "categories",
+  "account": "account",
+  "personal_data": "personal data",
+  "order_history": "order history",
+  "help": "help",
+  "web": "website",
+  "logout": "logout"
 }

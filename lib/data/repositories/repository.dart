@@ -15,6 +15,7 @@ class Repository {
   List<ProductDto>? _productDtoList;
   List<FamilyDto>? _familyDtoList;
   List<BasketProductDto>? _basketProductDtoList;
+  List<OrderHistoryDto>? _orderHistoryDtoList;
 
   User? get user => Mappers.toUser(userDto: _userDto);
 
@@ -58,6 +59,14 @@ class Repository {
     return null;
   }
 
+  List<Order>? get orderHistory {
+    if (_orderHistoryDtoList != null) {
+      return Mappers.toOrderHistoryList(orderHistoryDtoList: _orderHistoryDtoList!);
+    }
+
+    return null;
+  }
+
   List<Product> getProductsOfCategory(ProductCategory category) {
     return extras?.where((product) => product.categoryId == category.id).toList() ?? [];
   }
@@ -66,7 +75,7 @@ class Repository {
     var _productDtoList = _basketProductDtoList?.where((element) => element.basketId == basket.basketId).toList();
 
     if (_productDtoList != null) {
-      return Mappers.toBasketProductList(basketProductDtoList: _productDtoList);
+      return Mappers.toBasketProductList(basketProductDtoList: _productDtoList, productList: products);
     }
 
     return null;
@@ -94,6 +103,7 @@ class Repository {
         _setFamilyDtoList(json);
         _setProductDtoList(json);
         _setBasketProductDtoList(json);
+        _setOrderHistoryDtoList(json);
       }).catchError((error) async {
         if (error is ExpiredToken) {
           await authRepository.renewToken();
@@ -153,6 +163,16 @@ class Repository {
     if (basketProductsJson != null && basketProductsJson is List<dynamic>) {
       _basketProductDtoList = basketProductsJson.map((e) {
         return BasketProductDto.fromJson(e);
+      }).toList();
+    }
+  }
+
+  void _setOrderHistoryDtoList(Map<String, dynamic> json) {
+    var orderHistoryJson = json['mdoFechasPedidosAnterior'];
+
+    if (orderHistoryJson != null && orderHistoryJson is List<dynamic>) {
+      _orderHistoryDtoList = orderHistoryJson.map((e) {
+        return OrderHistoryDto.fromJson(e);
       }).toList();
     }
   }

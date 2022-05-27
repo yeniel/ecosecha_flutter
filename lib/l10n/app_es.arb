@@ -15,5 +15,11 @@
   "total": "total ",
   "add": "añadir",
   "baskets": "cestas",
-  "categories": "categorías"
+  "categories": "categorías",
+  "account": "cuenta",
+  "personal_data": "datos personales",
+  "order_history": "pedidos anteriores",
+  "help": "ayuda",
+  "web": "página web",
+  "logout": "salir"
 }

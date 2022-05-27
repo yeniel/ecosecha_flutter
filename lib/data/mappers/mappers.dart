@@ -57,8 +57,8 @@ class Mappers {
   static List<Product> toProductList({required List<ProductDto> productDtoList}) {
     return productDtoList
         .map((productDto) {
-          return toProduct(productDto: productDto);
-        })
+      return toProduct(productDto: productDto);
+    })
         .whereType<Product>()
         .toList();
   }
@@ -97,13 +97,13 @@ class Mappers {
   static List<ProductCategory> toCategoryMenuItemList({required List<FamilyDto> familyDtoList}) {
     return familyDtoList
         .map((familyDto) {
-          return familyDto.categories
-              .map((categoryDto) {
-                return toCategoryMenuItem(categoryDto: categoryDto, familyId: familyDto.id);
-              })
-              .whereType<ProductCategory>()
-              .toList();
-        })
+      return familyDto.categories
+          .map((categoryDto) {
+        return toCategoryMenuItem(categoryDto: categoryDto, familyId: familyDto.id);
+      })
+          .whereType<ProductCategory>()
+          .toList();
+    })
         .expand((element) => element.toList())
         .whereType<ProductCategory>()
         .toList();
@@ -143,14 +143,36 @@ class Mappers {
     }
   }
 
-  static List<BasketProduct> toBasketProductList({required List<BasketProductDto> basketProductDtoList}) {
-    return basketProductDtoList
-        .map((e) => BasketProduct(
-              quantity: int.parse(e.quantity),
-              basketId: int.parse(e.basketId),
-              name: e.name,
-              origin: e.origin,
-            ))
-        .toList();
+  static List<BasketProduct> toBasketProductList({
+    required List<BasketProductDto> basketProductDtoList,
+    required List<Product> productList,
+  }) {
+    return basketProductDtoList.map((basketProductDto) {
+      var relatedProduct = _getRelatedProduct(basketProductDto: basketProductDto, productList: productList);
+
+      return BasketProduct(
+        quantity: int.parse(basketProductDto.quantity),
+        basketId: int.parse(basketProductDto.basketId),
+        name: basketProductDto.name,
+        origin: basketProductDto.origin,
+        product: relatedProduct,
+      );
+    }).toList();
+  }
+
+  static Product _getRelatedProduct({required BasketProductDto basketProductDto, required List<Product> productList}) {
+    var basketMainProductName = basketProductDto.name.split(' ').first;
+
+    return productList.firstWhere((product) => product.name.contains(basketMainProductName));
+  }
+
+  static List<Order> toOrderHistoryList({required List<OrderHistoryDto> orderHistoryDtoList}) {
+    return orderHistoryDtoList.map((orderHistoryDto) {
+      return Order(
+        products: [],
+        date: orderHistoryDto.date,
+        deliveryGroup: '',
+      );
+    }).toList();
   }
 }
