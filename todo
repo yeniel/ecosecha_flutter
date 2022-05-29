@@ -1,13 +1,15 @@
-- En account puedo poner los datos de soporte
+- En account puedo poner los datos de soporte, vienen en mdoConfiguracion
     "telefonoEmpresa": " 914741984",
-    "web": " http://www.pedidos.ecosecha.org"
+    "web pedidos": " http://www.pedidos.ecosecha.org"
+    "web ": " http://ecosecha.blogspot.com"
 - Modificar pedido
 - Notificaciones
   - Si no ha cambiado la cesta por defecto
   - Plazo para hacer pedido
 - En account poner configuración de notificaciones
 - Implementar pull to refresh. https://pub.dev/packages/pull_to_refresh
-- Buscar en Tap de Extras
-- Buscar global
+- Buscar en Cestas
+- Buscar en Categorías
+- Ordenar pedido como mercadona, Por categorías o por fecha
 - Registro de nuevos usuarios
 - Onboarding

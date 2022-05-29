@@ -2,9 +2,9 @@ import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/categories/bloc/categories_bloc.dart';
 import 'package:ecosecha_flutter/presentation/products/view/products_page.dart';
+import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,31 +32,17 @@ class CategoriesView extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: MediaQuery.of(context).viewPadding.top + 20),
-              Header(title: S.categories.capitalizeSentence),
-              const SizedBox(height: 8),
-              Expanded(
-                child: BlocBuilder<CategoriesBloc, CategoriesState>(
-                  builder: (context, state) {
-                    return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: state.categories.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            CategoryMenuItemView(category: state.categories[index]),
-                      );
-                  },
-                ),
-              ),
-            ],
-          ),
+    return BaseView(
+      title: Header(title: S.categories.capitalizeSentence),
+      body: Expanded(
+        child: BlocBuilder<CategoriesBloc, CategoriesState>(
+          builder: (context, state) {
+            return ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: state.categories.length,
+              itemBuilder: (BuildContext context, int index) => CategoryMenuItemView(category: state.categories[index]),
+            );
+          },
         ),
       ),
     );

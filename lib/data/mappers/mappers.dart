@@ -9,7 +9,7 @@ class Mappers {
     if (userDto != null) {
       var firstEmail = userDto.emails.first.replaceAll('\n', '');
 
-      return User(id: userDto.id, name: userDto.name, email: firstEmail);
+      return User(id: userDto.id, name: userDto.name, email: firstEmail, deliveryGroup: userDto.deliveryGroup);
     } else {
       return null;
     }

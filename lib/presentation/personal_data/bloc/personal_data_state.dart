@@ -1,10 +1,13 @@
 part of 'personal_data_bloc.dart';
 
-abstract class PersonalDataState extends Equatable {
-  const PersonalDataState();
-}
+class PersonalDataState extends Equatable {
+  const PersonalDataState({this.user = User.empty});
 
-class PersonalDataInitial extends PersonalDataState {
+  final User user;
+
+  PersonalDataState copyWith({required User user}) {
+    return PersonalDataState(user: user);
+  }
   @override
-  List<Object> get props => [];
+  List<Object> get props => [user];
 }

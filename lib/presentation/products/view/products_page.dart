@@ -1,10 +1,10 @@
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/products/bloc/products_bloc.dart';
+import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_grid_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductsPage extends StatelessWidget {
@@ -33,32 +33,19 @@ class ProductsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: BlocBuilder<ProductsBloc, ProductsState>(
-          builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: MediaQuery.of(context).viewPadding.top + 20),
-                  Header(
-                    title: state.category.name.capitalizeSentence,
-                    showBack: true,
-                    onBack: () => Navigator.of(context).maybePop(),
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: ProductGridView(products: state.products),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+    return BlocBuilder<ProductsBloc, ProductsState>(
+      builder: (context, state) {
+        return BaseView(
+          title: Header(
+            title: state.category.name.capitalizeSentence,
+            showBack: true,
+            onBack: () => Navigator.of(context).maybePop(),
+          ),
+          body: Expanded(
+            child: ProductGridView(products: state.products),
+          ),
+        );
+      },
     );
   }
 }

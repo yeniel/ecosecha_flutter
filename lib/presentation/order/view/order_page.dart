@@ -2,10 +2,11 @@ import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/basket_product_list/view/basket_product_list_page.dart';
 import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
+import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/elevated_icon_button.dart';
+import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -33,41 +34,35 @@ class OrderView extends StatelessWidget {
     var textTheme = Theme.of(context).textTheme;
     var S = AppLocalizations.of(context)!;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: BlocBuilder<OrderBloc, OrderState>(
-          builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: MediaQuery.of(context).viewPadding.top + 20),
-                  Text(S.order.capitalizeSentence, style: textTheme.headline4),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text(S.order_delivery_address_label, style: textTheme.subtitle1),
-                      Text(state.order.deliveryGroup, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text(S.order_delivery_date_label, style: textTheme.subtitle1),
-                      Text(state.order.date, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  const Divider(),
-                  Expanded(child: OrderProductsWidget(products: state.order.products)),
-                  TotalPrice(totalPrice: state.totalPrice),
-                ],
-              ),
-            );
-          },
-        ),
+    return BaseView(
+      title: Header(title: S.order.capitalizeSentence),
+      body: BlocBuilder<OrderBloc, OrderState>(
+        builder: (context, state) {
+          return Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(S.order_delivery_address_label, style: textTheme.subtitle1),
+                    Text(state.order.deliveryGroup, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text(S.order_delivery_date_label, style: textTheme.subtitle1),
+                    Text(state.order.date, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                const Divider(),
+                Expanded(child: OrderProductsWidget(products: state.order.products)),
+                TotalPrice(totalPrice: state.totalPrice),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

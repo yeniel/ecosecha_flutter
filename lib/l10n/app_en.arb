@@ -21,5 +21,10 @@
   "order_history": "order history",
   "help": "help",
   "web": "website",
-  "logout": "logout"
+  "logout": "logout",
+  "invalid_credentials_error": "Invalid credentials",
+  "name": "name",
+  "delivery_group": "delivery group",
+  "email": "email",
+  "not_defined": "not defined"
 }

@@ -21,5 +21,10 @@
   "order_history": "pedidos anteriores",
   "help": "ayuda",
   "web": "página web",
-  "logout": "salir"
+  "logout": "salir",
+  "invalid_credentials_error": "Usuario y contraseña no válidos",
+  "name": "nombre",
+  "delivery_group": "grupo de reparto",
+  "email": "correo",
+  "not_defined": "no definido"
 }

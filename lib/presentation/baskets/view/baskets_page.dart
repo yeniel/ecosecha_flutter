@@ -1,10 +1,10 @@
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/baskets/bloc/baskets_bloc.dart';
+import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_grid_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -31,27 +31,14 @@ class BasketsView extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: BlocBuilder<BasketsBloc, BasketsState>(
-          builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: MediaQuery.of(context).viewPadding.top + 20),
-                  Header(title: S.baskets.capitalizeSentence),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: ProductGridView(products: state.products),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+    return BaseView(
+      title: Header(title: S.baskets.capitalizeSentence),
+      body: BlocBuilder<BasketsBloc, BasketsState>(
+        builder: (context, state) {
+          return Expanded(
+            child: ProductGridView(products: state.products),
+          );
+        },
       ),
     );
   }
