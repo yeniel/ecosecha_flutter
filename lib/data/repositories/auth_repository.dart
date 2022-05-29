@@ -85,6 +85,10 @@ class AuthRepository {
       _saveUsername(username);
       _savePassword(password);
       _controller.add(AuthenticationStatus.authenticated);
+    }).catchError((error) {
+      if (error is ApiError) {
+        throw InvalidCredentials();
+      }
     });
   }
 
