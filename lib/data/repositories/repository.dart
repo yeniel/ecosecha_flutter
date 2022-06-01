@@ -16,8 +16,11 @@ class Repository {
   List<FamilyDto>? _familyDtoList;
   List<BasketProductDto>? _basketProductDtoList;
   List<OrderHistoryDto>? _orderHistoryDtoList;
+  CompanyDto? _companyDto;
 
   User? get user => Mappers.toUser(userDto: _userDto);
+
+  Company? get company => Mappers.toCompany(companyDto: _companyDto);
 
   Order? get order {
     if (_orderDto != null && _userDto != null && _productDtoList != null) {
@@ -104,6 +107,7 @@ class Repository {
         _setProductDtoList(json);
         _setBasketProductDtoList(json);
         _setOrderHistoryDtoList(json);
+        _setCompanyDto(json);
       }).catchError((error) async {
         if (error is ExpiredToken) {
           await authRepository.renewToken();
@@ -117,6 +121,10 @@ class Repository {
 
   void _setUserDto(Map<String, dynamic> json) {
     _userDto = UserDto.fromJson(json['mdoConsumidor']);
+  }
+
+  void _setCompanyDto(Map<String, dynamic> json) {
+    _companyDto = CompanyDto.fromJson(json['mdoConfiguracion']);
   }
 
   void _setOrderDto(Map<String, dynamic> json) {

@@ -19,12 +19,14 @@
   "account": "cuenta",
   "personal_data": "datos personales",
   "order_history": "pedidos anteriores",
-  "help": "ayuda",
+  "contact": "contacto",
   "web": "página web",
   "logout": "salir",
   "invalid_credentials_error": "Usuario y contraseña no válidos",
   "name": "nombre",
   "delivery_group": "grupo de reparto",
   "email": "correo",
-  "not_defined": "no definido"
+  "not_defined": "no definido",
+  "phone": "teléfono",
+  "address": "dirección"
 }

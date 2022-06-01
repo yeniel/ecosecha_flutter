@@ -15,6 +15,24 @@ class Mappers {
     }
   }
 
+  static Company? toCompany({required CompanyDto? companyDto}) {
+    if (companyDto != null) {
+      var address = '${companyDto.address} ${companyDto.town} ${companyDto.zip} ${companyDto.province}';
+
+      return Company(
+        blogUrl: companyDto.blogUrl.trim(),
+        cif: companyDto.cif.trim(),
+        email: companyDto.email.trim(),
+        address: address.trim(),
+        name: companyDto.name.trim(),
+        phone: companyDto.phone.trim(),
+        webUrl: companyDto.webUrl.trim(),
+      );
+    } else {
+      return null;
+    }
+  }
+
   static Product? toProduct({required ProductDto? productDto}) {
     if (productDto != null) {
       var productType = ProductType.extra;

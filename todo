@@ -1,8 +1,12 @@
-- En account puedo poner los datos de soporte, vienen en mdoConfiguracion
-    "telefonoEmpresa": " 914741984",
-    "web pedidos": " http://www.pedidos.ecosecha.org"
-    "web ": " http://ecosecha.blogspot.com"
+- AccountPage
+  - Contact page
+    Llamar al pulsar en el teléfono
+    Enviar correo al pulsar en el email
+  - Cambiar Página web a Blog, leer la url de bd
+  - Añadir Página web de pedidos, leer la url de bd
+- Separar módulos con flutter create --template=package hello
 - Modificar pedido
+- Qué pasa cuando se cancela un pedido en qué estado queda o que devuelve la página
 - Notificaciones
   - Si no ha cambiado la cesta por defecto
   - Plazo para hacer pedido
@@ -11,5 +15,6 @@
 - Buscar en Cestas
 - Buscar en Categorías
 - Ordenar pedido como mercadona, Por categorías o por fecha
+- Widget con la cesta y los extras
 - Registro de nuevos usuarios
 - Onboarding

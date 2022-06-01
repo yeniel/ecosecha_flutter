@@ -19,12 +19,14 @@
   "account": "account",
   "personal_data": "personal data",
   "order_history": "order history",
-  "help": "help",
+  "contact": "contact",
   "web": "website",
   "logout": "logout",
   "invalid_credentials_error": "Invalid credentials",
   "name": "name",
   "delivery_group": "delivery group",
   "email": "email",
-  "not_defined": "not defined"
+  "not_defined": "not defined",
+  "phone": "phone",
+  "address": "address"
 }

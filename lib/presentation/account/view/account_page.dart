@@ -1,6 +1,7 @@
 import 'package:ecosecha_flutter/data/data.dart';
 import 'package:ecosecha_flutter/domain/extensions.dart';
 import 'package:ecosecha_flutter/presentation/account/bloc/account_bloc.dart';
+import 'package:ecosecha_flutter/presentation/contact/view/contact_page.dart';
 import 'package:ecosecha_flutter/presentation/personal_data/view/personal_data_page.dart';
 import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
@@ -53,9 +54,9 @@ class AccountView extends StatelessWidget {
                     // onTap: () => Navigator.of(context).push(OrderHistoryPage.route()),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.help_center_rounded),
-                    title: Text(S.help.capitalizeSentence),
-                    // onTap: () => Navigator.of(context).push(HelpPage.route()),
+                    leading: const Icon(Icons.contact_phone_outlined),
+                    title: Text(S.contact.capitalizeSentence),
+                    onTap: () => Navigator.of(context).push(ContactPage.route()),
                   ),
                   ListTile(
                     leading: const Icon(Icons.web),

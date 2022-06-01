@@ -2,6 +2,7 @@ library data;
 
 export 'dtos/basket_product_dto.dart';
 export 'dtos/category_dto.dart';
+export 'dtos/company_dto.dart';
 export 'dtos/family_dto.dart';
 export 'dtos/jwt_dto.dart';
 export 'dtos/order_dto.dart';

@@ -8,6 +8,7 @@ class PersonalDataState extends Equatable {
   PersonalDataState copyWith({required User user}) {
     return PersonalDataState(user: user);
   }
+
   @override
   List<Object> get props => [user];
 }
