@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:ecosecha_flutter/data/data.dart';
-import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 part 'order_event.dart';

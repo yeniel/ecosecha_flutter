@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:data/data.dart';
 import 'package:ecosecha_flutter/app.dart';
-import 'package:ecosecha_flutter/data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';

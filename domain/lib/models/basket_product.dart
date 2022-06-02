@@ -1,8 +1,8 @@
-import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class BasketProduct extends Equatable {
-  BasketProduct({
+  const BasketProduct({
     required this.quantity,
     required this.basketId,
     required this.name,

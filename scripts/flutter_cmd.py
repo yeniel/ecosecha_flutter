@@ -1,11 +1,13 @@
 from utils import *
 import argparse
+import pub_get
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-build_runner", nargs='?', const="y", help="Execute command flutter pub run build_runner build --delete-conflicting-outputs")
 parser.add_argument("-icons", nargs='?', const="y", help="Execute command flutter pub run flutter_launcher_icons:main")
 parser.add_argument("-clean", nargs='?', const="y", help="Execute command flutter clean")
+parser.add_argument("-pubget", nargs='?', const="y", help="Execute flutter pub get in all packages (data, domain, main)")
 
 args = parser.parse_args()
 
@@ -29,6 +31,7 @@ if args.clean == "y":
 	exec("xcrun simctl terminate booted com.yeniellandestoy.ecosecha.ecosechaFlutter")
 	exec("xcrun simctl uninstall booted com.yeniellandestoy.ecosecha.ecosechaFlutter")
 
-	print("\nFlutter pug get...")
-	
-	exec("flutter pub get")
+	pub_get.main()
+
+if args.pubget == "y":
+	pub_get.main()

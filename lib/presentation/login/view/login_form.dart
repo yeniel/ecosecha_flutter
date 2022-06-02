@@ -1,4 +1,4 @@
-import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

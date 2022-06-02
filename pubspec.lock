@@ -218,6 +218,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
+  data:
+    dependency: "direct main"
+    description:
+      path: data
+      relative: true
+    source: path
+    version: "0.0.1"
+  domain:
+    dependency: "direct main"
+    description:
+      path: domain
+      relative: true
+    source: path
+    version: "0.0.1"
   equatable:
     dependency: "direct main"
     description:
@@ -358,7 +372,7 @@ packages:
     source: hosted
     version: "0.15.0"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       url: "https://pub.dartlang.org"
@@ -421,7 +435,7 @@ packages:
     source: hosted
     version: "0.6.4"
   json_annotation:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: json_annotation
       url: "https://pub.dartlang.org"
@@ -624,7 +638,7 @@ packages:
     source: hosted
     version: "0.27.3"
   shared_preferences:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"

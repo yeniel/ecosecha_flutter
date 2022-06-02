@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:ecosecha_flutter/data/data.dart';
-import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {

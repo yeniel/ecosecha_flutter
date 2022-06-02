@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:ecosecha_flutter/data/data.dart';
+import 'package:data/data.dart';
 import 'package:equatable/equatable.dart';
 
 part 'account_event.dart';

@@ -1,4 +1,4 @@
-import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class Order extends Equatable {

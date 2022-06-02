@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:ecosecha_flutter/data/repositories/auth_repository.dart';
-import 'package:ecosecha_flutter/data/repositories/repository.dart';
-import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 part 'authentication_event.dart';

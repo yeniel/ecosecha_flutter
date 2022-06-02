@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:ecosecha_flutter/data/data.dart';
-import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 
 class Repository {
   Repository({required this.apiClient, required this.authRepository});
@@ -75,10 +75,10 @@ class Repository {
   }
 
   List<BasketProduct>? getProductsOfBasket(Product basket) {
-    var _productDtoList = _basketProductDtoList?.where((element) => element.basketId == basket.basketId).toList();
+    var productDtoList = _basketProductDtoList?.where((element) => element.basketId == basket.basketId).toList();
 
-    if (_productDtoList != null) {
-      return Mappers.toBasketProductList(basketProductDtoList: _productDtoList, productList: products);
+    if (productDtoList != null) {
+      return Mappers.toBasketProductList(basketProductDtoList: productDtoList, productList: products);
     }
 
     return null;

@@ -1,5 +1,5 @@
-import 'package:ecosecha_flutter/data/data.dart';
-import 'package:ecosecha_flutter/domain/extensions.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/account/bloc/account_bloc.dart';
 import 'package:ecosecha_flutter/presentation/contact/view/contact_page.dart';
 import 'package:ecosecha_flutter/presentation/personal_data/view/personal_data_page.dart';

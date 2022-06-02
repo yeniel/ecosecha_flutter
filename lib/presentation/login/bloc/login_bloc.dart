@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:ecosecha_flutter/data/repositories/auth_repository.dart';
+import 'package:data/data.dart';
 import 'package:ecosecha_flutter/presentation//login/login.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';

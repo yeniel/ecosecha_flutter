@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:ecosecha_flutter/data/data.dart';
-import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:path/path.dart';
 
 class Mappers {
@@ -190,7 +190,7 @@ class Mappers {
   static List<Order> toOrderHistoryList({required List<OrderHistoryDto> orderHistoryDtoList}) {
     return orderHistoryDtoList.map((orderHistoryDto) {
       return Order(
-        products: [],
+        products: const [],
         date: orderHistoryDto.date,
         deliveryGroup: '',
       );

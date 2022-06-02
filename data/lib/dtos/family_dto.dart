@@ -1,4 +1,4 @@
-import 'package:ecosecha_flutter/data/data.dart';
+import 'package:data/data.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'family_dto.g.dart';
