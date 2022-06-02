@@ -4,8 +4,8 @@ abstract class OrderEvent extends Equatable {
   const OrderEvent();
 }
 
-class OrderRequestedEvent extends OrderEvent {
-  const OrderRequestedEvent();
+class OrderInitEvent extends OrderEvent {
+  const OrderInitEvent();
 
   @override
   List<Object?> get props => [];

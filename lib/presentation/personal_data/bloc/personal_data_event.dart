@@ -4,8 +4,8 @@ abstract class PersonalDataEvent extends Equatable {
   const PersonalDataEvent();
 }
 
-class PersonalDataRequestedEvent extends PersonalDataEvent {
-  const PersonalDataRequestedEvent();
+class PersonalDataInitEvent extends PersonalDataEvent {
+  const PersonalDataInitEvent();
 
   @override
   List<Object?> get props => [];

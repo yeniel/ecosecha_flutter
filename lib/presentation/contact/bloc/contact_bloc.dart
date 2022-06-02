@@ -8,12 +8,12 @@ part 'contact_state.dart';
 
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
   ContactBloc({required Repository repository}) : _repository = repository, super(const ContactState()) {
-    on<ContactRequestedEvent>(_onContactRequestedEvent);
+    on<ContactInitEvent>(_onContactInitEvent);
   }
 
   final Repository _repository;
 
-  void _onContactRequestedEvent(ContactRequestedEvent event, Emitter<ContactState> emit) {
+  void _onContactInitEvent(ContactInitEvent event, Emitter<ContactState> emit) {
     var company = _repository.company;
 
     if (company != null) {

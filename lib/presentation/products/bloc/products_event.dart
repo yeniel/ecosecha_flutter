@@ -4,8 +4,8 @@ abstract class ProductsEvent extends Equatable {
   const ProductsEvent();
 }
 
-class ProductsRequestedEvent extends ProductsEvent {
-  const ProductsRequestedEvent();
+class ProductsInitEvent extends ProductsEvent {
+  const ProductsInitEvent();
 
   @override
   List<Object?> get props => [];

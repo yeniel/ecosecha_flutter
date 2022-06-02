@@ -16,7 +16,7 @@ class ProductsPage extends StatelessWidget {
         create: (context) => ProductsBloc(
           repository: context.read<Repository>(),
           category: category,
-        )..add(const ProductsRequestedEvent()),
+        )..add(const ProductsInitEvent()),
         child: const ProductsPage(),
       ),
     );

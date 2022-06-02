@@ -4,8 +4,8 @@ abstract class CategoriesEvent extends Equatable {
   const CategoriesEvent();
 }
 
-class CategoriesRequestedEvent extends CategoriesEvent {
-  const CategoriesRequestedEvent();
+class CategoriesInitEvent extends CategoriesEvent {
+  const CategoriesInitEvent();
 
   @override
   List<Object?> get props => [];

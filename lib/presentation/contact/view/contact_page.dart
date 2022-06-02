@@ -20,7 +20,7 @@ class ContactPage extends StatelessWidget {
     return BlocProvider(
       create: (_) =>
       ContactBloc(repository: context.read<Repository>())
-        ..add(const ContactRequestedEvent()),
+        ..add(const ContactInitEvent()),
       child: const ContactView(),
     );
   }

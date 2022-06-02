@@ -12,13 +12,13 @@ class BasketProductListBloc extends Bloc<BasketProductListEvent, BasketProductLi
       : _repository = repository,
         _basket = basket ?? Product.empty(),
         super(BasketProductListState(basket: basket ?? Product.empty())) {
-    on<BasketProductListRequestedEvent>(_onBasketProductListRequested);
+    on<BasketProductListInitEvent>(_onBasketProductListRequested);
   }
 
   final Product _basket;
   final Repository _repository;
 
-  void _onBasketProductListRequested(BasketProductListRequestedEvent event, Emitter<BasketProductListState> emit) {
+  void _onBasketProductListRequested(BasketProductListInitEvent event, Emitter<BasketProductListState> emit) {
     var products = _repository.getProductsOfBasket(_basket);
 
     emit(state.copyWith(products: products));

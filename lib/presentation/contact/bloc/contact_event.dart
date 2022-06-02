@@ -4,8 +4,8 @@ abstract class ContactEvent extends Equatable {
   const ContactEvent();
 }
 
-class ContactRequestedEvent extends ContactEvent {
-  const ContactRequestedEvent();
+class ContactInitEvent extends ContactEvent {
+  const ContactInitEvent();
 
   @override
   List<Object?> get props => [];

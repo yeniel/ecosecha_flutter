@@ -4,8 +4,8 @@ abstract class BasketsEvent extends Equatable {
   const BasketsEvent();
 }
 
-class BasketsRequestedEvent extends BasketsEvent {
-  const BasketsRequestedEvent();
+class BasketsInitEvent extends BasketsEvent {
+  const BasketsInitEvent();
 
   @override
   List<Object?> get props => [];

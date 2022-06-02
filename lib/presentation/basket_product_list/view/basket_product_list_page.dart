@@ -17,7 +17,7 @@ class BasketProductListPage extends StatelessWidget {
         create: (context) => BasketProductListBloc(
           repository: context.read<Repository>(),
           basket: basket,
-        )..add(const BasketProductListRequestedEvent()),
+        )..add(const BasketProductListInitEvent()),
         child: const BasketProductListPage(),
       ),
     );

@@ -2,13 +2,13 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/account/bloc/account_bloc.dart';
 import 'package:ecosecha_flutter/presentation/contact/view/contact_page.dart';
+import 'package:ecosecha_flutter/presentation/order_history/view/order_history_page.dart';
 import 'package:ecosecha_flutter/presentation/personal_data/view/personal_data_page.dart';
 import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountPage extends StatelessWidget {
@@ -52,7 +52,7 @@ class AccountView extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.list_alt_rounded),
                     title: Text(S.order_history.capitalizeSentence),
-                    // onTap: () => Navigator.of(context).push(OrderHistoryPage.route()),
+                    onTap: () => Navigator.of(context).push(OrderHistoryPage.route()),
                   ),
                   ListTile(
                     leading: const Icon(Icons.contact_phone_outlined),
@@ -60,7 +60,7 @@ class AccountView extends StatelessWidget {
                     onTap: () => Navigator.of(context).push(ContactPage.route()),
                   ),
                   ListTile(
-                    leading: const FaIcon(FontAwesomeIcons.truck, size: 24),
+                    leading: const Icon(Icons.shopping_basket_rounded),
                     title: Text(S.web_orders.capitalizeSentence),
                     onTap: () {
                       final _url = Uri.parse(state.ordersWebUrl);

@@ -24,7 +24,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     }
   }
 
-  // void _onAccountInfoRequestedEvent(AccountInfoRequestedEvent event, Emitter<AccountState> emit) {
+  // void _onAccountInfoInitEvent(AccountInfoInitEvent event, Emitter<AccountState> emit) {
   //   var orderHistory = _repository.orderHistory;
   //
   //   if (orderHistory != null) {

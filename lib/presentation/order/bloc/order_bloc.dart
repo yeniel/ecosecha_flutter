@@ -11,12 +11,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   OrderBloc({required Repository repository})
       : _repository = repository,
         super(OrderState()) {
-    on<OrderRequestedEvent>(_onOrderRequested);
+    on<OrderInitEvent>(_onOrderRequested);
   }
 
   final Repository _repository;
 
-  void _onOrderRequested(OrderRequestedEvent event, Emitter<OrderState> emit) {
+  void _onOrderRequested(OrderInitEvent event, Emitter<OrderState> emit) {
     var order = _repository.order;
 
     if (order != null) {
