@@ -54,7 +54,7 @@ class _UsernameInput extends StatelessWidget {
           key: const Key('loginForm_usernameInput_textField'),
           onChanged: (username) => context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           decoration: InputDecoration(
-            labelText: S.user,
+            labelText: S.user.capitalizeSentence,
             errorText: state.username.invalid ? S.invalidUser : null,
           ),
         );
@@ -76,7 +76,7 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: S.password,
+            labelText: S.password.capitalizeSentence,
             errorText: state.password.invalid ? S.invalidPassword : null,
           ),
         );
