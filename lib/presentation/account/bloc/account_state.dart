@@ -1,14 +1,15 @@
 part of 'account_bloc.dart';
 
 class AccountState extends Equatable {
-  const AccountState({this.orderHistory = const []});
+  const AccountState({this.ordersWebUrl = '', this.blogUrl = ''});
 
-  final List<Order> orderHistory;
+  final String ordersWebUrl;
+  final String blogUrl;
 
-  AccountState copyWith({required List<Order> orderHistory}) {
-    return AccountState(orderHistory: orderHistory);
+  AccountState copyWith({required ordersWebUrl, required blogUrl}) {
+    return AccountState(ordersWebUrl: ordersWebUrl, blogUrl: blogUrl);
   }
 
   @override
-  List<Object> get props => [orderHistory];
+  List<Object> get props => [ordersWebUrl, blogUrl];
 }

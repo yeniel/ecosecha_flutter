@@ -26,7 +26,7 @@ class Mappers {
         address: address.trim(),
         name: companyDto.name.trim(),
         phone: companyDto.phone.trim(),
-        webUrl: companyDto.webUrl.trim(),
+        ordersWebUrl: companyDto.webUrl.trim().replaceAll('www.', ''),
       );
     } else {
       return null;

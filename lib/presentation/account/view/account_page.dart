@@ -8,6 +8,7 @@ import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountPage extends StatelessWidget {
@@ -20,7 +21,7 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AccountBloc(authRepository: context.read<AuthRepository>()),
+      create: (_) => AccountBloc(authRepository: context.read<AuthRepository>(), repository: context.read<Repository>())..add(const AccountInitEvent()),
       child: const AccountView(),
     );
   }
@@ -59,10 +60,19 @@ class AccountView extends StatelessWidget {
                     onTap: () => Navigator.of(context).push(ContactPage.route()),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.web),
-                    title: Text(S.web.capitalizeSentence),
+                    leading: const FaIcon(FontAwesomeIcons.truck, size: 24),
+                    title: Text(S.web_orders.capitalizeSentence),
                     onTap: () {
-                      final _url = Uri.parse('https://ecosecha.blogspot.com');
+                      final _url = Uri.parse(state.ordersWebUrl);
+
+                      launchUrl(_url);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.web),
+                    title: Text(S.blog_website.capitalizeSentence),
+                    onTap: () {
+                      final _url = Uri.parse(state.blogUrl);
 
                       launchUrl(_url);
                     },

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Company extends Equatable {
-  const Company({this.blogUrl, this.cif, this.email, this.address, this.name, this.phone, this.webUrl});
+  const Company({this.blogUrl, this.cif, this.email, this.address, this.name, this.phone, this.ordersWebUrl});
 
   final String? blogUrl;
   final String? cif;
@@ -9,7 +9,7 @@ class Company extends Equatable {
   final String? address;
   final String? name;
   final String? phone;
-  final String? webUrl;
+  final String? ordersWebUrl;
 
   static const empty = Company();
 
