@@ -6,6 +6,7 @@ import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactPage extends StatelessWidget {
   const ContactPage({Key? key}) : super(key: key);
@@ -50,11 +51,21 @@ class ContactView extends StatelessWidget {
                     leading: const Icon(Icons.email),
                     title: Text(S.email.capitalizeSentence),
                     subtitle: Text(state.company.email ?? S.not_defined.capitalizeSentence),
+                    onTap: () async {
+                      var emailUri = Uri.parse('mailto:${state.company.email}');
+
+                      await launchUrl(emailUri);
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.phone),
                     title: Text(S.phone.capitalizeSentence),
                     subtitle: Text(state.company.phone ?? S.not_defined.capitalizeSentence),
+                    onTap: () async {
+                      var phoneUri = Uri.parse('tel:${state.company.phone}');
+
+                      await launchUrl(phoneUri);
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.house_rounded),
