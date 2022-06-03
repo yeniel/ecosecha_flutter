@@ -8,16 +8,16 @@ part 'baskets_event.dart';
 part 'baskets_state.dart';
 
 class BasketsBloc extends Bloc<BasketsEvent, BasketsState> {
-  BasketsBloc({required Repository repository})
-      : _repository = repository,
+  BasketsBloc({required ProductsRepository productsRepository})
+      : _productsRepository = productsRepository,
         super(const BasketsState()) {
     on<BasketsInitEvent>(_onBasketsRequested);
   }
 
-  final Repository _repository;
+  final ProductsRepository _productsRepository;
 
   void _onBasketsRequested(BasketsInitEvent event, Emitter<BasketsState> emit) {
-    var baskets = _repository.baskets;
+    var baskets = _productsRepository.baskets;
 
     emit(state.copyWith(products: baskets));
   }

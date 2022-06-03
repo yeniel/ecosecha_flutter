@@ -10,9 +10,13 @@ part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({required AuthRepository authRepository, required Repository repository})
-      : _authRepository = authRepository,
+  AuthenticationBloc({
+    required AuthRepository authRepository,
+    required Repository repository,
+    required UserRepository userRepository,
+  })  : _authRepository = authRepository,
         _repository = repository,
+        _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
@@ -24,6 +28,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   final AuthRepository _authRepository;
   final Repository _repository;
+  final UserRepository _userRepository;
   late StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
 
   @override
@@ -64,7 +69,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     try {
       await _repository.fetchAll();
 
-      var user = _repository.user;
+      var user = _userRepository.user;
 
       return user;
     } catch (_) {

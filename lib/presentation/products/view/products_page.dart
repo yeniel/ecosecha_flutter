@@ -14,7 +14,7 @@ class ProductsPage extends StatelessWidget {
     return MaterialPageRoute(
       builder: (context) => BlocProvider(
         create: (context) => ProductsBloc(
-          repository: context.read<Repository>(),
+          productsRepository: context.read<ProductsRepository>(),
           category: category,
         )..add(const ProductsInitEvent()),
         child: const ProductsPage(),

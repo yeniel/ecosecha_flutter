@@ -21,6 +21,10 @@ void main() async {
           providers: [
             RepositoryProvider(create: (context) => authRepository),
             RepositoryProvider(create: (context) => repository),
+            RepositoryProvider(create: (context) => ProductsRepository(repository: repository)),
+            RepositoryProvider(create: (context) => UserRepository(repository: repository)),
+            RepositoryProvider(create: (context) => CompanyRepository(repository: repository)),
+            RepositoryProvider(create: (context) => OrderRepository(repository: repository)),
           ],
           child: const App(),
         ),

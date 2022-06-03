@@ -7,16 +7,16 @@ part 'categories_state.dart';
 part 'categories_event.dart';
 
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
-  CategoriesBloc({required Repository repository})
-      : _repository = repository,
+  CategoriesBloc({required ProductsRepository productsRepository})
+      : _productsRepository = productsRepository,
         super(const CategoriesState()) {
     on<CategoriesInitEvent>(_onCategoriesInitEvent);
   }
 
-  final Repository _repository;
+  final ProductsRepository _productsRepository;
 
   void _onCategoriesInitEvent(CategoriesInitEvent event, Emitter<CategoriesState> emit) {
-    var categories = _repository.categories;
+    var categories = _productsRepository.categories;
 
     if (categories != null) {
       emit(state.copyWith(categories: categories));

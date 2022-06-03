@@ -8,16 +8,16 @@ part 'order_event.dart';
 part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
-  OrderBloc({required Repository repository})
-      : _repository = repository,
+  OrderBloc({required OrderRepository orderRepository})
+      : _orderRepository = orderRepository,
         super(OrderState()) {
     on<OrderInitEvent>(_onOrderRequested);
   }
 
-  final Repository _repository;
+  final OrderRepository _orderRepository;
 
   void _onOrderRequested(OrderInitEvent event, Emitter<OrderState> emit) {
-    var order = _repository.order;
+    var order = _orderRepository.order;
 
     if (order != null) {
       var totalPrice =

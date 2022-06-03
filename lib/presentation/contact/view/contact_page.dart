@@ -19,7 +19,7 @@ class ContactPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-      ContactBloc(repository: context.read<Repository>())
+      ContactBloc(companyRepository: context.read<CompanyRepository>())
         ..add(const ContactInitEvent()),
       child: const ContactView(),
     );

@@ -8,16 +8,16 @@ part 'personal_data_event.dart';
 part 'personal_data_state.dart';
 
 class PersonalDataBloc extends Bloc<PersonalDataEvent, PersonalDataState> {
-  PersonalDataBloc({required Repository repository})
-      : _repository = repository,
+  PersonalDataBloc({required UserRepository userRepository})
+      : _userRepository = userRepository,
         super(const PersonalDataState()) {
     on<PersonalDataInitEvent>(_onPersonalDataInitEvent);
   }
 
-  final Repository _repository;
+  final UserRepository _userRepository;
 
   void _onPersonalDataInitEvent(PersonalDataInitEvent event, Emitter<PersonalDataState> emit) {
-    var user = _repository.user;
+    var user = _userRepository.user;
 
     if (user != null) {
       emit(state.copyWith(user: user));

@@ -18,7 +18,7 @@ class BasketsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BasketsBloc(repository: context.read<Repository>())..add(const BasketsInitEvent()),
+      create: (_) => BasketsBloc(productsRepository: context.read<ProductsRepository>())..add(const BasketsInitEvent()),
       child: const BasketsView(),
     );
   }

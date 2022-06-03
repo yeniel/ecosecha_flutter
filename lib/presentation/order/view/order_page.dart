@@ -20,7 +20,7 @@ class OrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OrderBloc(repository: context.read<Repository>())..add(const OrderInitEvent()),
+      create: (_) => OrderBloc(orderRepository: context.read<OrderRepository>())..add(const OrderInitEvent()),
       child: const OrderView(),
     );
   }

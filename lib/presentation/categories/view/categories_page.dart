@@ -19,7 +19,7 @@ class CategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CategoriesBloc(repository: context.read<Repository>())..add(const CategoriesInitEvent()),
+      create: (_) => CategoriesBloc(productsRepository: context.read<ProductsRepository>())..add(const CategoriesInitEvent()),
       child: const CategoriesView(),
     );
   }

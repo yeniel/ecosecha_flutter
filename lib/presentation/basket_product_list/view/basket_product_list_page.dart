@@ -15,7 +15,7 @@ class BasketProductListPage extends StatelessWidget {
     return MaterialPageRoute(
       builder: (context) => BlocProvider(
         create: (context) => BasketProductListBloc(
-          repository: context.read<Repository>(),
+          productsRepository: context.read<ProductsRepository>(),
           basket: basket,
         )..add(const BasketProductListInitEvent()),
         child: const BasketProductListPage(),

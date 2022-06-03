@@ -6,18 +6,18 @@ part 'account_event.dart';
 part 'account_state.dart';
 
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
-  AccountBloc({required AuthRepository authRepository, required Repository repository})
-      : _authRepository = authRepository, _repository = repository,
+  AccountBloc({required AuthRepository authRepository, required CompanyRepository companyRepository})
+      : _authRepository = authRepository, _companyRepository = companyRepository,
         super(const AccountState()) {
     on<AccountInitEvent>(_onAccountInitEvent);
     on<AccountLogoutEvent>(_onAccountLogoutEvent);
   }
 
   final AuthRepository _authRepository;
-  final Repository _repository;
+  final CompanyRepository _companyRepository;
 
   void _onAccountInitEvent(AccountInitEvent event, Emitter<AccountState> emit) {
-    var company = _repository.company;
+    var company = _companyRepository.company;
 
     if (company != null) {
       emit(state.copyWith(ordersWebUrl: company.ordersWebUrl, blogUrl: company.blogUrl));
