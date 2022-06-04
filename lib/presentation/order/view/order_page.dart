@@ -3,9 +3,9 @@ import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/basket_product_list/view/basket_product_list_page.dart';
 import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
 import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
-import 'package:ecosecha_flutter/presentation/widgets/elevated_icon_button.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
+import 'package:ecosecha_flutter/presentation/widgets/product_quantity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -128,39 +128,12 @@ class OrderProductWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        orderProduct.quantity.toString() + S.order_quantity_label,
-                        style: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.right,
-                      ),
-                      const Spacer(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            width: 56,
-                            height: 32,
-                            child: ElevatedIconButton(
-                              onPressed: () => {},
-                              icon: Icons.remove,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            width: 56,
-                            height: 32,
-                            child: ElevatedIconButton(
-                              onPressed: () => {},
-                              icon: Icons.add,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
+                  ProductQuantity(
+                    orderProduct: orderProduct,
+                    onPressedAdd: () => {},
+                    onPressedSubtract: () => {},
+                    onPressedDelete: () => {},
+                  ),
                 ],
               ),
             ),
