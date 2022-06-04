@@ -15,16 +15,25 @@ void main() async {
       var apiClient = HttpApiClient();
       var authRepository = AuthRepository(apiClient: apiClient);
       var repository = Repository(apiClient: apiClient, authRepository: authRepository);
+      var productsRepository = ProductsRepository(repository: repository);
+      var sharedPreferences = await SharedPreferences.getInstance();
 
       runApp(
         MultiRepositoryProvider(
           providers: [
             RepositoryProvider(create: (context) => authRepository),
             RepositoryProvider(create: (context) => repository),
-            RepositoryProvider(create: (context) => ProductsRepository(repository: repository)),
+            RepositoryProvider(create: (context) => productsRepository),
             RepositoryProvider(create: (context) => UserRepository(repository: repository)),
             RepositoryProvider(create: (context) => CompanyRepository(repository: repository)),
-            RepositoryProvider(create: (context) => OrderRepository(repository: repository)),
+            RepositoryProvider(
+              create: (context) => OrderRepository(
+                apiClient: apiClient,
+                productsRepository: productsRepository,
+                sharedPreferences: sharedPreferences,
+                repository: repository,
+              ),
+            ),
           ],
           child: const App(),
         ),
