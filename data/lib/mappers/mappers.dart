@@ -80,7 +80,7 @@ class Mappers {
         .toList();
   }
 
-  static Order? toOrder({
+  static Order toOrder({
     required OrderDto orderDto,
     required UserDto userDto,
     required List<ProductDto> productDtoList,
