@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:data/data.dart';
+import 'package:data/dtos/order_product_cache_dto.dart';
 import 'package:domain/domain.dart';
 import 'package:path/path.dart';
 
@@ -109,6 +110,10 @@ class Mappers {
     } else {
       return null;
     }
+  }
+
+  static OrderProductCacheDto toOrderProductCacheDto({required OrderProduct orderProduct}) {
+    return OrderProductCacheDto(id: orderProduct.product.id, quantity: orderProduct.quantity);
   }
 
   static List<ProductCategory> toCategoryMenuItemList({required List<FamilyDto> familyDtoList}) {

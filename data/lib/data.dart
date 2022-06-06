@@ -17,6 +17,7 @@ export 'repositories/api_errors.dart';
 export 'repositories/auth_repository.dart';
 export 'repositories/company_repository.dart';
 export 'repositories/http_api_client.dart';
+export 'repositories/order_cache_datasource.dart';
 export 'repositories/order_repository.dart';
 export 'repositories/products_repository.dart';
 export 'repositories/repository.dart';

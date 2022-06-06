@@ -12,13 +12,13 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       : _productsRepository = productsRepository,
         _category = category ?? ProductCategory.empty(),
         super(ProductsState(category: category ?? ProductCategory.empty())) {
-    on<ProductsInitEvent>(_onProductsRequested);
+    on<ProductsInitEvent>(_onProductsInit);
   }
 
   final ProductsRepository _productsRepository;
   final ProductCategory _category;
 
-  void _onProductsRequested(ProductsInitEvent event, Emitter<ProductsState> emit) {
+  void _onProductsInit(ProductsInitEvent event, Emitter<ProductsState> emit) {
     var products = _productsRepository.getProductsOfCategory(_category);
 
     emit(state.copyWith(products: products));

@@ -7,6 +7,10 @@ class OrderProduct extends Equatable {
   final Product product;
   final int quantity;
 
+  OrderProduct copyWith({product, quantity}) {
+    return OrderProduct(product: product ?? this.product, quantity: quantity ?? this.quantity);
+  }
+
   @override
   List<Object> get props => [product, quantity];
 }

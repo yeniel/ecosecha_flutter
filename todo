@@ -1,4 +1,4 @@
-Script para
+Script para debug wifi
 adb tcpip 5555
 adb connect <device ip addr>:5555
 adb devices

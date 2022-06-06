@@ -11,5 +11,5 @@ class OrderState extends Equatable {
   }
 
   @override
-  List<Object> get props => [order];
+  List<Object> get props => [order, totalPrice];
 }

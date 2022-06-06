@@ -11,12 +11,12 @@ class BasketsBloc extends Bloc<BasketsEvent, BasketsState> {
   BasketsBloc({required ProductsRepository productsRepository})
       : _productsRepository = productsRepository,
         super(const BasketsState()) {
-    on<BasketsInitEvent>(_onBasketsRequested);
+    on<BasketsInitEvent>(_onBasketsInit);
   }
 
   final ProductsRepository _productsRepository;
 
-  void _onBasketsRequested(BasketsInitEvent event, Emitter<BasketsState> emit) {
+  void _onBasketsInit(BasketsInitEvent event, Emitter<BasketsState> emit) {
     var baskets = _productsRepository.baskets;
 
     emit(state.copyWith(products: baskets));

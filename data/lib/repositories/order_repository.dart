@@ -1,31 +1,30 @@
 import 'package:data/data.dart';
+import 'package:data/dtos/order_product_cache_dto.dart';
 import 'package:domain/domain.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderRepository {
   const OrderRepository({
     required this.apiClient,
     required this.repository,
     required this.productsRepository,
-    required this.sharedPreferences,
+    required this.cacheDataSource,
   });
 
   final ApiClient apiClient;
   final Repository repository;
   final ProductsRepository productsRepository;
-  final SharedPreferences sharedPreferences;
+  final OrderCacheDataSource cacheDataSource;
 
-  Order get order {
+  Future<Order> get order async {
     Order orderInApi = _orderInApi();
-    Order? orderInCache = _orderInCache();
+    Order? orderInCache = await _orderInCache();
 
     return orderInCache ?? orderInApi;
   }
 
   Order _orderInApi() {
     if (repository.orderDto != null && repository.userDto != null && repository.productDtoList != null) {
-      // THIS IS BECAUSE WE RECEIVE SOME EMPTY MAPS
-      repository.orderDto!.products.removeWhere((element) => element.id == 0);
+      _removeEmptyMaps();
 
       return Mappers.toOrder(
         orderDto: repository.orderDto!,
@@ -37,51 +36,52 @@ class OrderRepository {
     }
   }
 
-  Order? _orderInCache() {
-    List<String>? savedOrderProductIdList = sharedPreferences.getStringList(orderProductIdListKey);
+  // BACKEND API BUG
+  void _removeEmptyMaps() {
+    repository.orderDto!.products.removeWhere((element) => element.id == 0);
+  }
 
-    if (savedOrderProductIdList != null) {
-      List<Product> products = productsRepository.products.where((product) =>
-          savedOrderProductIdList.contains(product.id.toString())).toList();
+  Future<Order?> _orderInCache() async {
+    List<OrderProductCacheDto> orderProductCacheDtoList = await cacheDataSource.getProducts();
 
-      return _orderInApi().copyWith(newProducts: products);
+    if (orderProductCacheDtoList.isNotEmpty) {
+      List<OrderProduct> orderProducts = orderProductCacheDtoList.map((cacheProduct) {
+        var product = productsRepository.products.firstWhere((product) => product.id == cacheProduct.id);
+
+        return OrderProduct(product: product, quantity: cacheProduct.quantity);
+      }).toList();
+
+      return _orderInApi().copyWith(newProducts: orderProducts);
     }
 
     return null;
   }
 
-  bool get hasOrderInCache {
-    return _orderInCache() != null;
+  Future<bool> get hasOrderInCache async {
+    Order orderInApi = _orderInApi();
+    Order? orderInCache = await _orderInCache();
+
+    return orderInApi != orderInCache;
   }
 
   void updateOrder({required Order order}) {
-    List<String> newOrderProductIdList = order.products.map((orderProduct) => orderProduct.product.id.toString()).toList();
-
-    sharedPreferences.setStringList(orderProductIdListKey, newOrderProductIdList);
+    for (var orderProduct in order.products) {
+      cacheDataSource.upsertProduct(orderProduct: Mappers.toOrderProductCacheDto(orderProduct: orderProduct));
+    }
   }
 
   Future<bool> confirmOrder() {
-    sharedPreferences.remove(orderProductIdListKey);
+    cacheDataSource.deleteAll();
 
     return Future.value(true);
   }
 
-  void addProduct({required Product product}) {
-    List<String>? cacheOrderProductIdList = sharedPreferences.getStringList(orderProductIdListKey);
-
-    if (cacheOrderProductIdList != null) {
-      cacheOrderProductIdList.add(product.id.toString());
-      sharedPreferences.setStringList(orderProductIdListKey, cacheOrderProductIdList);
-    }
+  void addOrUpdateProduct({required OrderProduct orderProduct}) {
+    cacheDataSource.upsertProduct(orderProduct: Mappers.toOrderProductCacheDto(orderProduct: orderProduct));
   }
 
-  void removeProduct({required Product product}) {
-    List<String>? cacheOrderProductIdList = sharedPreferences.getStringList(orderProductIdListKey);
-
-    if (cacheOrderProductIdList != null) {
-      cacheOrderProductIdList.remove(product.id.toString());
-      sharedPreferences.setStringList(orderProductIdListKey, cacheOrderProductIdList);
-    }
+  void deleteProduct({required OrderProduct orderProduct}) {
+    cacheDataSource.deleteProduct(id: orderProduct.product.id);
   }
 
   List<Order>? get orderHistory {

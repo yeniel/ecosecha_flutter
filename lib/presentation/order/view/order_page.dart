@@ -92,6 +92,7 @@ class OrderProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
     var textTheme = Theme.of(context).textTheme;
+    var bloc = context.read<OrderBloc>();
 
     return GestureDetector(
       child: Container(
@@ -130,9 +131,9 @@ class OrderProductWidget extends StatelessWidget {
                   const SizedBox(height: 4),
                   ProductQuantity(
                     orderProduct: orderProduct,
-                    onPressedAdd: () => {},
-                    onPressedSubtract: () => {},
-                    onPressedDelete: () => {},
+                    onPressedAdd: () => bloc.add(AddProductEvent(orderProduct: orderProduct)),
+                    onPressedSubtract: () => bloc.add(SubtractProductEvent(orderProduct: orderProduct)),
+                    onPressedDelete: () => bloc.add(DeleteProductEvent(orderProduct: orderProduct)),
                   ),
                 ],
               ),
