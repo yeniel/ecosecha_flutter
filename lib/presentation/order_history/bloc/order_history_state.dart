@@ -5,7 +5,7 @@ class OrderHistoryState extends Equatable {
 
   final List<Order> orders;
 
-  OrderHistoryState copyWith({required List<Order> orders}) {
+  OrderHistoryState copyWith({required orders}) {
     return OrderHistoryState(orders: orders);
   }
 

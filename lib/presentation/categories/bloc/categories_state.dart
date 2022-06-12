@@ -5,10 +5,8 @@ class CategoriesState extends Equatable {
 
   final List<ProductCategory> categories;
 
-  CategoriesState copyWith({
-    List<ProductCategory>? categories,
-  }) {
-    return CategoriesState(categories: categories ?? this.categories);
+  CategoriesState copyWith({categories}) {
+    return CategoriesState(categories: categories);
   }
 
   @override

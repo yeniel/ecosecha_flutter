@@ -6,8 +6,8 @@ class BasketProductListState extends Equatable {
   final Product basket;
   final List<BasketProduct> products;
 
-  BasketProductListState copyWith({List<BasketProduct>? products}) {
-    return BasketProductListState(basket: basket, products: products ?? []);
+  BasketProductListState copyWith({required products}) {
+    return BasketProductListState(basket: basket, products: products);
   }
 
   @override

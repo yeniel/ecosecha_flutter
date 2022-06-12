@@ -6,8 +6,8 @@ class ProductsState extends Equatable {
   final ProductCategory category;
   final List<Product> products;
 
-  ProductsState copyWith({List<Product>? products}) {
-    return ProductsState(category: category, products: products ?? []);
+  ProductsState copyWith({required products}) {
+    return ProductsState(category: category, products: products);
   }
 
   @override

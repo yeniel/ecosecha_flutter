@@ -6,8 +6,8 @@ class AccountState extends Equatable {
   final String ordersWebUrl;
   final String blogUrl;
 
-  AccountState copyWith({required ordersWebUrl, required blogUrl}) {
-    return AccountState(ordersWebUrl: ordersWebUrl, blogUrl: blogUrl);
+  AccountState copyWith({ordersWebUrl, blogUrl}) {
+    return AccountState(ordersWebUrl: ordersWebUrl ?? this.ordersWebUrl, blogUrl: blogUrl ?? this.blogUrl);
   }
 
   @override
