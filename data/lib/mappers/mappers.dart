@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:data/data.dart';
-import 'package:data/dtos/order_product_cache_dto.dart';
 import 'package:domain/domain.dart';
 import 'package:path/path.dart';
 
@@ -184,7 +183,7 @@ class Mappers {
 
   static Product _getRelatedProduct({required BasketProductDto basketProductDto, required List<Product> productList}) {
     var basketMainProductName = basketProductDto.name.split(' ').first;
-    var emptyProduct = Product.empty(image: Constants.productDefaultImage);
+    var emptyProduct = Product.emptyWithDefaultImage;
 
     return productList.firstWhere(
       (product) => product.name.contains(basketMainProductName),

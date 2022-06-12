@@ -24,19 +24,29 @@ class Product extends Equatable {
   final ProductType type;
   final int categoryId;
 
-  static Product empty({ProductType type = ProductType.basket, String image = ''}) {
-    return Product(
-      id: 0,
-      basketId: '0',
-      name: '',
-      price: 0.0,
-      origin: '',
-      image: image,
-      measureUnit: '',
-      type: type,
-      categoryId: 0,
-    );
-  }
+  static const Product empty = Product(
+    id: 0,
+    basketId: '0',
+    name: '',
+    price: 0.0,
+    origin: '',
+    image: '',
+    measureUnit: '',
+    type: ProductType.basket,
+    categoryId: 0,
+  );
+
+  static const Product emptyWithDefaultImage = Product(
+    id: 0,
+    basketId: '0',
+    name: '',
+    price: 0.0,
+    origin: '',
+    image: Constants.productDefaultImage,
+    measureUnit: '',
+    type: ProductType.basket,
+    categoryId: 0,
+  );
 
   @override
   List<Object> get props => [id, basketId, name, price, origin, image, measureUnit, type, categoryId];

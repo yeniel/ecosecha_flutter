@@ -1,28 +1,34 @@
 import 'package:data/data.dart';
-import 'package:data/dtos/order_product_cache_dto.dart';
 import 'package:domain/domain.dart';
+// ignore: depend_on_referenced_packages
+import "package:rxdart/rxdart.dart";
 
 class OrderRepository {
-  const OrderRepository({
+  OrderRepository({
     required this.apiClient,
     required this.repository,
     required this.productsRepository,
     required this.cacheDataSource,
-  });
+  }) {
+    Order orderInApi = _getOrderInApi();
+
+    _getOrderInCache().then((orderInCache) {
+      _orderInCache = orderInCache;
+      _orderStreamController.add(orderInCache ?? orderInApi);
+    });
+  }
 
   final ApiClient apiClient;
   final Repository repository;
   final ProductsRepository productsRepository;
   final OrderCacheDataSource cacheDataSource;
 
-  Future<Order> get order async {
-    Order orderInApi = _orderInApi();
-    Order? orderInCache = await _orderInCache();
+  final _orderStreamController = BehaviorSubject<Order>.seeded(Order.empty);
+  late Order? _orderInCache;
 
-    return orderInCache ?? orderInApi;
-  }
+  Stream<Order> get order => _orderStreamController.asBroadcastStream();
 
-  Order _orderInApi() {
+  Order _getOrderInApi() {
     if (repository.orderDto != null && repository.userDto != null && repository.productDtoList != null) {
       _removeEmptyMaps();
 
@@ -41,7 +47,7 @@ class OrderRepository {
     repository.orderDto!.products.removeWhere((element) => element.id == 0);
   }
 
-  Future<Order?> _orderInCache() async {
+  Future<Order?> _getOrderInCache() async {
     List<OrderProductCacheDto> orderProductCacheDtoList = await cacheDataSource.getProducts();
 
     if (orderProductCacheDtoList.isNotEmpty) {
@@ -51,23 +57,34 @@ class OrderRepository {
         return OrderProduct(product: product, quantity: cacheProduct.quantity);
       }).toList();
 
-      return _orderInApi().copyWith(newProducts: orderProducts);
+      return _getOrderInApi().copyWith(newProducts: orderProducts);
     }
 
     return null;
   }
 
-  Future<bool> get hasOrderInCache async {
-    Order orderInApi = _orderInApi();
-    Order? orderInCache = await _orderInCache();
+  void _emitOrder() {
+    _getOrderInCache().then((orderInCache) {
+      _orderInCache = orderInCache;
 
-    return orderInApi != orderInCache;
+      if (_orderInCache != null) {
+        _orderStreamController.add(orderInCache!);
+      }
+    });
+  }
+
+  bool get isConfirmed {
+    Order orderInApi = _getOrderInApi();
+
+    return orderInApi != _orderInCache;
   }
 
   void updateOrder({required Order order}) {
     for (var orderProduct in order.products) {
       cacheDataSource.upsertProduct(orderProduct: Mappers.toOrderProductCacheDto(orderProduct: orderProduct));
     }
+
+    _emitOrder();
   }
 
   Future<bool> confirmOrder() {
@@ -78,10 +95,12 @@ class OrderRepository {
 
   void addOrUpdateProduct({required OrderProduct orderProduct}) {
     cacheDataSource.upsertProduct(orderProduct: Mappers.toOrderProductCacheDto(orderProduct: orderProduct));
+    _emitOrder();
   }
 
   void deleteProduct({required OrderProduct orderProduct}) {
     cacheDataSource.deleteProduct(id: orderProduct.product.id);
+    _emitOrder();
   }
 
   List<Order>? get orderHistory {

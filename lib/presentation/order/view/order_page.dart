@@ -5,7 +5,7 @@ import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
 import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
-import 'package:ecosecha_flutter/presentation/widgets/product_quantity.dart';
+import 'package:ecosecha_flutter/presentation/widgets/product_quantity/view/product_quantity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,7 +20,11 @@ class OrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OrderBloc(orderRepository: context.read<OrderRepository>())..add(const OrderInitEvent()),
+      create: (_) => OrderBloc(
+        orderRepository: context.read<OrderRepository>(),
+        userRepository: context.read<UserRepository>(),
+        companyRepository: context.read<CompanyRepository>(),
+      )..add(const OrderInitEvent()),
       child: const OrderView(),
     );
   }
@@ -59,6 +63,7 @@ class OrderView extends StatelessWidget {
                 const Divider(),
                 Expanded(child: OrderProductsWidget(products: state.order.products)),
                 TotalPrice(totalPrice: state.totalPrice),
+                OrderActionButtons(state: state),
               ],
             ),
           );
@@ -92,7 +97,6 @@ class OrderProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
     var textTheme = Theme.of(context).textTheme;
-    var bloc = context.read<OrderBloc>();
 
     return GestureDetector(
       child: Container(
@@ -129,12 +133,7 @@ class OrderProductWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  ProductQuantity(
-                    orderProduct: orderProduct,
-                    onPressedAdd: () => bloc.add(AddProductEvent(orderProduct: orderProduct)),
-                    onPressedSubtract: () => bloc.add(SubtractProductEvent(orderProduct: orderProduct)),
-                    onPressedDelete: () => bloc.add(DeleteProductEvent(orderProduct: orderProduct)),
-                  ),
+                  ProductQuantity(orderProduct: orderProduct),
                 ],
               ),
             ),
@@ -167,6 +166,33 @@ class TotalPrice extends StatelessWidget {
         Text(S.total.capitalizeSentence, style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
         const Spacer(),
         Text('${totalPrice.toString()} €', style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold))
+      ],
+    );
+  }
+}
+
+class OrderActionButtons extends StatelessWidget {
+  const OrderActionButtons({Key? key, required this.state}) : super(key: key);
+
+  final OrderState state;
+
+  @override
+  Widget build(BuildContext context) {
+    var S = AppLocalizations.of(context)!;
+    var bloc = context.read<OrderBloc>();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        OutlinedButton(
+          onPressed: () => bloc.add(const CancelOrderEvent()),
+          child: Text(S.cancel_order.capitalizeSentence),
+        ),
+        if (!state.confirmed && state.order.products.isNotEmpty)
+          ElevatedButton(
+            onPressed: () => bloc.add(const ConfirmOrderEvent()),
+            child: Text(S.confirm.capitalizeSentence),
+          ),
       ],
     );
   }

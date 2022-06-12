@@ -29,5 +29,7 @@
   "email": "correo",
   "not_defined": "no definido",
   "phone": "teléfono",
-  "address": "dirección"
+  "address": "dirección",
+  "confirm": "confirmar",
+  "cancel_order": "cancelar pedido"
 }

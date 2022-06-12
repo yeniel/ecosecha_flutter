@@ -8,6 +8,7 @@ export 'dtos/jwt_dto.dart';
 export 'dtos/order_dto.dart';
 export 'dtos/order_history_dto.dart'
 ;
+export 'dtos/order_product_cache_dto.dart';
 export 'dtos/order_product_dto.dart';
 export 'dtos/product_dto.dart';
 export 'dtos/user_dto.dart';
