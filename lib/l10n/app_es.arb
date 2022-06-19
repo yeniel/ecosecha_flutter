@@ -31,5 +31,7 @@
   "phone": "teléfono",
   "address": "dirección",
   "confirm": "confirmar",
-  "cancel_order": "cancelar pedido"
+  "cancel_order": "cancelar pedido",
+  "minimum_amount": "El pedido debe contener al menos una cesta o {minimumAmount}€ en productos",
+  "confirm": "confirmar"
 }

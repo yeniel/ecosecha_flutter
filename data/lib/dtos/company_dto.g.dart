@@ -17,6 +17,7 @@ CompanyDto _$CompanyDtoFromJson(Map<String, dynamic> json) => CompanyDto(
       name: json['nombreEmpresa'] as String? ?? '',
       phone: json['telefonoEmpresa'] as String? ?? '',
       webUrl: json['web'] as String? ?? '',
+      minimumAmount: json['importeMinimo'] as String? ?? '0',
     );
 
 Map<String, dynamic> _$CompanyDtoToJson(CompanyDto instance) =>
@@ -31,4 +32,5 @@ Map<String, dynamic> _$CompanyDtoToJson(CompanyDto instance) =>
       'nombreEmpresa': instance.name,
       'telefonoEmpresa': instance.phone,
       'web': instance.webUrl,
+      'importeMinimo': instance.minimumAmount,
     };

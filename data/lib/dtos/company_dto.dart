@@ -15,6 +15,7 @@ class CompanyDto {
     required this.name,
     required this.phone,
     required this.webUrl,
+    required this.minimumAmount,
   });
 
   factory CompanyDto.fromJson(Map<String, dynamic> json) => _$CompanyDtoFromJson(json);
@@ -48,6 +49,9 @@ class CompanyDto {
 
   @JsonKey(name: 'web', defaultValue: '')
   final String webUrl;
+
+  @JsonKey(name: 'importeMinimo', defaultValue: '0')
+  final String minimumAmount;
 
   Map<String, dynamic> toJson() => _$CompanyDtoToJson(this);
 }

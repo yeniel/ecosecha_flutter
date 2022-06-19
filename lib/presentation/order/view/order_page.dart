@@ -5,7 +5,7 @@ import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
 import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
-import 'package:ecosecha_flutter/presentation/widgets/product_quantity/view/product_quantity.dart';
+import 'package:ecosecha_flutter/presentation/widgets/product_quantity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -61,7 +61,12 @@ class OrderView extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const Divider(),
-                Expanded(child: OrderProductsWidget(products: state.order.products)),
+                Expanded(
+                  child: OrderProductsWidget(
+                    products: state.order.products,
+                    minimumAmount: state.minimumAmount,
+                  ),
+                ),
                 TotalPrice(totalPrice: state.totalPrice),
                 OrderActionButtons(state: state),
               ],
@@ -74,12 +79,24 @@ class OrderView extends StatelessWidget {
 }
 
 class OrderProductsWidget extends StatelessWidget {
-  const OrderProductsWidget({Key? key, required this.products}) : super(key: key);
+  const OrderProductsWidget({Key? key, required this.products, required this.minimumAmount}) : super(key: key);
 
   final List<OrderProduct> products;
+  final int minimumAmount;
 
   @override
   Widget build(BuildContext context) {
+    var S = AppLocalizations.of(context)!;
+    var textTheme = Theme.of(context).textTheme;
+
+    if (products.isEmpty) {
+      return Center(
+        child: Text(
+          S.minimum_amount(minimumAmount),
+          style: textTheme.headline6,
+        ),
+      );
+    }
     return ListView.builder(
       padding: EdgeInsets.zero,
       itemCount: products.length,
@@ -97,6 +114,7 @@ class OrderProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
     var textTheme = Theme.of(context).textTheme;
+    var bloc = context.read<OrderBloc>();
 
     return GestureDetector(
       child: Container(
@@ -133,7 +151,12 @@ class OrderProductWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  ProductQuantity(orderProduct: orderProduct),
+                  ProductQuantity(
+                    orderProduct: orderProduct,
+                    onPressedAdd: () => bloc.add(AddProductEvent(orderProduct: orderProduct)),
+                    onPressedSubtract: () => bloc.add(SubtractProductEvent(orderProduct: orderProduct)),
+                    onPressedDelete: () => bloc.add(DeleteProductEvent(orderProduct: orderProduct)),
+                  ),
                 ],
               ),
             ),
@@ -180,6 +203,7 @@ class OrderActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
     var bloc = context.read<OrderBloc>();
+    var confirmButtonEnabled = !state.confirmed && state.order.products.isNotEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -188,11 +212,10 @@ class OrderActionButtons extends StatelessWidget {
           onPressed: () => bloc.add(const CancelOrderEvent()),
           child: Text(S.cancel_order.capitalizeSentence),
         ),
-        if (!state.confirmed && state.order.products.isNotEmpty)
-          ElevatedButton(
-            onPressed: () => bloc.add(const ConfirmOrderEvent()),
-            child: Text(S.confirm.capitalizeSentence),
-          ),
+        ElevatedButton(
+          onPressed: confirmButtonEnabled ? () => bloc.add(const ConfirmOrderEvent()) : null,
+          child: Text(S.confirm.capitalizeSentence),
+        ),
       ],
     );
   }

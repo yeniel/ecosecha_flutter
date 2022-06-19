@@ -18,6 +18,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         _userRepository = userRepository,
         super(OrderState()) {
     on<OrderInitEvent>(_onOrderInit);
+    on<AddProductEvent>(_onAddProduct);
+    on<SubtractProductEvent>(_onSubtractProduct);
+    on<DeleteProductEvent>(_onDeleteProduct);
     on<CancelOrderEvent>(_onCancelOrder);
     on<ConfirmOrderEvent>(_onConfirmOrder);
   }
@@ -30,20 +33,45 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     await emit.forEach<Order>(
       _orderRepository.order,
       onData: (order) {
-        _orderRepository.updateOrder(order: order);
-
         var confirmed = _orderRepository.isConfirmed;
+        var totalPrice = _calculateTotalPrice(order);
+        var company = _companyRepository.company;
 
-        var totalPrice = order.products.map((product) {
-          return product.quantity * product.product.price;
-        }).reduce((value, element) => value + element);
-
-        var totalPriceRounded = double.parse(totalPrice.toStringAsFixed(2));
-
-        return state.copyWith(order: order, totalPrice: totalPriceRounded, confirmed: confirmed);
+        return state.copyWith(
+          order: order,
+          totalPrice: totalPrice,
+          confirmed: confirmed,
+          minimumAmount: company?.minimumAmount,
+        );
       },
       onError: (_, __) => state,
     );
+  }
+
+  double _calculateTotalPrice(Order order) {
+    var totalPrice = order.products.map((product) {
+      return product.quantity * product.product.price;
+    }).reduce((value, element) => value + element);
+
+    var totalPriceRounded = double.parse(totalPrice.toStringAsFixed(2));
+
+    return totalPriceRounded;
+  }
+
+  Future<void> _onAddProduct(AddProductEvent event, Emitter<OrderState> emit) async {
+    var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity + 1);
+
+    _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
+  }
+
+  Future<void> _onSubtractProduct(SubtractProductEvent event, Emitter<OrderState> emit) async {
+    var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity - 1);
+
+    _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
+  }
+
+  Future<void> _onDeleteProduct(DeleteProductEvent event, Emitter<OrderState> emit) async {
+    _orderRepository.deleteProduct(orderProduct: event.orderProduct);
   }
 
   Future<void> _onCancelOrder(CancelOrderEvent event, Emitter<OrderState> emit) async {

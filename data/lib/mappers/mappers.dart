@@ -27,6 +27,7 @@ class Mappers {
         name: companyDto.name.trim(),
         phone: companyDto.phone.trim(),
         ordersWebUrl: companyDto.webUrl.trim().replaceAll('www.', ''),
+        minimumAmount: int.parse(companyDto.minimumAmount.trim()),
       );
     } else {
       return null;

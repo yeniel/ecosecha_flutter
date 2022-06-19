@@ -30,6 +30,15 @@
   "not_defined": "not defined",
   "phone": "phone",
   "address": "address",
-  "confirm": "confirm",
-  "cancel_order": "cancel order"
+  "cancel_order": "cancel order",
+  "minimum_amount": "El pedido debe contener al menos una cesta o {minimumAmount}€ en productos",
+  "@minimum_amount": {
+    "placeholders": {
+      "minimumAmount": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
+  "confirm": "confirm"
 }

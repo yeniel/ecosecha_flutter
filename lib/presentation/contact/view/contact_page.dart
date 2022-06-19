@@ -50,7 +50,7 @@ class ContactView extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.email),
                     title: Text(S.email.capitalizeSentence),
-                    subtitle: Text(state.company.email ?? S.not_defined.capitalizeSentence),
+                    subtitle: Text(state.company.email),
                     onTap: () async {
                       var emailUri = Uri.parse('mailto:${state.company.email}');
 
@@ -60,7 +60,7 @@ class ContactView extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.phone),
                     title: Text(S.phone.capitalizeSentence),
-                    subtitle: Text(state.company.phone ?? S.not_defined.capitalizeSentence),
+                    subtitle: Text(state.company.phone),
                     onTap: () async {
                       var phoneUri = Uri.parse('tel:${state.company.phone}');
 
@@ -70,7 +70,7 @@ class ContactView extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.house_rounded),
                     title: Text(S.address.capitalizeSentence),
-                    subtitle: Text(state.company.address ?? S.not_defined.capitalizeSentence),
+                    subtitle: Text(state.company.address),
                   ),
                 ],
               ).toList(),
