@@ -1,19 +1,14 @@
 part of 'baskets_bloc.dart';
 
 class BasketsState extends Equatable {
-  const BasketsState({this.products = const [], this.order = Order.empty});
+  const BasketsState({this.orderProducts = const []});
 
-  final List<Product> products;
-  final Order order;
+  final List<OrderProduct> orderProducts;
 
   BasketsState copyWith({required products}) {
-    return BasketsState(products: products);
-  }
-
-  bool isProductInOrder({product}) {
-    return order.products.contains(product);
+    return BasketsState(orderProducts: products);
   }
 
   @override
-  List<Object> get props => [products];
+  List<Object> get props => [orderProducts];
 }

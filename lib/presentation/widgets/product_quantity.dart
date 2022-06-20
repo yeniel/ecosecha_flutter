@@ -1,8 +1,6 @@
 import 'package:domain/domain.dart';
-import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
 import 'package:ecosecha_flutter/presentation/widgets/elevated_icon_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductQuantity extends StatelessWidget {

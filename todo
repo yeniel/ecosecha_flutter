@@ -1,3 +1,9 @@
+- Pedido Vacía
+  - Entregar en y El día están vaciós
+  - El texto "El pedido debe contener..." ponerlo más grande y centrado
+  - Añadir imagen en el centro
+  - El precio total formatearlo a dos decimales
+
 - Poner el OrderRepository.order como un stream para poder modfiicarlos desde varios sitios con el ProductQuantity
 Ver como se hace en el TodoFlutter_bloc con un emit.forEach
 

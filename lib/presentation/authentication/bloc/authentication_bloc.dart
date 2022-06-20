@@ -66,14 +66,13 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   }
 
   Future<User?> _tryGetUser() async {
-    try {
-      await _repository.fetchAll();
+    await _repository.fetchAll().catchError((error) async {
+      if (error is ExpiredToken) {
+        await _authRepository.renewToken();
+        await _repository.fetchAll();
+      }
+    });
 
-      var user = _userRepository.user;
-
-      return user;
-    } catch (_) {
-      return null;
-    }
+    return _userRepository.user;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/baskets/bloc/baskets_bloc.dart';
+import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
 import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_grid_view.dart';
@@ -17,8 +18,22 @@ class BasketsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => BasketsBloc(productsRepository: context.read<ProductsRepository>())..add(const BasketsInitEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => BasketsBloc(
+              productsRepository: context.read<ProductsRepository>(),
+              orderRepository: context.read<OrderRepository>(),
+          )..add(const BasketsInitEvent()),
+        ),
+        BlocProvider(
+          create: (_) => OrderBloc(
+            orderRepository: context.read<OrderRepository>(),
+            userRepository: context.read<UserRepository>(),
+            companyRepository: context.read<CompanyRepository>(),
+          )..add(const OrderInitEvent()),
+        ),
+      ],
       child: const BasketsView(),
     );
   }
@@ -36,7 +51,7 @@ class BasketsView extends StatelessWidget {
       body: BlocBuilder<BasketsBloc, BasketsState>(
         builder: (context, state) {
           return Expanded(
-            child: ProductGridView(products: state.products),
+            child: ProductGridView(orderProducts: state.orderProducts),
           );
         },
       ),

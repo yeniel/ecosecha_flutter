@@ -41,11 +41,6 @@ class Repository {
         _setBasketProductDtoList(json);
         _setOrderHistoryDtoList(json);
         _setCompanyDto(json);
-      }).catchError((error) async {
-        if (error is ExpiredToken) {
-          await authRepository.renewToken();
-          unawaited(fetchAll());
-        }
       });
     }
 

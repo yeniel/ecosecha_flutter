@@ -8,17 +8,30 @@ part 'baskets_event.dart';
 part 'baskets_state.dart';
 
 class BasketsBloc extends Bloc<BasketsEvent, BasketsState> {
-  BasketsBloc({required ProductsRepository productsRepository})
+  BasketsBloc({required ProductsRepository productsRepository, required OrderRepository orderRepository})
       : _productsRepository = productsRepository,
+        _orderRepository = orderRepository,
         super(const BasketsState()) {
     on<BasketsInitEvent>(_onBasketsInit);
   }
 
   final ProductsRepository _productsRepository;
+  final OrderRepository _orderRepository;
 
-  void _onBasketsInit(BasketsInitEvent event, Emitter<BasketsState> emit) {
-    var baskets = _productsRepository.baskets;
+  Future<void> _onBasketsInit(BasketsInitEvent event, Emitter<BasketsState> emit) async {
+    await emit.forEach<Order>(
+      _orderRepository.order,
+      onData: (order) {
+        var orderProducts = _productsRepository.baskets?.map((basket) {
+          return order.products.firstWhere(
+            (orderProduct) => orderProduct.product.id == basket.id,
+            orElse: () => OrderProduct(product: basket, quantity: 0),
+          );
+        }).toList();
 
-    emit(state.copyWith(products: baskets));
+        return state.copyWith(products: orderProducts);
+      },
+      onError: (_, __) => state,
+    );
   }
 }

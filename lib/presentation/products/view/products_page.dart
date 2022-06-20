@@ -42,7 +42,7 @@ class ProductsView extends StatelessWidget {
             onBack: () => Navigator.of(context).maybePop(),
           ),
           body: Expanded(
-            child: ProductGridView(products: state.products),
+            child: ProductGridView(orderProducts: state.orderProducts),
           ),
         );
       },

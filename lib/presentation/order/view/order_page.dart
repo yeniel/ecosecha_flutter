@@ -94,6 +94,7 @@ class OrderProductsWidget extends StatelessWidget {
         child: Text(
           S.minimum_amount(minimumAmount),
           style: textTheme.headline6,
+          textAlign: TextAlign.center,
         ),
       );
     }

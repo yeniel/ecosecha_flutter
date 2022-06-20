@@ -12,6 +12,8 @@ class OrderRepository {
     required this.cacheDataSource,
   }) {
     _getOrderInCache().then((orderInCache) {
+      _orderInCache = orderInCache;
+
       if (orderInCache.products.isNotEmpty) {
         _orderStreamController.add(orderInCache);
       } else {
@@ -26,14 +28,18 @@ class OrderRepository {
   final OrderCacheDataSource cacheDataSource;
 
   final _orderStreamController = BehaviorSubject<Order>.seeded(Order.empty);
-  late Order _orderInCache;
+  Order? _orderInCache;
 
   Stream<Order> get order => _orderStreamController.asBroadcastStream();
 
   bool get isConfirmed {
     Order orderInApi = _getOrderInApi();
 
-    return orderInApi != _orderInCache;
+    if (_orderInCache == null) {
+      return true;
+    } else {
+      return orderInApi != _orderInCache;
+    }
   }
 
   List<Order>? get orderHistory {

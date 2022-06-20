@@ -48,7 +48,7 @@ class HttpApiClient implements ApiClient {
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
-    } else if (response.statusCode == 401 || response.statusCode == 405) {
+    } else if (response.statusCode == 400 || response.statusCode == 401 || response.statusCode == 405) {
       throw ExpiredToken();
     } else {
       throw ApiError();
