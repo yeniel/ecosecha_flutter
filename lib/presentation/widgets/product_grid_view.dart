@@ -91,18 +91,23 @@ class ProductGridViewButtons extends StatelessWidget {
     var bloc = context.read<OrderBloc>();
 
     if (orderProduct.quantity == 0) {
-      return Container(
-        height: 40,
-        padding: EdgeInsets.zero,
-        child: OutlinedButton(
-          onPressed: () => bloc.add(AddProductEvent(orderProduct: orderProduct)),
-          child: Text(S.add.capitalizeSentence),
-          style: OutlinedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            height: 32,
+            child: OutlinedButton(
+              onPressed: () => bloc.add(AddProductEvent(orderProduct: orderProduct)),
+              child: Text(S.add.capitalizeSentence),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       );
     } else {
       return Container(

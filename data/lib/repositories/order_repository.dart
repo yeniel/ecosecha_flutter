@@ -12,8 +12,6 @@ class OrderRepository {
     required this.cacheDataSource,
   }) {
     _getOrderInCache().then((orderInCache) {
-      _orderInCache = orderInCache;
-
       if (orderInCache.products.isNotEmpty) {
         _orderStreamController.add(orderInCache);
       } else {
@@ -34,12 +32,14 @@ class OrderRepository {
 
   bool get isConfirmed {
     Order orderInApi = _getOrderInApi();
+    var confirmed = true;
+    var orderInCache = _orderInCache;
 
-    if (_orderInCache == null) {
-      return true;
-    } else {
-      return orderInApi != _orderInCache;
+    if (orderInCache != null && orderInCache.products.isNotEmpty) {
+      confirmed = orderInApi == _orderInCache;
     }
+
+    return confirmed;
   }
 
   List<Order>? get orderHistory {
@@ -102,7 +102,11 @@ class OrderRepository {
       return OrderProduct(product: product, quantity: cacheProduct.quantity);
     }).toList();
 
-    return _getOrderInApi().copyWith(newProducts: orderProducts);
+    var orderInCache = _getOrderInApi().copyWith(newProducts: orderProducts);
+
+    _orderInCache = orderInCache;
+
+    return orderInCache;
   }
 
   void _emitOrder() {

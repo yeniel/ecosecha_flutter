@@ -34,12 +34,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       _orderRepository.order,
       onData: (order) {
         var confirmed = _orderRepository.isConfirmed;
-        var totalPrice = _calculateTotalPrice(order);
+        var totalAmount = _calculateTotalAmount(order);
         var company = _companyRepository.company;
 
         return state.copyWith(
           order: order,
-          totalPrice: totalPrice,
+          totalAmount: totalAmount,
           confirmed: confirmed,
           minimumAmount: company?.minimumAmount,
         );
@@ -48,14 +48,16 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
   }
 
-  double _calculateTotalPrice(Order order) {
-    var totalPrice = order.products.map((product) {
+  double _calculateTotalAmount(Order order) {
+    var productAmountList = order.products.map((product) {
       return product.quantity * product.product.price;
-    }).reduce((value, element) => value + element);
+    });
 
-    var totalPriceRounded = double.parse(totalPrice.toStringAsFixed(2));
+    var totalAmount = productAmountList.isEmpty ? 0 : productAmountList.reduce((value, element) => value + element);
 
-    return totalPriceRounded;
+    var totalAmountRounded = double.parse(totalAmount.toStringAsFixed(2));
+
+    return totalAmountRounded;
   }
 
   Future<void> _onAddProduct(AddProductEvent event, Emitter<OrderState> emit) async {

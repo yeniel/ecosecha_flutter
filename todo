@@ -1,4 +1,5 @@
-- Pedido Vacía
+- Pedido Vacío
+  - Al cambiar el pedido no estoy copiando el order que hay en api al order de cache
   - Entregar en y El día están vaciós
   - El texto "El pedido debe contener..." ponerlo más grande y centrado
   - Añadir imagen en el centro

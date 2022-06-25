@@ -67,7 +67,7 @@ class OrderView extends StatelessWidget {
                     minimumAmount: state.minimumAmount,
                   ),
                 ),
-                TotalPrice(totalPrice: state.totalPrice),
+                TotalAmount(totalAmount: state.totalAmount),
                 OrderActionButtons(state: state),
               ],
             ),
@@ -90,12 +90,17 @@ class OrderProductsWidget extends StatelessWidget {
     var textTheme = Theme.of(context).textTheme;
 
     if (products.isEmpty) {
-      return Center(
-        child: Text(
-          S.minimum_amount(minimumAmount),
-          style: textTheme.headline6,
-          textAlign: TextAlign.center,
-        ),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.remove_shopping_cart_rounded, size: 64),
+          const SizedBox(height: 8),
+          Text(
+            S.minimum_amount(minimumAmount),
+            style: textTheme.headline6,
+            textAlign: TextAlign.center,
+          ),
+        ],
       );
     }
     return ListView.builder(
@@ -174,10 +179,10 @@ class OrderProductWidget extends StatelessWidget {
   }
 }
 
-class TotalPrice extends StatelessWidget {
-  const TotalPrice({Key? key, required this.totalPrice}) : super(key: key);
+class TotalAmount extends StatelessWidget {
+  const TotalAmount({Key? key, required this.totalAmount}) : super(key: key);
 
-  final double totalPrice;
+  final double totalAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +194,7 @@ class TotalPrice extends StatelessWidget {
       children: [
         Text(S.total.capitalizeSentence, style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
         const Spacer(),
-        Text('${totalPrice.toString()} €', style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold))
+        Text('${totalAmount.toString()} €', style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold))
       ],
     );
   }
@@ -204,7 +209,7 @@ class OrderActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
     var bloc = context.read<OrderBloc>();
-    var confirmButtonEnabled = !state.confirmed && state.order.products.isNotEmpty;
+    var confirmButtonEnabled = !state.confirmed;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
