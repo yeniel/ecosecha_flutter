@@ -1,11 +1,9 @@
 - Pedido Vacío
-  - Al cambiar el pedido no estoy copiando el order que hay en api al order de cache
+  - Error al añadir productos sueltos flutter: type 'List<Product>' is not a subtype of type 'List<OrderProduct>'
   - Entregar en y El día están vaciós
-  - El texto "El pedido debe contener..." ponerlo más grande y centrado
-  - Añadir imagen en el centro
-  - El precio total formatearlo a dos decimales
+  - El precio total formatearlo a dos decimales cuando es zero
 
-- Poner el OrderRepository.order como un stream para poder modfiicarlos desde varios sitios con el ProductQuantity
+- Poner el OrderRepository.order como un stream para poder modificarlos desde varios sitios con el ProductQuantity
 Ver como se hace en el TodoFlutter_bloc con un emit.forEach
 
 - Modificar pedido

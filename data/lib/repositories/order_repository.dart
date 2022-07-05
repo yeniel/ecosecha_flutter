@@ -9,38 +9,21 @@ class OrderRepository {
     required this.apiClient,
     required this.repository,
     required this.productsRepository,
-    required this.cacheDataSource,
   }) {
-    _getOrderInCache().then((orderInCache) {
-      if (orderInCache.products.isNotEmpty) {
-        _orderStreamController.add(orderInCache);
-      } else {
-        _orderStreamController.add(_getOrderInApi());
-      }
-    });
+    _orderInMemory = _getOrderInApi();
+    _orderStreamController.add(_orderInMemory);
   }
 
   final ApiClient apiClient;
   final Repository repository;
   final ProductsRepository productsRepository;
-  final OrderCacheDataSource cacheDataSource;
 
   final _orderStreamController = BehaviorSubject<Order>.seeded(Order.empty);
-  Order? _orderInCache;
+  Order _orderInMemory = Order.empty;
 
   Stream<Order> get order => _orderStreamController.asBroadcastStream();
 
-  bool get isConfirmed {
-    Order orderInApi = _getOrderInApi();
-    var confirmed = true;
-    var orderInCache = _orderInCache;
-
-    if (orderInCache != null && orderInCache.products.isNotEmpty) {
-      confirmed = orderInApi == _orderInCache;
-    }
-
-    return confirmed;
-  }
+  bool isConfirmed = true;
 
   List<Order>? get orderHistory {
     if (repository.orderHistoryDtoList != null) {
@@ -50,28 +33,29 @@ class OrderRepository {
     return null;
   }
 
-  void updateOrder({required Order order}) {
-    for (var orderProduct in order.products) {
-      cacheDataSource.upsertProduct(orderProduct: Mappers.toOrderProductCacheDto(orderProduct: orderProduct));
-    }
-
-    _emitOrder();
-  }
-
   Future<bool> confirmOrder() {
-    cacheDataSource.deleteAll();
+    isConfirmed = true;
 
     return Future.value(true);
   }
 
   void addOrUpdateProduct({required OrderProduct orderProduct}) {
-    cacheDataSource.upsertProduct(orderProduct: Mappers.toOrderProductCacheDto(orderProduct: orderProduct));
-    _emitOrder();
+    int savedOrderProductIndex =
+        _orderInMemory.products.indexWhere((element) => element.product == orderProduct.product);
+
+    if (savedOrderProductIndex == -1) {
+      _orderInMemory.products.add(orderProduct);
+    } else {
+      _orderInMemory.products[savedOrderProductIndex] = orderProduct;
+    }
+
+    _emitOrderChange();
   }
 
   void deleteProduct({required OrderProduct orderProduct}) {
-    cacheDataSource.deleteProduct(id: orderProduct.product.id);
-    _emitOrder();
+    _orderInMemory.products.removeWhere((element) => element.product == orderProduct.product);
+
+    _emitOrderChange();
   }
 
   Order _getOrderInApi() {
@@ -93,25 +77,8 @@ class OrderRepository {
     repository.orderDto!.products.removeWhere((element) => element.id == 0);
   }
 
-  Future<Order> _getOrderInCache() async {
-    List<OrderProductCacheDto> orderProductCacheDtoList = await cacheDataSource.getProducts();
-
-    List<OrderProduct> orderProducts = orderProductCacheDtoList.map((cacheProduct) {
-      var product = productsRepository.products.firstWhere((product) => product.id == cacheProduct.id);
-
-      return OrderProduct(product: product, quantity: cacheProduct.quantity);
-    }).toList();
-
-    var orderInCache = _getOrderInApi().copyWith(newProducts: orderProducts);
-
-    _orderInCache = orderInCache;
-
-    return orderInCache;
-  }
-
-  void _emitOrder() {
-    _getOrderInCache().then((orderInCache) {
-      _orderStreamController.add(orderInCache);
-    });
+  void _emitOrderChange() {
+    isConfirmed = _getOrderInApi() == _orderInMemory || _orderInMemory.products.isEmpty;
+    _orderStreamController.add(_orderInMemory);
   }
 }

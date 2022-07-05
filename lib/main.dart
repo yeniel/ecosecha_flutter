@@ -16,7 +16,6 @@ void main() async {
       var authRepository = AuthRepository(apiClient: apiClient);
       var repository = Repository(apiClient: apiClient, authRepository: authRepository);
       var productsRepository = ProductsRepository(repository: repository);
-      var orderCacheDataSource = OrderCacheDataSource();
 
       runApp(
         MultiRepositoryProvider(
@@ -30,7 +29,6 @@ void main() async {
               create: (context) => OrderRepository(
                 apiClient: apiClient,
                 productsRepository: productsRepository,
-                cacheDataSource: orderCacheDataSource,
                 repository: repository,
               ),
             ),

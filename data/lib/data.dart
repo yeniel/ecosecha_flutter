@@ -8,7 +8,6 @@ export 'dtos/jwt_dto.dart';
 export 'dtos/order_dto.dart';
 export 'dtos/order_history_dto.dart'
 ;
-export 'dtos/order_product_cache_dto.dart';
 export 'dtos/order_product_dto.dart';
 export 'dtos/product_dto.dart';
 export 'dtos/user_dto.dart';
@@ -18,7 +17,6 @@ export 'repositories/api_errors.dart';
 export 'repositories/auth_repository.dart';
 export 'repositories/company_repository.dart';
 export 'repositories/http_api_client.dart';
-export 'repositories/order_cache_datasource.dart';
 export 'repositories/order_repository.dart';
 export 'repositories/products_repository.dart';
 export 'repositories/repository.dart';

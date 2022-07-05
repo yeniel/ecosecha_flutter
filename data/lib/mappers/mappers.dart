@@ -112,10 +112,6 @@ class Mappers {
     }
   }
 
-  static OrderProductCacheDto toOrderProductCacheDto({required OrderProduct orderProduct}) {
-    return OrderProductCacheDto(id: orderProduct.product.id, quantity: orderProduct.quantity);
-  }
-
   static List<ProductCategory> toCategoryMenuItemList({required List<FamilyDto> familyDtoList}) {
     return familyDtoList
         .map((familyDto) {
