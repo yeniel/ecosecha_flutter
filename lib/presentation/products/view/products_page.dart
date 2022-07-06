@@ -1,5 +1,6 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
 import 'package:ecosecha_flutter/presentation/products/bloc/products_bloc.dart';
 import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
@@ -8,23 +9,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductsPage extends StatelessWidget {
-  const ProductsPage({Key? key}) : super(key: key);
+  ProductsPage({Key? key, required ProductCategory category})
+      : _category = category,
+        super(key: key);
 
-  static Route route({ProductCategory? category}) {
-    return MaterialPageRoute(
-      builder: (context) => BlocProvider(
-        create: (context) => ProductsBloc(
-          productsRepository: context.read<ProductsRepository>(),
-          category: category,
-        )..add(const ProductsInitEvent()),
-        child: const ProductsPage(),
-      ),
-    );
+  final ProductCategory _category;
+
+  static Route route({required ProductCategory category}) {
+    return MaterialPageRoute(builder: (_) => ProductsPage(category: category));
   }
 
   @override
   Widget build(BuildContext context) {
-    return const ProductsView();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductsBloc(
+            productsRepository: context.read<ProductsRepository>(),
+            orderRepository: context.read<OrderRepository>(),
+            category: _category,
+          )..add(const ProductsInitEvent()),
+        ),
+        BlocProvider(
+          create: (_) => OrderBloc(
+            orderRepository: context.read<OrderRepository>(),
+            userRepository: context.read<UserRepository>(),
+            companyRepository: context.read<CompanyRepository>(),
+          )..add(const OrderInitEvent()),
+        ),
+      ],
+      child: const ProductsView(),
+    );
   }
 }
 
