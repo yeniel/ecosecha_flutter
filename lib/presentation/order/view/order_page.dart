@@ -3,6 +3,7 @@ import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/basket_product_list/view/basket_product_list_page.dart';
 import 'package:ecosecha_flutter/presentation/order/bloc/order_bloc.dart';
 import 'package:ecosecha_flutter/presentation/widgets/base_view.dart';
+import 'package:ecosecha_flutter/presentation/widgets/dialog_builder.dart';
 import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_image.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_quantity.dart';
@@ -40,7 +41,26 @@ class OrderView extends StatelessWidget {
 
     return BaseView(
       title: Header(title: S.order.capitalizeSentence),
-      body: BlocBuilder<OrderBloc, OrderState>(
+      body: BlocConsumer<OrderBloc, OrderState>(
+        listener: (context, state) {
+          if (state.status == OrderStatus.loading) {
+            DialogBuilder(context).showLoadingIndicator(context: context, text: S.loading_indicator);
+          } else if (state.status == OrderStatus.loaded) {
+            DialogBuilder(context).hideOpenDialog();
+          } else if (state.status == OrderStatus.confirmError) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(content: Text(S.confirm_order_error)),
+              );
+          } else if (state.status == OrderStatus.orderOutOfDate) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(content: Text(state.error)),
+              );
+          }
+        },
         builder: (context, state) {
           return Expanded(
             child: Column(

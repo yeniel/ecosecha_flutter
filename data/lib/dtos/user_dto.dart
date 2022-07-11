@@ -9,7 +9,7 @@ class UserDto {
     required this.name,
     required this.emails,
     required this.deliveryGroup,
-    required this.warningMessage,
+    required this.orderWarning,
   });
 
   factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
@@ -27,7 +27,7 @@ class UserDto {
   final String deliveryGroup;
 
   @JsonKey(name: 'validacion')
-  final String warningMessage;
+  final String orderWarning;
 
   Map<String, dynamic> toJson() => _$UserDtoToJson(this);
 }

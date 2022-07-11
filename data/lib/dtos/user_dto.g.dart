@@ -13,7 +13,7 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) => UserDto(
           .map((e) => e as String)
           .toList(),
       deliveryGroup: json['nombreGrupo'] as String,
-      warningMessage: json['validacion'] as String,
+      orderWarning: json['validacion'] as String,
     );
 
 Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
@@ -21,5 +21,5 @@ Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
       'nombre': instance.name,
       'cuentasCorreo': instance.emails,
       'nombreGrupo': instance.deliveryGroup,
-      'validacion': instance.warningMessage,
+      'validacion': instance.orderWarning,
     };

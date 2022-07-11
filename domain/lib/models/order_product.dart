@@ -6,11 +6,17 @@ class OrderProduct extends Equatable {
 
   final Product product;
   final int quantity;
+  double get amount {
+    return product.price * quantity;
+  }
 
   static const OrderProduct empty = OrderProduct(product: Product.empty, quantity: 0);
 
-  OrderProduct copyWith({product, quantity}) {
-    return OrderProduct(product: product ?? this.product, quantity: quantity ?? this.quantity);
+  OrderProduct copyWith({product, quantity, amount}) {
+    return OrderProduct(
+      product: product ?? this.product,
+      quantity: quantity ?? this.quantity,
+    );
   }
 
   @override

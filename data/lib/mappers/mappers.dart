@@ -9,7 +9,13 @@ class Mappers {
     if (userDto != null) {
       var firstEmail = userDto.emails.first.replaceAll('\n', '');
 
-      return User(id: userDto.id, name: userDto.name, email: firstEmail, deliveryGroup: userDto.deliveryGroup);
+      return User(
+        id: userDto.id,
+        name: userDto.name,
+        email: firstEmail,
+        deliveryGroup: userDto.deliveryGroup,
+        orderWarning: userDto.orderWarning,
+      );
     } else {
       return null;
     }
@@ -44,14 +50,15 @@ class Mappers {
 
       return Product(
         id: productDto.id,
-        basketId: productDto.basketId,
+        codigo: productDto.codigo,
         name: productDto.name,
         price: productDto.price,
         origin: productDto.origin,
         image: _getProductImageUrl(productDto),
         measureUnit: productDto.measureUnit,
         type: productType,
-        categoryId: int.parse(productDto.category),
+        category: int.parse(productDto.category),
+        family: int.parse(productDto.family),
       );
     } else {
       return null;
@@ -136,8 +143,8 @@ class Mappers {
     );
   }
 
-  static String _getIconName(int categoryId) {
-    switch (categoryId) {
+  static String _getIconName(int category) {
+    switch (category) {
       case 1:
         return 'fruit';
       case 4:

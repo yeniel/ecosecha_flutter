@@ -33,12 +33,12 @@ class ProductsRepository {
   }
 
   List<Product> getProductsOfCategory(ProductCategory category) {
-    return extras?.where((product) => product.categoryId == category.id).toList() ?? [];
+    return extras?.where((product) => product.category == category.id).toList() ?? [];
   }
 
   List<BasketProduct>? getProductsOfBasket(Product basket) {
     var productDtoList =
-        repository.basketProductDtoList?.where((element) => element.basketId == basket.basketId).toList();
+        repository.basketProductDtoList?.where((element) => element.basketId == basket.codigo).toList();
 
     if (productDtoList != null) {
       return Mappers.toBasketProductList(basketProductDtoList: productDtoList, productList: products);

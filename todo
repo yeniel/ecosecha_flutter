@@ -1,18 +1,10 @@
-
-  - Error al añadir productos sueltos flutter: type 'List<Product>' is not a subtype of type 'List<OrderProduct>'
-  - Entregar en y El día están vaciós
-  - El precio total formatearlo a dos decimales cuando es zero
-
-- Poner el OrderRepository.order como un stream para poder modificarlos desde varios sitios con el ProductQuantity
-Ver como se hace en el TodoFlutter_bloc con un emit.forEach
-
 - Modificar pedido
-- Añadir loading al confirmar pedido
+  - Generar htmlPedido
 - Cancelar pedido
     Para cancelar totalmente un pedido ya confirmado o cancelar la cesta semanal tendréis que enviarnos un email a info@ecosecha.org. Seremos nosotros los que cancelemos el pedido.
 - Aviso de mas de una cesta en el pedido
     Cuando tengáis asignada una cesta y queréis cambiarla por otra, tenéis que tener en cuenta que hay que cancelar la que tenías asignada ya, sino se os quedarían las dos cestas grabadas, la que teníais asignada y la que queréis
-- mdoConsumidor.validacion: Creo que este campo es para saber si se puede cambiar el pedido, si llega "Ok" si no llega un mensaje diciendo que ya no se puede cambiar
+
 - Zendesk
 - Notificaciones
   - Si no ha cambiado la cesta por defecto

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:data/data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
@@ -29,7 +30,7 @@ class HttpApiClient implements ApiClient {
     final response = await client.get(
       Uri.parse(_host + _basePath + path),
       headers: {'Content-Type': 'application/json'},
-    );
+    ).timeout(const Duration(seconds: 30));;
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -39,12 +40,16 @@ class HttpApiClient implements ApiClient {
   }
 
   @override
-  Future<Map<String, dynamic>> post({required String path, required Map<String, String> body}) async {
+  Future<Map<String, dynamic>> post({required String path, required Map<String, dynamic> body}) async {
     final response = await client.post(
       Uri.parse(_host + _basePath + path),
       body: json.encode(body),
       headers: {'Content-Type': 'application/json'},
-    );
+    ).timeout(const Duration(seconds: 30));
+
+    if (kDebugMode) {
+      print(response);
+    }
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));

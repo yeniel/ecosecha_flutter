@@ -1,5 +1,6 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
 
 // ignore: depend_on_referenced_packages
 import "package:rxdart/rxdart.dart";
@@ -8,22 +9,24 @@ class OrderRepository {
   OrderRepository({
     required this.apiClient,
     required this.repository,
+    required this.authRepository,
     required this.productsRepository,
+    required this.userRepository,
   }) {
-    _orderInMemory = _getOrderInApi();
+    _orderInMemory = _getOrderFromApi();
     _orderStreamController.add(_orderInMemory);
   }
 
   final ApiClient apiClient;
   final Repository repository;
+  final AuthRepository authRepository;
+  final UserRepository userRepository;
   final ProductsRepository productsRepository;
 
   final _orderStreamController = BehaviorSubject<Order>.seeded(Order.empty);
   Order _orderInMemory = Order.empty;
 
   Stream<Order> get order => _orderStreamController.asBroadcastStream();
-
-  bool isConfirmed = true;
 
   List<Order>? get orderHistory {
     if (repository.orderHistoryDtoList != null) {
@@ -34,9 +37,53 @@ class OrderRepository {
   }
 
   Future<bool> confirmOrder() {
-    isConfirmed = true;
+    Order orderFromApi = _getOrderFromApi();
+    Map<String, dynamic> body;
+    var jwt = authRepository.jwt?.value;
+    var user = userRepository.user;
 
-    return Future.value(true);
+    if (jwt != null && user != null) {
+      body = {
+        "token": jwt,
+        "usuario": user.id,
+        "fechaPedido": orderFromApi.date,
+        "mdoLineasPedidoWeb": mapOrderDtoToJson(),
+        "email": "",
+        "cuentaCorreo": user.email,
+        "htmlPedido": "<!doctype html><html></html>"
+      };
+
+      return apiClient.post(path: 'grabarpedido', body: body).then((response) {
+        if (kDebugMode) {
+          print(response);
+        }
+
+        return Future.value(true);
+      });
+    } else {
+      return Future.value(false);
+    }
+  }
+
+  List<Map<String, dynamic>> mapOrderDtoToJson() {
+    List<Map<String, dynamic>> json = [];
+    Order order = _orderInMemory;
+
+    for (var orderProduct in order.products) {
+      var product = orderProduct.product;
+
+      json.add({
+        "nombreProducto": product.name,
+        "cantidad": orderProduct.quantity.toString(),
+        "codigoProducto": product.codigo.toString(),
+        "familiaProducto": product.family.toString(),
+        "importe": orderProduct.amount.toString(),
+        "precio": product.price,
+        "idProducto": product.id
+      });
+    }
+    
+    return json;
   }
 
   void addOrUpdateProduct({required OrderProduct orderProduct}) {
@@ -58,7 +105,7 @@ class OrderRepository {
     _emitOrderChange();
   }
 
-  Order _getOrderInApi() {
+  Order _getOrderFromApi() {
     if (repository.orderDto != null && repository.userDto != null && repository.productDtoList != null) {
       _removeEmptyMaps();
 
@@ -78,7 +125,6 @@ class OrderRepository {
   }
 
   void _emitOrderChange() {
-    isConfirmed = _getOrderInApi() == _orderInMemory || _orderInMemory.products.isEmpty;
     _orderStreamController.add(_orderInMemory);
   }
 }

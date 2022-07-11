@@ -6,7 +6,6 @@ part 'product_dto.g.dart';
 class ProductDto {
   const ProductDto({
     required this.id,
-    required this.basketId,
     required this.name,
     required this.price,
     required this.origin,
@@ -14,6 +13,7 @@ class ProductDto {
     required this.measureUnit,
     required this.family,
     required this.category,
+    required this.codigo,
   });
 
   factory ProductDto.fromJson(Map<String, dynamic> json) => _$ProductDtoFromJson(json);
@@ -22,7 +22,7 @@ class ProductDto {
   final int id;
 
   @JsonKey(name: 'codigo')
-  final String basketId;
+  final String codigo;
 
   @JsonKey(name: 'descripcion')
   final String name;

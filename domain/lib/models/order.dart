@@ -10,8 +10,8 @@ class Order extends Equatable {
 
   static const empty = Order(products: [], date: '', deliveryGroup: '');
 
-  Order copyWith({required newProducts}) {
-    return Order(products: newProducts, date: date, deliveryGroup: deliveryGroup);
+  Order copyWith({newProducts}) {
+    return Order(products: newProducts ?? products, date: date, deliveryGroup: deliveryGroup);
   }
 
   @override

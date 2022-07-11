@@ -16,6 +16,8 @@ void main() async {
       var authRepository = AuthRepository(apiClient: apiClient);
       var repository = Repository(apiClient: apiClient, authRepository: authRepository);
       var productsRepository = ProductsRepository(repository: repository);
+      var userRepository = UserRepository(repository: repository);
+      var companyRepository = CompanyRepository(repository: repository);
 
       runApp(
         MultiRepositoryProvider(
@@ -23,12 +25,14 @@ void main() async {
             RepositoryProvider(create: (context) => authRepository),
             RepositoryProvider(create: (context) => repository),
             RepositoryProvider(create: (context) => productsRepository),
-            RepositoryProvider(create: (context) => UserRepository(repository: repository)),
-            RepositoryProvider(create: (context) => CompanyRepository(repository: repository)),
+            RepositoryProvider(create: (context) => userRepository),
+            RepositoryProvider(create: (context) => companyRepository),
             RepositoryProvider(
               create: (context) => OrderRepository(
                 apiClient: apiClient,
                 productsRepository: productsRepository,
+                authRepository: authRepository,
+                userRepository: userRepository,
                 repository: repository,
               ),
             ),

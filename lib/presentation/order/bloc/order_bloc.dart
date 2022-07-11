@@ -28,20 +28,41 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final OrderRepository _orderRepository;
   final CompanyRepository _companyRepository;
   final UserRepository _userRepository;
+  Order? _initialOrder;
+
+  bool get isOrderOutOfDate {
+    return _userRepository.user?.orderWarning != 'Ok';
+  }
 
   Future<void> _onOrderInit(OrderInitEvent event, Emitter<OrderState> emit) async {
     await emit.forEach<Order>(
       _orderRepository.order,
       onData: (order) {
-        var confirmed = _orderRepository.isConfirmed;
         var totalAmount = _calculateTotalAmount(order);
         var company = _companyRepository.company;
+        var status = OrderStatus.init;
+        String? error;
+
+        _initialOrder ??= Order(
+          products: List.from(order.products),
+          date: order.date,
+          deliveryGroup: order.deliveryGroup,
+        );
+
+        var isConfirmed = _initialOrder == order || order.products.isEmpty || isOrderOutOfDate;
+
+        if (isOrderOutOfDate) {
+          status = OrderStatus.orderOutOfDate;
+          error = _userRepository.user?.orderWarning;
+        }
 
         return state.copyWith(
           order: order,
           totalAmount: totalAmount,
-          confirmed: confirmed,
+          confirmed: isConfirmed,
           minimumAmount: company?.minimumAmount,
+          status: status,
+          error: error,
         );
       },
       onError: (_, __) => state,
@@ -49,11 +70,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   double _calculateTotalAmount(Order order) {
-    var productAmountList = order.products.map((product) {
-      return product.quantity * product.product.price;
-    });
+    var totalAmount = 0.0;
 
-    var totalAmount = productAmountList.isEmpty ? 0 : productAmountList.reduce((value, element) => value + element);
+    if (order.products.isNotEmpty) {
+      totalAmount = order.products.map((e) => e.amount).reduce((value, element) => value + element);
+    }
 
     var totalAmountRounded = double.parse(totalAmount.toStringAsFixed(2));
 
@@ -94,6 +115,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   Future<void> _onConfirmOrder(ConfirmOrderEvent event, Emitter<OrderState> emit) async {
-    await _orderRepository.confirmOrder();
+    emit(state.copyWith(status: OrderStatus.loading));
+    var response = await _orderRepository.confirmOrder();
+
+    if (response) {
+      emit(state.copyWith(status: OrderStatus.loaded));
+    } else {
+      emit(state.copyWith(status: OrderStatus.confirmError));
+    }
   }
 }

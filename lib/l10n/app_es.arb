@@ -33,5 +33,7 @@
   "confirm": "confirmar",
   "cancel_order": "cancelar pedido",
   "minimum_amount": "El pedido debe contener al menos una cesta o {minimumAmount}€ en productos",
-  "confirm": "confirmar"
+  "confirm": "confirmar",
+  "loading_indicator": "Por favor espere",
+  "confirm_order_error": "No hemos podido confirmar su pedido. Inténtelo más tarde."
 }
