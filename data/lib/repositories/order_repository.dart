@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 
 // ignore: depend_on_referenced_packages
 import "package:rxdart/rxdart.dart";
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:async' show Future;
 
 class OrderRepository {
   OrderRepository({
@@ -36,7 +38,7 @@ class OrderRepository {
     return null;
   }
 
-  Future<bool> confirmOrder() {
+  Future<bool> confirmOrder() async {
     Order orderFromApi = _getOrderFromApi();
     Map<String, dynamic> body;
     var jwt = authRepository.jwt?.value;
@@ -50,7 +52,7 @@ class OrderRepository {
         "mdoLineasPedidoWeb": mapOrderDtoToJson(),
         "email": "",
         "cuentaCorreo": user.email,
-        "htmlPedido": "<!doctype html><html></html>"
+        "htmlPedido": await _getHtmlPedido()
       };
 
       return apiClient.post(path: 'grabarpedido', body: body).then((response) {
@@ -84,6 +86,32 @@ class OrderRepository {
     }
     
     return json;
+  }
+
+  Future<String> _getHtmlPedido() async {
+    String htmlPedidoTemplate = await rootBundle.loadString('assets/html_pedido.txt');
+    var user = userRepository.user;
+    Order orderFromApi = _getOrderFromApi();
+    String orderProducts = _getOrderProductsHtml();
+
+    htmlPedidoTemplate = htmlPedidoTemplate.replaceFirst('{{userName}}', user?.name ?? '');
+    htmlPedidoTemplate = htmlPedidoTemplate.replaceFirst('{{date}}', orderFromApi.date);
+    htmlPedidoTemplate = htmlPedidoTemplate.replaceFirst('{{orderProducts}}', orderProducts);
+
+    return htmlPedidoTemplate;
+  }
+
+  String _getOrderProductsHtml() {
+    Order order = _orderInMemory;
+    String html = '';
+
+    for (var orderProduct in order.products) {
+      var product = orderProduct.product;
+
+      html += '<li>${product.name} (${orderProduct.quantity})</li>';
+    }
+
+    return html;
   }
 
   void addOrUpdateProduct({required OrderProduct orderProduct}) {

@@ -53,8 +53,7 @@ flutter:
   generate: true
 
   assets:
-    - assets/product_default.jpeg
-    - assets/app_icon.png
+    - assets/
 
 flutter_icons:
   android: true

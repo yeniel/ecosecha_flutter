@@ -119,7 +119,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     var response = await _orderRepository.confirmOrder();
 
     if (response) {
-      emit(state.copyWith(status: OrderStatus.loaded));
+      emit(state.copyWith(status: OrderStatus.loaded, confirmed: true));
     } else {
       emit(state.copyWith(status: OrderStatus.confirmError));
     }
