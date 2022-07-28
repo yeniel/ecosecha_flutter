@@ -1,13 +1,12 @@
 - Notificaciones
   - Último día para hacer el pedido
-- Implementar pull to refresh. https://pub.dev/packages/pull_to_refresh
 - Buscar en Cestas
 - Buscar en Categorías
 - Ordenar pedido como mercadona, Por categorías o por fecha
 - Amplitude
 - Firebase para AB Test y push...
-- Widget con la cesta y los extras
 - Registro de nuevos usuarios
 - Onboarding
+- Widget con la cesta y los extras
 - Notificacion: Si no ha cambiado la cesta por defecto (NO TENGO LA CESTA POR DEFECTO DEL USUARIO
 - BaseBloc: https://medium.com/flutter-community/mixins-and-base-classes-a-recipe-for-success-in-flutter-bc3fbb5da670

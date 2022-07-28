@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,8 @@ class _AppViewState extends State<AppView> {
 
   @override
   Widget build(BuildContext context) {
+    listenLocalNotifications();
+
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.green,
@@ -93,5 +96,18 @@ class _AppViewState extends State<AppView> {
       },
       onGenerateRoute: (_) => SplashPage.route(),
     );
+  }
+
+  void listenLocalNotifications() {
+    AwesomeNotifications().actionStream.listen((ReceivedNotification receivedNotification) {
+      // Navigator.of(context).pushNamed(
+      //     '/NotificationPage',
+      //     arguments: {
+      //       // your page params. I recommend you to pass the
+      //       // entire *receivedNotification* object
+      //       id: receivedNotification.id
+      //     }
+      // );
+    });
   }
 }

@@ -1,7 +1,11 @@
+import 'dart:async';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:bloc/bloc.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'order_event.dart';
@@ -42,6 +46,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         var company = _companyRepository.company;
         var status = OrderStatus.init;
         String? error;
+
+        configureLocalNotifications(orderDate: order.date);
 
         _initialOrder ??= Order(
           products: List.from(order.products),
@@ -123,5 +129,37 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     } else {
       emit(state.copyWith(status: OrderStatus.confirmError));
     }
+  }
+
+  void configureLocalNotifications({required String orderDate}) {
+    var date = DateFormat('dd/MM/yyyy').parse(orderDate);
+
+    date = date.subtract(const Duration(hours: 12));
+
+    if (date.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch) {
+      date = date.add(const Duration(days: 7));
+    }
+
+    unawaited(
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 1,
+          channelKey: 'basic_channel',
+          title: 'Ecosecha',
+          body: '¡Último día para modificar su pedido!',
+          wakeUpScreen: true,
+          category: NotificationCategory.Reminder,
+          notificationLayout: NotificationLayout.BigText,
+          autoDismissible: false,
+        ),
+        schedule: NotificationCalendar(
+          weekday: date.weekday,
+          hour: date.hour,
+          allowWhileIdle: true,
+          repeats: true,
+          preciseAlarm: true,
+        ),
+      ),
+    );
   }
 }

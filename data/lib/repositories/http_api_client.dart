@@ -30,7 +30,7 @@ class HttpApiClient implements ApiClient {
     final response = await client.get(
       Uri.parse(_host + _basePath + path),
       headers: {'Content-Type': 'application/json'},
-    ).timeout(const Duration(seconds: 30));;
+    ).timeout(const Duration(seconds: 30));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
