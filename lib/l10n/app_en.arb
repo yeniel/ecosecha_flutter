@@ -42,5 +42,6 @@
   },
   "confirm": "confirm",
   "loading_indicator": "Please wait",
-  "confirm_order_error": "We can not confirm your order. Try again later"
+  "confirm_order_error": "We can not confirm your order. Try again later",
+  "search": "Search"
 }

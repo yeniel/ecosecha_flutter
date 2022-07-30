@@ -62,6 +62,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           error = _userRepository.user?.orderWarning;
         }
 
+        order.products.sort((orderProduct1, orderProduct2) {
+          if (orderProduct1.product.type == ProductType.basket) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+
         return state.copyWith(
           order: order,
           totalAmount: totalAmount,

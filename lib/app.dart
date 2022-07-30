@@ -99,7 +99,7 @@ class _AppViewState extends State<AppView> {
   }
 
   void listenLocalNotifications() {
-    AwesomeNotifications().actionStream.listen((ReceivedNotification receivedNotification) {
+    // AwesomeNotifications().actionStream.listen((ReceivedNotification receivedNotification) {
       // Navigator.of(context).pushNamed(
       //     '/NotificationPage',
       //     arguments: {
@@ -108,6 +108,6 @@ class _AppViewState extends State<AppView> {
       //       id: receivedNotification.id
       //     }
       // );
-    });
+    // });
   }
 }

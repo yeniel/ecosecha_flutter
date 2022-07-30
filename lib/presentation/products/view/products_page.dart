@@ -7,6 +7,7 @@ import 'package:ecosecha_flutter/presentation/widgets/header.dart';
 import 'package:ecosecha_flutter/presentation/widgets/product_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductsPage extends StatelessWidget {
   ProductsPage({Key? key, required ProductCategory category})
@@ -48,6 +49,8 @@ class ProductsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var S = AppLocalizations.of(context)!;
+
     return BlocBuilder<ProductsBloc, ProductsState>(
       builder: (context, state) {
         return BaseView(
@@ -57,7 +60,21 @@ class ProductsView extends StatelessWidget {
             onBack: () => Navigator.of(context).maybePop(),
           ),
           body: Expanded(
-            child: ProductGridView(orderProducts: state.orderProducts),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  onChanged: (query) => context.read<ProductsBloc>().add(ProductsSearchEvent(query: query)),
+                  decoration: InputDecoration(
+                    labelText: S.search,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: ProductGridView(orderProducts: state.orderProducts),
+                ),
+              ],
+            ),
           ),
         );
       },

@@ -17,11 +17,13 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         _category = category ?? ProductCategory.empty(),
         super(ProductsState(category: category ?? ProductCategory.empty())) {
     on<ProductsInitEvent>(_onProductsInit);
+    on<ProductsSearchEvent>(_onProductsSearch);
   }
 
   final ProductsRepository _productsRepository;
   final OrderRepository _orderRepository;
   final ProductCategory _category;
+  List<OrderProduct> _allProducts = [];
 
   Future<void> _onProductsInit(ProductsInitEvent event, Emitter<ProductsState> emit) async {
     await emit.forEach<Order>(
@@ -34,9 +36,21 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
           );
         }).toList();
 
+        _allProducts = orderProducts;
+
         return state.copyWith(products: orderProducts);
       },
       onError: (_, __) => state,
     );
+  }
+
+  Future<void> _onProductsSearch(ProductsSearchEvent event, Emitter<ProductsState> emit) async {
+    var filteredProducts = _allProducts.where((element) {
+      var productName = element.product.name.toLowerCase();
+
+      return productName.contains(event.query);
+    }).toList();
+
+    emit(state.copyWith(products: filteredProducts));
   }
 }
