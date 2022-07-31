@@ -1,3 +1,5 @@
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/account/view/account_page.dart';
 import 'package:ecosecha_flutter/presentation/baskets/view/baskets_page.dart';
 import 'package:ecosecha_flutter/presentation/categories/view/categories_page.dart';
@@ -14,7 +16,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HomeBloc(),
+      create: (_) => HomeBloc(
+        userRepository: context.read<UserRepository>(),
+        analyticsManager: context.read<AnalyticsManager>(),
+      ),
       child: const HomeView(),
     );
   }

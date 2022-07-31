@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -48,11 +47,11 @@ class _AppViewState extends State<AppView> {
       // theme: ThemeData(
       //   colorScheme: const ColorScheme(
       //     brightness: Brightness.light,
-      //     primary: Constants.acelga,
+      //     primary: Colores.acelga,
       //     onPrimary: Colors.white,
-      //     secondary: Constants.acelga,
+      //     secondary: Colores.acelga,
       //     onSecondary: Colors.white,
-      //     error: Constants.rabano,
+      //     error: Colores.rabano,
       //     onError: Colors.white,
       //     background: Colors,
       //     onBackground: onBackground,

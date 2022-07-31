@@ -17,9 +17,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     required OrderRepository orderRepository,
     required CompanyRepository companyRepository,
     required UserRepository userRepository,
-  })  : _orderRepository = orderRepository,
+    required AnalyticsManager analyticsManager,
+  })
+      : _orderRepository = orderRepository,
         _companyRepository = companyRepository,
         _userRepository = userRepository,
+        _analyticsManager = analyticsManager,
         super(OrderState()) {
     on<OrderInitEvent>(_onOrderInit);
     on<AddProductEvent>(_onAddProduct);
@@ -27,11 +30,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<DeleteProductEvent>(_onDeleteProduct);
     on<CancelOrderEvent>(_onCancelOrder);
     on<ConfirmOrderEvent>(_onConfirmOrder);
+
+    _analyticsManager.logEvent(OrderPageEvent());
   }
 
   final OrderRepository _orderRepository;
   final CompanyRepository _companyRepository;
   final UserRepository _userRepository;
+  final AnalyticsManager _analyticsManager;
   Order? _initialOrder;
 
   bool get isOrderOutOfDate {
@@ -99,16 +105,29 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity + 1);
 
     _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
+    _analyticsManager.logEvent(AddProductAnalyticsEvent(
+      productId: orderProduct.product.id,
+      productName: orderProduct.product.name,
+    ));
   }
 
   Future<void> _onSubtractProduct(SubtractProductEvent event, Emitter<OrderState> emit) async {
     var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity - 1);
 
     _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
+    _analyticsManager.logEvent(SubtractProductAnalyticsEvent(
+      productId: orderProduct.product.id,
+      productName: orderProduct.product.name,
+    ));
   }
 
   Future<void> _onDeleteProduct(DeleteProductEvent event, Emitter<OrderState> emit) async {
     _orderRepository.deleteProduct(orderProduct: event.orderProduct);
+
+    _analyticsManager.logEvent(DeleteProductAnalyticsEvent(
+      productId: event.orderProduct.product.id,
+      productName: event.orderProduct.product.name,
+    ));
   }
 
   Future<void> _onCancelOrder(CancelOrderEvent event, Emitter<OrderState> emit) async {
@@ -126,6 +145,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     }
+
+    _analyticsManager.logEvent(CancelOrderAnalyticsEvent());
   }
 
   Future<void> _onConfirmOrder(ConfirmOrderEvent event, Emitter<OrderState> emit) async {
@@ -137,6 +158,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     } else {
       emit(state.copyWith(status: OrderStatus.confirmError));
     }
+
+    _analyticsManager.logEvent(ConfirmOrderAnalyticsEvent(success: response));
   }
 
   void configureLocalNotifications({required String orderDate}) {
@@ -144,7 +167,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
     date = date.subtract(const Duration(hours: 12));
 
-    if (date.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch) {
+    if (date.millisecondsSinceEpoch < DateTime
+        .now()
+        .millisecondsSinceEpoch) {
       date = date.add(const Duration(days: 7));
     }
 

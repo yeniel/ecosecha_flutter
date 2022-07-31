@@ -31,6 +31,7 @@ class BasketsPage extends StatelessWidget {
             orderRepository: context.read<OrderRepository>(),
             userRepository: context.read<UserRepository>(),
             companyRepository: context.read<CompanyRepository>(),
+            analyticsManager: context.read<AnalyticsManager>(),
           )..add(const OrderInitEvent()),
         ),
       ],

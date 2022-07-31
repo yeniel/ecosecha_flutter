@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/app.dart';
+import 'package:ecosecha_flutter/presentation/analytics/amplitude_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,6 +46,9 @@ void main() async {
       var productsRepository = ProductsRepository(repository: repository);
       var userRepository = UserRepository(repository: repository);
       var companyRepository = CompanyRepository(repository: repository);
+      var analyticsManager = AmplitudeManager();
+
+      await analyticsManager.init();
 
       runApp(
         MultiRepositoryProvider(
@@ -53,6 +58,8 @@ void main() async {
             RepositoryProvider(create: (context) => productsRepository),
             RepositoryProvider(create: (context) => userRepository),
             RepositoryProvider(create: (context) => companyRepository),
+            // ignore: unnecessary_cast
+            RepositoryProvider(create: (context) => analyticsManager as AnalyticsManager),
             RepositoryProvider(
               create: (context) => OrderRepository(
                 apiClient: apiClient,
