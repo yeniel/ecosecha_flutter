@@ -1,6 +1,6 @@
 import 'package:domain/domain.dart';
 
-class ContactEmailTapEvent implements AnalyticsEvent {
+class ContactEmailTapAnalyticsEvent implements AnalyticsEvent {
   @override
   String get name => AnalyticsEventName.contactEmailTap;
 

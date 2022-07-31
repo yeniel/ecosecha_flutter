@@ -8,13 +8,17 @@ part 'order_history_event.dart';
 part 'order_history_state.dart';
 
 class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState> {
-  OrderHistoryBloc({required OrderRepository orderRepository})
-      : _orderRepository = orderRepository,
+  OrderHistoryBloc({
+    required OrderRepository orderRepository,
+    required AnalyticsManager analyticsManager,
+  })  : _orderRepository = orderRepository,
+        _analyticsManager = analyticsManager,
         super(const OrderHistoryState()) {
     on<OrderHistoryEvent>(_onOrderHistoryInitEvent);
   }
 
   final OrderRepository _orderRepository;
+  final AnalyticsManager _analyticsManager;
 
   void _onOrderHistoryInitEvent(OrderHistoryEvent event, Emitter<OrderHistoryState> emit) {
     var orderHistory = _orderRepository.orderHistory;
@@ -22,5 +26,7 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState> {
     if (orderHistory != null) {
       emit(state.copyWith(orders: orderHistory));
     }
+
+    _analyticsManager.logEvent(OrderHistoryPageEvent());
   }
 }

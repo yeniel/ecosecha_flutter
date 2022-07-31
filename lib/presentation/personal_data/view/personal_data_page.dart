@@ -18,7 +18,10 @@ class PersonalDataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => PersonalDataBloc(userRepository: context.read<UserRepository>())..add(const PersonalDataInitEvent()),
+      create: (_) => PersonalDataBloc(
+        userRepository: context.read<UserRepository>(),
+        analyticsManager: context.read<AnalyticsManager>(),
+      )..add(const PersonalDataInitEvent()),
       child: const PersonalDataView(),
     );
   }

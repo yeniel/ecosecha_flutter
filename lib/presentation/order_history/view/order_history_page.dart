@@ -17,7 +17,10 @@ class OrderHistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OrderHistoryBloc(orderRepository: context.read<OrderRepository>())..add(const OrderHistoryInitEvent()),
+      create: (_) => OrderHistoryBloc(
+        orderRepository: context.read<OrderRepository>(),
+        analyticsManager: context.read<AnalyticsManager>(),
+      )..add(const OrderHistoryInitEvent()),
       child: const OrderHistoryView(),
     );
   }

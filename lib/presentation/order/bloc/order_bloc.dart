@@ -30,8 +30,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<DeleteProductEvent>(_onDeleteProduct);
     on<CancelOrderEvent>(_onCancelOrder);
     on<ConfirmOrderEvent>(_onConfirmOrder);
-
-    _analyticsManager.logEvent(OrderPageEvent());
   }
 
   final OrderRepository _orderRepository;

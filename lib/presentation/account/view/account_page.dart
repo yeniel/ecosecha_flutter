@@ -24,6 +24,7 @@ class AccountPage extends StatelessWidget {
       create: (_) => AccountBloc(
         authRepository: context.read<AuthRepository>(),
         companyRepository: context.read<CompanyRepository>(),
+        analyticsManager: context.read<AnalyticsManager>(),
       )..add(const AccountInitEvent()),
       child: const AccountView(),
     );

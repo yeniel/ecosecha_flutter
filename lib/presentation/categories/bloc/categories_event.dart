@@ -10,3 +10,12 @@ class CategoriesInitEvent extends CategoriesEvent {
   @override
   List<Object?> get props => [];
 }
+
+class CategoryTapEvent extends CategoriesEvent {
+  const CategoryTapEvent({required this.category});
+
+  final ProductCategory category;
+
+  @override
+  List<Object?> get props => [category];
+}

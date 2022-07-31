@@ -10,3 +10,17 @@ class ContactInitEvent extends ContactEvent {
   @override
   List<Object?> get props => [];
 }
+
+class ContactPhoneTapEvent extends ContactEvent {
+  const ContactPhoneTapEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class ContactEmailTapEvent extends ContactEvent {
+  const ContactEmailTapEvent();
+
+  @override
+  List<Object?> get props => [];
+}

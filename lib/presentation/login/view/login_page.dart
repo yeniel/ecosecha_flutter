@@ -1,4 +1,5 @@
 import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,8 +21,8 @@ class LoginPage extends StatelessWidget {
         child: BlocProvider(
           create: (context) {
             return LoginBloc(
-              authRepository:
-                  RepositoryProvider.of<AuthRepository>(context),
+              authRepository: RepositoryProvider.of<AuthRepository>(context),
+              analyticsManager: context.read<AnalyticsManager>(),
             );
           },
           child: LoginForm(),

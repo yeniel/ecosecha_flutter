@@ -14,17 +14,34 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   })  : _userRepository = userRepository,
         _analyticsManager = analyticsManager,
         super(HomeInitial()) {
-    on<HomeSetTabEvent>((event, emit) => emit(HomeTabSetState(tab: event.tab)));
+    on<HomeSetTabEvent>(_onHomeSetTab);
 
     var user = _userRepository.user;
 
     if (user != null) {
       _analyticsManager.setUserId(user.id.toString());
     }
-
-    _analyticsManager.logEvent(StartAppEvent());
   }
 
   final UserRepository _userRepository;
   final AnalyticsManager _analyticsManager;
+
+  Future<void> _onHomeSetTab(HomeSetTabEvent event, Emitter<HomeState> emit) async {
+    emit(HomeTabSetState(tab: event.tab));
+
+    switch (event.tab) {
+      case HomeTab.order:
+        _analyticsManager.logEvent(OrderPageEvent());
+        break;
+      case HomeTab.baskets:
+        _analyticsManager.logEvent(BasketsPageEvent());
+        break;
+      case HomeTab.products:
+        _analyticsManager.logEvent(CategoriesPageEvent());
+        break;
+      case HomeTab.account:
+        _analyticsManager.logEvent(AccountPageEvent());
+        break;
+    }
+  }
 }

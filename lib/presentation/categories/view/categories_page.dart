@@ -19,7 +19,10 @@ class CategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CategoriesBloc(productsRepository: context.read<ProductsRepository>())..add(const CategoriesInitEvent()),
+      create: (_) => CategoriesBloc(
+        productsRepository: context.read<ProductsRepository>(),
+        analyticsManager: context.read<AnalyticsManager>(),
+      )..add(const CategoriesInitEvent()),
       child: const CategoriesView(),
     );
   }
@@ -59,7 +62,10 @@ class CategoryMenuItemView extends StatelessWidget {
     return ListTile(
       leading: FaIcon(_getIconData(category.icon)),
       title: Text(category.name),
-      onTap: () => Navigator.of(context).push(ProductsPage.route(category: category)),
+      onTap: () {
+        context.read<CategoriesBloc>().add(CategoryTapEvent(category: category));
+        Navigator.of(context).push(ProductsPage.route(category: category));
+      },
     );
   }
 

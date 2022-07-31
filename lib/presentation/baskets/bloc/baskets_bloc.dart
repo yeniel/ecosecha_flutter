@@ -8,8 +8,10 @@ part 'baskets_event.dart';
 part 'baskets_state.dart';
 
 class BasketsBloc extends Bloc<BasketsEvent, BasketsState> {
-  BasketsBloc({required ProductsRepository productsRepository, required OrderRepository orderRepository})
-      : _productsRepository = productsRepository,
+  BasketsBloc({
+    required ProductsRepository productsRepository,
+    required OrderRepository orderRepository,
+  })  : _productsRepository = productsRepository,
         _orderRepository = orderRepository,
         super(const BasketsState()) {
     on<BasketsInitEvent>(_onBasketsInit);

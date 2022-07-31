@@ -11,6 +11,20 @@ class AccountInitEvent extends AccountEvent {
   List<Object?> get props => [];
 }
 
+class AccountOrderWebSiteTapEvent extends AccountEvent {
+  const AccountOrderWebSiteTapEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class AccountBlogTapEvent extends AccountEvent {
+  const AccountBlogTapEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
 class AccountLogoutEvent extends AccountEvent {
   const AccountLogoutEvent();
 

@@ -18,9 +18,10 @@ class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-      ContactBloc(companyRepository: context.read<CompanyRepository>())
-        ..add(const ContactInitEvent()),
+      create: (_) => ContactBloc(
+        companyRepository: context.read<CompanyRepository>(),
+        analyticsManager: context.read<AnalyticsManager>(),
+      )..add(const ContactInitEvent()),
       child: const ContactView(),
     );
   }
@@ -32,6 +33,7 @@ class ContactView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
+    var bloc = context.read<ContactBloc>();
 
     return BaseView(
       title: Header(
@@ -54,6 +56,8 @@ class ContactView extends StatelessWidget {
                     onTap: () async {
                       var emailUri = Uri.parse('mailto:${state.company.email}');
 
+                      bloc.add(const ContactPhoneTapEvent());
+
                       await launchUrl(emailUri);
                     },
                   ),
@@ -63,6 +67,8 @@ class ContactView extends StatelessWidget {
                     subtitle: Text(state.company.phone),
                     onTap: () async {
                       var phoneUri = Uri.parse('tel:${state.company.phone}');
+
+                      bloc.add(const ContactEmailTapEvent());
 
                       await launchUrl(phoneUri);
                     },

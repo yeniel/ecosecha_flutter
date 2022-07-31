@@ -1,5 +1,4 @@
 class AnalyticsEventName {
-  static const startApp = 'startApp';
   static const orderPage = 'orderPage';
   static const addProduct = 'addProduct';
   static const subtractProduct = 'subtractProduct';
@@ -7,8 +6,9 @@ class AnalyticsEventName {
   static const cancelOrder = 'cancelOrder';
   static const confirmOrder = 'confirmOrder';
   static const basketsPage = 'basketsPage';
+  static const basketProductListPage = 'basketProductListPage';
   static const categoriesPage = 'categoriesPage';
-  static const categoryPage = 'categoryPage';
+  static const categoryTap = 'categoryPage';
   static const accountPage = 'accountPage';
   static const personalDataPage = 'personalDataPage';
   static const orderHistoryPage = 'orderHistoryPage';

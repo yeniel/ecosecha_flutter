@@ -48,7 +48,7 @@ class HttpApiClient implements ApiClient {
     ).timeout(const Duration(seconds: 30));
 
     if (kDebugMode) {
-      print(response);
+      print(String.fromCharCodes(response.bodyBytes));
     }
 
     if (response.statusCode == 200) {

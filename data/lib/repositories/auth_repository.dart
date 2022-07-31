@@ -69,7 +69,7 @@ class AuthRepository {
     if (_password == null) {
       var passwordFromSharedPreferences = _prefs?.getString(passwordKey);
 
-      if (_prefs != null && passwordFromSharedPreferences != null) {
+      if (_prefs != null && passwordFromSharedPreferences != null && passwordFromSharedPreferences.isNotEmpty) {
         _password = passwordFromSharedPreferences;
       }
     }
@@ -86,7 +86,7 @@ class AuthRepository {
       _savePassword(password);
       _controller.add(AuthenticationStatus.authenticated);
     }).catchError((error) {
-      if (error is ApiError) {
+      if (error is ExpiredToken || error is ApiError) {
         throw InvalidCredentials();
       }
     });
@@ -101,6 +101,7 @@ class AuthRepository {
   }
 
   void logout() {
+    _prefs?.setString(passwordKey, '');
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 

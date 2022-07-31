@@ -1,6 +1,8 @@
 import 'package:domain/domain.dart';
 
 class LoginErrorEvent implements AnalyticsEvent {
+  LoginErrorEvent({required this.error});
+
   @override
   String get name => AnalyticsEventName.loginError;
 

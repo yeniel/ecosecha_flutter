@@ -1,8 +1,8 @@
 import 'package:domain/domain.dart';
 
-class StartAppEvent implements AnalyticsEvent {
+class LoginAnalyticsEvent implements AnalyticsEvent {
   @override
-  String get name => AnalyticsEventName.startApp;
+  String get name => AnalyticsEventName.login;
 
   @override
   Map<String, dynamic> get properties => {};

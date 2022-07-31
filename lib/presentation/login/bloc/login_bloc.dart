@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation//login/login.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
@@ -11,7 +12,9 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
     required AuthRepository authRepository,
+    required AnalyticsManager analyticsManager,
   })  : _authRepository = authRepository,
+        _analyticsManager = analyticsManager,
         super(const LoginState()) {
     on<LoginUsernameChanged>(_onUsernameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
@@ -19,6 +22,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   final AuthRepository _authRepository;
+  final AnalyticsManager _analyticsManager;
 
   void _onUsernameChanged(
     LoginUsernameChanged event,
@@ -57,8 +61,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
 
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
-      } catch (_) {
+        _analyticsManager.logEvent(LoginAnalyticsEvent());
+      } catch (error) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
+        _analyticsManager.logEvent(LoginErrorEvent(error: error.toString()));
       }
     }
   }
