@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:data/data.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
@@ -47,9 +46,9 @@ class HttpApiClient implements ApiClient {
       headers: {'Content-Type': 'application/json'},
     ).timeout(const Duration(seconds: 30));
 
-    if (kDebugMode) {
-      print(String.fromCharCodes(response.bodyBytes));
-    }
+    // if (kDebugMode) {
+    //   print(String.fromCharCodes(response.bodyBytes));
+    // }
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));

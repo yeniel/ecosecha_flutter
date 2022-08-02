@@ -38,8 +38,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final AnalyticsManager _analyticsManager;
   Order? _initialOrder;
 
-  bool get isOrderOutOfDate {
-    return _userRepository.user?.orderWarning != 'Ok';
+  bool get canChangeOrder {
+    return _userRepository.user?.orderWarning == 'Ok';
   }
 
   Future<void> _onOrderInit(OrderInitEvent event, Emitter<OrderState> emit) async {
@@ -48,7 +48,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       onData: (order) {
         var totalAmount = _calculateTotalAmount(order);
         var company = _companyRepository.company;
-        var status = OrderStatus.init;
+        var status = OrderPageStatus.init;
         String? error;
 
         configureLocalNotifications(orderDate: order.date);
@@ -59,11 +59,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           deliveryGroup: order.deliveryGroup,
         );
 
-        var isConfirmed = _initialOrder == order || order.products.isEmpty || isOrderOutOfDate;
+        var canConfirm = _initialOrder != order && order.products.isNotEmpty && canChangeOrder;
+        var canCancel = canChangeOrder && !_orderRepository.isCancelled;
 
-        if (isOrderOutOfDate) {
-          status = OrderStatus.orderOutOfDate;
-          error = _userRepository.user?.orderWarning;
+        if (!canChangeOrder) {
+          error = _userRepository.user?.orderWarning?.split('|').first;
+        } else if (_orderRepository.isCancelled) {
+          error = 'Pedido cancelado';
         }
 
         order.products.sort((orderProduct1, orderProduct2) {
@@ -77,9 +79,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         return state.copyWith(
           order: order,
           totalAmount: totalAmount,
-          confirmed: isConfirmed,
+          canConfirm: canConfirm,
+          canCancel: canCancel,
           minimumAmount: company?.minimumAmount,
-          status: status,
+          pageStatus: status,
           error: error,
         );
       },
@@ -148,13 +151,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   Future<void> _onConfirmOrder(ConfirmOrderEvent event, Emitter<OrderState> emit) async {
-    emit(state.copyWith(status: OrderStatus.loading));
+    emit(state.copyWith(pageStatus: OrderPageStatus.loading));
     var response = await _orderRepository.confirmOrder();
 
     if (response) {
-      emit(state.copyWith(status: OrderStatus.loaded, confirmed: true));
+      emit(state.copyWith(pageStatus: OrderPageStatus.loaded, canConfirm: false));
     } else {
-      emit(state.copyWith(status: OrderStatus.confirmError));
+      emit(state.copyWith(pageStatus: OrderPageStatus.confirmError));
     }
 
     _analyticsManager.logEvent(ConfirmOrderAnalyticsEvent(success: response));
@@ -163,7 +166,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   void configureLocalNotifications({required String orderDate}) {
     var date = DateFormat('dd/MM/yyyy').parse(orderDate);
 
-    date = date.subtract(const Duration(hours: 12));
+    date = date.subtract(const Duration(days: 2, hours: 12));
 
     if (date.millisecondsSinceEpoch < DateTime
         .now()
@@ -194,3 +197,4 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
   }
 }
+

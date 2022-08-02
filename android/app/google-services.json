@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1027121853374",
+    "project_id": "ecosecha-58865",
+    "storage_bucket": "ecosecha-58865.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027121853374:android:7a1ec41d62be133c783fef",
+        "android_client_info": {
+          "package_name": "com.yeniellandestoy.ecosecha.ecosecha_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027121853374-didm5s4bpsm1rgeq078btgu8b4vehvtu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmhFdcje7hwiUpXiziGw9BtdWjYBKAJSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027121853374-didm5s4bpsm1rgeq078btgu8b4vehvtu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1027121853374-iv3vqrts8hl685uphufoqvoiq0k4mg4u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yeniellandestoy.ecosecha.ecosechaFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

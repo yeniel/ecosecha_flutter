@@ -2,9 +2,18 @@
 - Tests
 
 - Poner Buscar Categorías. Que busque en todas la categorias quitando la lista de categorias y poniendo el GridView de productos
-- Firebase para AB Test y push...
 - Registro de nuevos usuarios
 - Onboarding
 - Widget con la cesta y los extras
 - Notificacion: Si no ha cambiado la cesta por defecto (NO TENGO LA CESTA POR DEFECTO DEL USUARIO)
 - BaseBloc: https://medium.com/flutter-community/mixins-and-base-classes-a-recipe-for-success-in-flutter-bc3fbb5da670
+
+
+EMPRESA ECOSECHA
+
+- Url Política de privacidad
+- Cuando se cancela un pedido llega mdoPedidosExtras.cesta == "NO" pero no sé si es porque ese usuario no tiene cesta
+por defecto o porque la ha cancelado.
+Además el campo "fecha" se queda con la fecha de la semana anterior y entonces el mensaje (mdoConsumidor.validacion)
+de que no se puede cambiar la cesta pone esa fecha anterior.
+Cuando esto esté arreglado podré cancelar la notificación semanal y volverla a poner cuando vuelva a tener pedido (esto es automático a la siguiente semana?)
