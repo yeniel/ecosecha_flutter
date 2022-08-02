@@ -4,7 +4,10 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/app.dart';
+import 'package:ecosecha_flutter/firebase_options.dart';
 import 'package:ecosecha_flutter/presentation/analytics/amplitude_manager.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +42,12 @@ void main() async {
           AwesomeNotifications().requestPermissionToSendNotifications();
         }
       });
+
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
 
       var apiClient = HttpApiClient();
       var authRepository = AuthRepository(apiClient: apiClient);
