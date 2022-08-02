@@ -1,12 +1,3 @@
-- Cambiar la hora de la notificación a 4 días antes de la fecha
-- El mensaje de Cerrado el plazo que salga debajo del botón de confirmar y no como snack
-
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(content: Text(state.error)),
-              );
-
 - Codemagic
 - Tests
 

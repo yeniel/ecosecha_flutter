@@ -4,38 +4,40 @@ class OrderState extends Equatable {
   OrderState({
     this.order = Order.empty,
     this.totalAmount = 0.0,
-    this.confirmed = true,
+    this.pageStatus = OrderPageStatus.init,
+    this.canConfirm = true,
+    this.canCancel = true,
     this.minimumAmount = 0,
-    this.status = OrderStatus.init,
     this.error = '',
   });
 
   final Order order;
   final double totalAmount;
-  final bool confirmed;
+  final OrderPageStatus pageStatus;
+  final bool canConfirm;
+  final bool canCancel;
   final int minimumAmount;
-  final OrderStatus status;
   final String error;
 
-  OrderState copyWith({order, totalAmount, confirmed, minimumAmount, status, error}) {
+  OrderState copyWith({order, totalAmount, pageStatus, canConfirm, canCancel, minimumAmount, error}) {
     return OrderState(
       order: order ?? this.order,
       totalAmount: totalAmount ?? this.totalAmount,
-      confirmed: confirmed ?? this.confirmed,
+      pageStatus: pageStatus ?? this.pageStatus,
+      canConfirm: canConfirm ?? this.canConfirm,
+      canCancel: canCancel ?? this.canCancel,
       minimumAmount: minimumAmount ?? this.minimumAmount,
-      status: status ?? this.status,
       error: error ?? this.error,
     );
   }
 
   @override
-  List<Object> get props => [order, totalAmount, confirmed, minimumAmount, status, error];
+  List<Object> get props => [order, totalAmount, pageStatus, canConfirm, canCancel, minimumAmount, error];
 }
 
-enum OrderStatus {
+enum OrderPageStatus {
   init,
   loading,
   loaded,
   confirmError,
-  orderOutOfDate,
 }

@@ -29,6 +29,7 @@ class OrderRepository {
   Order _orderInMemory = Order.empty;
 
   Stream<Order> get order => _orderStreamController.asBroadcastStream();
+  bool get isCancelled => _getOrderFromApi().products.isEmpty;
 
   List<Order>? get orderHistory {
     if (repository.orderHistoryDtoList != null) {

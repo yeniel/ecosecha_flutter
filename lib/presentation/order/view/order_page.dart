@@ -44,11 +44,11 @@ class OrderView extends StatelessWidget {
       title: Header(title: S.order.capitalizeSentence),
       body: BlocConsumer<OrderBloc, OrderState>(
         listener: (context, state) {
-          if (state.status == OrderStatus.loading) {
+          if (state.pageStatus == OrderPageStatus.loading) {
             DialogBuilder(context).showLoadingIndicator(context: context, text: S.loading_indicator);
-          } else if (state.status == OrderStatus.loaded) {
+          } else if (state.pageStatus == OrderPageStatus.loaded) {
             DialogBuilder(context).hideOpenDialog();
-          } else if (state.status == OrderStatus.confirmError) {
+          } else if (state.pageStatus == OrderPageStatus.confirmError) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -224,21 +224,52 @@ class OrderActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
     var bloc = context.read<OrderBloc>();
-    var confirmButtonEnabled = !state.confirmed;
-    var cancelButtonEnabled = state.order.products.isNotEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         OutlinedButton(
-          onPressed: cancelButtonEnabled ? () => bloc.add(const CancelOrderEvent()) : null,
+          onPressed: state.canConfirm ? () => bloc.add(const CancelOrderEvent()) : null,
           child: Text(S.cancel_order.capitalizeSentence),
         ),
         ElevatedButton(
-          onPressed: confirmButtonEnabled ? () => bloc.add(const ConfirmOrderEvent()) : null,
+          onPressed: state.canCancel ? () => bloc.add(const ConfirmOrderEvent()) : null,
           child: Text(S.confirm.capitalizeSentence),
         ),
+        if (state.error.isNotEmpty)
+          WarningMessage(error: state.error),
       ],
     );
   }
 }
+
+class WarningMessage extends StatelessWidget {
+  const WarningMessage({Key? key, required this.error}) : super(key: key);
+
+  final String error;
+
+  @override
+  Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.amberAccent,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.error_outline_rounded),
+            ),
+            Expanded(child: Text(error, style: textTheme.subtitle1)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

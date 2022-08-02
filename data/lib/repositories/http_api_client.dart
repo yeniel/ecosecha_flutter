@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:data/data.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
