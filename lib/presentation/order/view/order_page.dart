@@ -54,12 +54,6 @@ class OrderView extends StatelessWidget {
               ..showSnackBar(
                 SnackBar(content: Text(S.confirm_order_error)),
               );
-          } else if (state.status == OrderStatus.orderOutOfDate) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(content: Text(state.error)),
-              );
           }
         },
         builder: (context, state) {
@@ -231,12 +225,13 @@ class OrderActionButtons extends StatelessWidget {
     var S = AppLocalizations.of(context)!;
     var bloc = context.read<OrderBloc>();
     var confirmButtonEnabled = !state.confirmed;
+    var cancelButtonEnabled = state.order.products.isNotEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         OutlinedButton(
-          onPressed: () => bloc.add(const CancelOrderEvent()),
+          onPressed: cancelButtonEnabled ? () => bloc.add(const CancelOrderEvent()) : null,
           child: Text(S.cancel_order.capitalizeSentence),
         ),
         ElevatedButton(
