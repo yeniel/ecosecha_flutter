@@ -1,23 +1,28 @@
 import 'package:bloc/bloc.dart';
-import 'package:ecosecha_flutter/data/repositories/auth/auth_service.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation//login/login.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
 part 'login_event.dart';
+
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
-    required AuthService authService,
-  })  : _authService = authService,
+    required AuthRepository authRepository,
+    required AnalyticsManager analyticsManager,
+  })  : _authRepository = authRepository,
+        _analyticsManager = analyticsManager,
         super(const LoginState()) {
     on<LoginUsernameChanged>(_onUsernameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onSubmitted);
   }
 
-  final AuthService _authService;
+  final AuthRepository _authRepository;
+  final AnalyticsManager _analyticsManager;
 
   void _onUsernameChanged(
     LoginUsernameChanged event,
@@ -35,6 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) {
     final password = Password.dirty(event.password);
+
     emit(state.copyWith(
       password: password,
       status: Formz.validate([password, state.username]),
@@ -47,14 +53,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
       try {
-        await _authService.login(
+        await _authRepository.login(
           username: state.username.value,
           password: state.password.value,
         );
+
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
-      } catch (_) {
+        _analyticsManager.logEvent(LoginAnalyticsEvent());
+      } catch (error) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
+        _analyticsManager.logEvent(LoginErrorEvent(error: error.toString()));
       }
     }
   }

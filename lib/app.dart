@@ -1,27 +1,27 @@
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'data/data.dart';
-import 'domain/domain.dart';
 import 'presentation/authentication/bloc/authentication_bloc.dart';
 import 'presentation/home/home.dart';
 import 'presentation/login/login.dart';
 import 'presentation/splash/splash.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key, required this.authService, required this.repository}) : super(key: key);
-
-  final AuthService authService;
-  final Repository repository;
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authService,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(authService: authService, repository: repository),
-        child: AppView(),
+    return BlocProvider(
+      create: (_) => AuthenticationBloc(
+        authRepository: context.read<AuthRepository>(),
+        repository: context.read<Repository>(),
+        userRepository: context.read<UserRepository>(),
       ),
+      child: AppView(),
     );
   }
 }
@@ -38,11 +38,38 @@ class _AppViewState extends State<AppView> {
 
   @override
   Widget build(BuildContext context) {
+    listenLocalNotifications();
+
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
+      // theme: ThemeData(
+      //   colorScheme: const ColorScheme(
+      //     brightness: Brightness.light,
+      //     primary: Colores.acelga,
+      //     onPrimary: Colors.white,
+      //     secondary: Colores.acelga,
+      //     onSecondary: Colors.white,
+      //     error: Colores.rabano,
+      //     onError: Colors.white,
+      //     background: Colors,
+      //     onBackground: onBackground,
+      //     surface: surface,
+      //     onSurface: onSurface,
+      //   ),
+      // ),
       navigatorKey: _navigatorKey,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''),
+        const Locale('es', ''),
+      ],
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
@@ -68,5 +95,18 @@ class _AppViewState extends State<AppView> {
       },
       onGenerateRoute: (_) => SplashPage.route(),
     );
+  }
+
+  void listenLocalNotifications() {
+    // AwesomeNotifications().actionStream.listen((ReceivedNotification receivedNotification) {
+      // Navigator.of(context).pushNamed(
+      //     '/NotificationPage',
+      //     arguments: {
+      //       // your page params. I recommend you to pass the
+      //       // entire *receivedNotification* object
+      //       id: receivedNotification.id
+      //     }
+      // );
+    // });
   }
 }

@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:ecosecha_flutter/data/repositories/auth/auth_service.dart';
-import 'package:ecosecha_flutter/data/repositories/repository.dart';
-import 'package:ecosecha_flutter/domain/domain.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 part 'authentication_event.dart';
@@ -11,26 +10,31 @@ part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({required AuthService authService, required Repository repository})
-      : _authService = authService,
+  AuthenticationBloc({
+    required AuthRepository authRepository,
+    required Repository repository,
+    required UserRepository userRepository,
+  })  : _authRepository = authRepository,
         _repository = repository,
+        _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
 
-    _authenticationStatusSubscription = _authService.status.listen(
+    _authenticationStatusSubscription = _authRepository.status.listen(
       (status) => add(AuthenticationStatusChanged(status)),
     );
   }
 
-  final AuthService _authService;
+  final AuthRepository _authRepository;
   final Repository _repository;
+  final UserRepository _userRepository;
   late StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
 
   @override
   Future<void> close() {
     _authenticationStatusSubscription.cancel();
-    _authService.dispose();
+    _authRepository.dispose();
     return super.close();
   }
 
@@ -43,8 +47,12 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
-        return emit(
-            user != null ? AuthenticationState.authenticated(user) : const AuthenticationState.unauthenticated());
+
+        if (user != null) {
+          return emit(AuthenticationState.authenticated(user));
+        } else {
+          return emit(const AuthenticationState.unauthenticated());
+        }
       default:
         return emit(const AuthenticationState.unknown());
     }
@@ -54,18 +62,17 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     AuthenticationLogoutRequested event,
     Emitter<AuthenticationState> emit,
   ) {
-    _authService.logout();
+    _authRepository.logout();
   }
 
   Future<User?> _tryGetUser() async {
-    try {
-      await _repository.fetchAll();
+    await _repository.fetchAll().catchError((error) async {
+      if (error is ExpiredToken) {
+        await _authRepository.renewToken();
+        await _repository.fetchAll();
+      }
+    });
 
-      var user = _repository.user;
-
-      return user;
-    } catch (_) {
-      return null;
-    }
+    return _userRepository.user;
   }
 }
