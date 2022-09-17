@@ -1,3 +1,8 @@
+- En el ultimo pedido de marta cuando confirmó toda la lista fallo y se quedo en loading
+- Cuando buscas un producto si le das a añadir se repinta la vista pero el textfield se queda con la busqueda.
+- Guardar pedido no cofirmado en firestore
+- En Contacto si le das a la direccion que abra google maps
+
 - Añadir link a Privacy Policy
 - Codemagic
 - Tests
@@ -18,3 +23,4 @@ por defecto o porque la ha cancelado.
 Además el campo "fecha" se queda con la fecha de la semana anterior y entonces el mensaje (mdoConsumidor.validacion)
 de que no se puede cambiar la cesta pone esa fecha anterior.
 Cuando esto esté arreglado podré cancelar la notificación semanal y volverla a poner cuando vuelva a tener pedido (esto es automático a la siguiente semana?)
+- Campo con la fecha cuando se abre el plazo para hacer el pedido

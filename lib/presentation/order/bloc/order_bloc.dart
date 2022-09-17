@@ -18,8 +18,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     required CompanyRepository companyRepository,
     required UserRepository userRepository,
     required AnalyticsManager analyticsManager,
-  })
-      : _orderRepository = orderRepository,
+  })  : _orderRepository = orderRepository,
         _companyRepository = companyRepository,
         _userRepository = userRepository,
         _analyticsManager = analyticsManager,
@@ -51,7 +50,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         var status = OrderPageStatus.init;
         String? error;
 
-        configureLocalNotifications(orderDate: order.date);
+        configureLocalNotifications(date: order.date);
 
         _initialOrder ??= Order(
           products: List.from(order.products),
@@ -163,15 +162,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     _analyticsManager.logEvent(ConfirmOrderAnalyticsEvent(success: response));
   }
 
-  void configureLocalNotifications({required String orderDate}) {
-    var date = DateFormat('dd/MM/yyyy').parse(orderDate);
+  void configureLocalNotifications({required String date}) {
+    var orderDate = DateFormat('dd/MM/yyyy').parse(date);
+    var endDate = orderDate.subtract(const Duration(days: 2, hours: 12));
 
-    date = date.subtract(const Duration(days: 2, hours: 12));
-
-    if (date.millisecondsSinceEpoch < DateTime
-        .now()
-        .millisecondsSinceEpoch) {
-      date = date.add(const Duration(days: 7));
+    if (endDate.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch) {
+      endDate = endDate.add(const Duration(days: 7));
     }
 
     unawaited(
@@ -180,15 +176,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           id: 1,
           channelKey: 'basic_channel',
           title: 'Ecosecha',
-          body: '¡Último día para modificar su pedido!',
+          body: '¡Último día para modificar tu pedido!',
           wakeUpScreen: true,
           category: NotificationCategory.Reminder,
           notificationLayout: NotificationLayout.BigText,
           autoDismissible: false,
         ),
         schedule: NotificationCalendar(
-          weekday: date.weekday,
-          hour: date.hour,
+          weekday: endDate.weekday,
+          hour: endDate.hour,
           allowWhileIdle: true,
           repeats: true,
           preciseAlarm: true,
@@ -197,4 +193,3 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
   }
 }
-

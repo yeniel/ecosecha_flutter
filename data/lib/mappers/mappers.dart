@@ -186,13 +186,38 @@ class Mappers {
   }
 
   static Product _getRelatedProduct({required BasketProductDto basketProductDto, required List<Product> productList}) {
-    var basketMainProductName = basketProductDto.name.split(' ').first;
-    var emptyProduct = Product.emptyWithDefaultImage;
+    var basketProductNameWords = basketProductDto.name.split(' ').map((e) => e.toLowerCase());
 
-    return productList.firstWhere(
-      (product) => product.name.contains(basketMainProductName),
-      orElse: () => emptyProduct,
-    );
+    var productsWithFirstWord = productList.where((product) {
+      return product.name.toLowerCase().contains(basketProductNameWords.first);
+    }).toList();
+
+    var wordCounter = 0;
+    var max = 0;
+    var selectedProduct = Product.emptyWithDefaultImage;
+
+    if (productsWithFirstWord.isNotEmpty) {
+      selectedProduct = productsWithFirstWord.first;
+    }
+
+    for (var product in productsWithFirstWord) {
+      var productNameWords = product.name.split(' ').map((e) => e.toLowerCase());
+
+      for (var word in productNameWords) {
+        if (basketProductNameWords.contains(word)) {
+          wordCounter++;
+        }
+      }
+
+      if (wordCounter > max) {
+        max = wordCounter;
+        selectedProduct = product;
+      }
+
+      wordCounter = 0;
+    }
+
+    return selectedProduct;
   }
 
   static List<Order> toOrderHistoryList({required List<OrderHistoryDto> orderHistoryDtoList}) {

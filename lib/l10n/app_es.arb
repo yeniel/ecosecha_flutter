@@ -35,6 +35,6 @@
   "minimum_amount": "El pedido debe contener al menos una cesta o {minimumAmount}€ en productos",
   "confirm": "confirmar",
   "loading_indicator": "Por favor espere",
-  "confirm_order_error": "No hemos podido confirmar su pedido. Inténtelo más tarde.",
+  "confirm_order_error": "No hemos podido confirmar tu pedido. Inténtalo más tarde.",
   "search": "Buscar"
 }
