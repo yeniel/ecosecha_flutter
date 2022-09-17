@@ -1,3 +1,5 @@
+- Se ha confirmado un cambio sin haberle dado al botón de confirmar
+- Comprobar que llega en el json cuando todavía no se puede hacer pedido el miércoles
 - Error con "http://pedidos.ecosecha.org/imagenes/Melon piel sapo.jpg"
 
 - Al buscar en Frutas por "ma" sale error:
@@ -8,7 +10,7 @@ When the exception was thrown, this was the stack:
 Image provider: CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0)
  Image key: CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0): CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0)
 
-- Codemagic
+- Codemagic con .yaml
 - Tests
 
 - Poner Buscar Categorías. Que busque en todas la categorias quitando la lista de categorias y poniendo el GridView de productos
