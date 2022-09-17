@@ -1,15 +1,5 @@
-- Se ha confirmado un cambio sin haberle dado al botón de confirmar
 - Comprobar que llega en el json cuando todavía no se puede hacer pedido el miércoles
-- Error con "http://pedidos.ecosecha.org/imagenes/Melon piel sapo.jpg"
-
-- Al buscar en Frutas por "ma" sale error:
-The following HttpExceptionWithStatus was thrown resolving an image codec:
-HttpException: Invalid statusCode: 403, uri = http://pedidos.ecosecha.org/imagenes/
-
-When the exception was thrown, this was the stack:
-Image provider: CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0)
- Image key: CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0): CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0)
-
+- Amplitude
 - Codemagic con .yaml
 - Tests
 
@@ -32,3 +22,4 @@ Además el campo "fecha" se queda con la fecha de la semana anterior y entonces 
 de que no se puede cambiar la cesta pone esa fecha anterior.
 Cuando esto esté arreglado podré cancelar la notificación semanal y volverla a poner cuando vuelva a tener pedido (esto es automático a la siguiente semana?)
 - Campo con la fecha cuando se abre el plazo para hacer el pedido
+- La imagen http://pedidos.ecosecha.org/imagenes/Melon%20piel%20sapo.jpg no existe
