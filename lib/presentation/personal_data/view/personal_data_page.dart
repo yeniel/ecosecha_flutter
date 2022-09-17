@@ -36,7 +36,7 @@ class PersonalDataView extends StatelessWidget {
 
     return BaseView(
       title: Header(
-        title: S.personal_data.capitalizeSentence,
+        title: S.personal_data,
         showBack: true,
         onBack: () => Navigator.of(context).maybePop(),
       ),
@@ -56,16 +56,16 @@ class PersonalDataView extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.account_box_rounded),
                     title: Text(S.name.capitalizeSentence),
-                    subtitle: Text(state.user.name ?? S.not_defined.capitalizeSentence),
+                    subtitle: Text(state.user.name ?? S.not_defined),
                   ),
                   ListTile(
                     leading: const Icon(Icons.email_rounded),
                     title: Text(S.email.capitalizeSentence),
-                    subtitle: Text(state.user.email ?? S.not_defined.capitalizeSentence),
+                    subtitle: Text(state.user.email ?? S.not_defined),
                   ),
                   ListTile(
                     leading: const FaIcon(FontAwesomeIcons.truck, size: 24),
-                    title: Text(S.delivery_group.capitalizeSentence),
+                    title: Text(S.delivery_group),
                     subtitle: Text(state.user.deliveryGroup),
                   ),
                 ],

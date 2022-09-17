@@ -230,7 +230,7 @@ class OrderActionButtons extends StatelessWidget {
       children: [
         OutlinedButton(
           onPressed: state.canConfirm ? () => bloc.add(const CancelOrderEvent()) : null,
-          child: Text(S.cancel_order.capitalizeSentence),
+          child: Text(S.cancel_order),
         ),
         ElevatedButton(
           onPressed: state.canCancel ? () => bloc.add(const ConfirmOrderEvent()) : null,

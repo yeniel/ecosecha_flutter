@@ -50,12 +50,12 @@ class AccountView extends StatelessWidget {
                 tiles: [
                   ListTile(
                     leading: const Icon(Icons.account_box_rounded),
-                    title: Text(S.personal_data.capitalizeSentence),
+                    title: Text(S.personal_data),
                     onTap: () => Navigator.of(context).push(PersonalDataPage.route()),
                   ),
                   ListTile(
                     leading: const Icon(Icons.list_alt_rounded),
-                    title: Text(S.order_history.capitalizeSentence),
+                    title: Text(S.order_history),
                     onTap: () => Navigator.of(context).push(OrderHistoryPage.route()),
                   ),
                   ListTile(
@@ -65,7 +65,7 @@ class AccountView extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.shopping_basket_rounded),
-                    title: Text(S.web_orders.capitalizeSentence),
+                    title: Text(S.web_orders),
                     onTap: () {
                       final _url = Uri.parse(state.ordersWebUrl);
 
@@ -77,6 +77,15 @@ class AccountView extends StatelessWidget {
                     title: Text(S.blog_website.capitalizeSentence),
                     onTap: () {
                       final _url = Uri.parse(state.blogUrl);
+
+                      launchUrl(_url);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.privacy_tip),
+                    title: Text(S.privacy_policy.capitalizeSentence),
+                    onTap: () {
+                      final _url = Uri.parse(Constants.privacyPolicyUrl);
 
                       launchUrl(_url);
                     },
