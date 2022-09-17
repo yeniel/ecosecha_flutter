@@ -24,33 +24,44 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   final OrderRepository _orderRepository;
   final ProductCategory _category;
   List<OrderProduct> _allProducts = [];
+  String _searchQuery = '';
 
   Future<void> _onProductsInit(ProductsInitEvent event, Emitter<ProductsState> emit) async {
     await emit.forEach<Order>(
       _orderRepository.order,
       onData: (order) {
-        var orderProducts = _productsRepository.getProductsOfCategory(_category).map((basket) {
-          return order.products.firstWhere(
-            (orderProduct) => orderProduct.product.id == basket.id,
-            orElse: () => OrderProduct(product: basket, quantity: 0),
-          );
-        }).toList();
+        _allProducts = _getProductsOfCategoryAndOrder(order);
 
-        _allProducts = orderProducts;
-
-        return state.copyWith(products: orderProducts);
+        if (_searchQuery.isEmpty) {
+          return state.copyWith(products: _allProducts);
+        } else {
+          return state.copyWith(products: _filterProductsBySearchQuery());
+        }
       },
       onError: (_, __) => state,
     );
   }
 
+  List<OrderProduct> _getProductsOfCategoryAndOrder(Order order) {
+    return _productsRepository.getProductsOfCategory(_category).map((basket) {
+      return order.products.firstWhere(
+            (orderProduct) => orderProduct.product.id == basket.id,
+        orElse: () => OrderProduct(product: basket, quantity: 0),
+      );
+    }).toList();
+  }
+
   Future<void> _onProductsSearch(ProductsSearchEvent event, Emitter<ProductsState> emit) async {
-    var filteredProducts = _allProducts.where((element) {
+    _searchQuery = event.query;
+
+    emit(state.copyWith(products: _filterProductsBySearchQuery()));
+  }
+
+  List<OrderProduct> _filterProductsBySearchQuery() {
+    return _allProducts.where((element) {
       var productName = element.product.name.toLowerCase();
 
-      return productName.contains(event.query);
+      return productName.contains(_searchQuery);
     }).toList();
-
-    emit(state.copyWith(products: filteredProducts));
   }
 }

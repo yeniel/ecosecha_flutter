@@ -1,5 +1,15 @@
+- Error con "http://pedidos.ecosecha.org/imagenes/Melon piel sapo.jpg"
+
+- Al buscar en Frutas sale error:
+The following HttpExceptionWithStatus was thrown resolving an image codec:
+HttpException: Invalid statusCode: 403, uri = http://pedidos.ecosecha.org/imagenes/
+
+When the exception was thrown, this was the stack:
+Image provider: CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0)
+ Image key: CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0): CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0)
+
+
 - En el ultimo pedido de marta cuando confirmó toda la lista fallo y se quedo en loading
-- Cuando buscas un producto si le das a añadir se repinta la vista pero el textfield se queda con la busqueda.
 - Guardar pedido no cofirmado en firestore
 - En Contacto si le das a la direccion que abra google maps
 
