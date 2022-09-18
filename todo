@@ -1,6 +1,6 @@
 - Comprobar que llega en el json cuando todavía no se puede hacer pedido el miércoles
-- Amplitude
 - Codemagic con .yaml
+- Scripts o cliente para lanzar codemagic
 - Tests
 
 - Poner Buscar Categorías. Que busque en todas la categorias quitando la lista de categorias y poniendo el GridView de productos
