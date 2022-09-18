@@ -77,6 +77,11 @@ class ContactView extends StatelessWidget {
                     leading: const Icon(Icons.house_rounded),
                     title: Text(S.address.capitalizeSentence),
                     subtitle: Text(state.company.address),
+                    onTap: () async {
+                      var addressUri = Uri.parse(Constants.addressUrl);
+
+                      await launchUrl(addressUri);
+                    },
                   ),
                 ],
               ).toList(),

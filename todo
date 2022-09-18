@@ -5,7 +5,6 @@
 
 - Poner Buscar Categorías. Que busque en todas la categorias quitando la lista de categorias y poniendo el GridView de productos
 - Guardar pedido no cofirmado en firestore
-- En Contacto si le das a la direccion que abra google maps
 - Registro de nuevos usuarios
 - Onboarding
 - Widget con la cesta y los extras
