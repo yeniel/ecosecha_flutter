@@ -44,16 +44,35 @@ class OrderView extends StatelessWidget {
       title: Header(title: S.order.capitalizeSentence),
       body: BlocConsumer<OrderBloc, OrderState>(
         listener: (context, state) {
-          if (state.pageStatus == OrderPageStatus.loading) {
-            DialogBuilder(context).showLoadingIndicator(context: context, text: S.loading_indicator);
-          } else if (state.pageStatus == OrderPageStatus.loaded) {
-            DialogBuilder(context).hideOpenDialog();
-          } else if (state.pageStatus == OrderPageStatus.confirmError) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(content: Text(S.confirm_order_error)),
-              );
+          switch (state.pageStatus) {
+            case OrderPageStatus.loading:
+              {
+                DialogBuilder(context).showLoadingIndicator(context: context, text: S.loading_indicator);
+              }
+              break;
+            case OrderPageStatus.loaded:
+              {
+                DialogBuilder(context).hideOpenDialog();
+              }
+              break;
+            case OrderPageStatus.confirmError:
+              {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(content: Text(S.confirm_order_error)),
+                  );
+              }
+              break;
+            case OrderPageStatus.canNotChangeError:
+              {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(content: Text(S.can_not_change_order_error)),
+                  );
+              }
+              break;
           }
         },
         builder: (context, state) {
@@ -236,8 +255,7 @@ class OrderActionButtons extends StatelessWidget {
           onPressed: state.canConfirm ? () => bloc.add(const ConfirmOrderEvent()) : null,
           child: Text(S.confirm.capitalizeSentence),
         ),
-        if (state.error.isNotEmpty)
-          WarningMessage(error: state.error),
+        if (state.error.isNotEmpty) WarningMessage(error: state.error),
       ],
     );
   }
@@ -272,4 +290,3 @@ class WarningMessage extends StatelessWidget {
     );
   }
 }
-

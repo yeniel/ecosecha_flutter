@@ -9,6 +9,7 @@ class OrderState extends Equatable {
     this.canCancel = true,
     this.minimumAmount = 0,
     this.error = '',
+    this.toggleState = true,
   });
 
   final Order order;
@@ -18,8 +19,9 @@ class OrderState extends Equatable {
   final bool canCancel;
   final int minimumAmount;
   final String error;
+  final bool toggleState;
 
-  OrderState copyWith({order, totalAmount, pageStatus, canConfirm, canCancel, minimumAmount, error}) {
+  OrderState copyWith({order, totalAmount, pageStatus, canConfirm, canCancel, minimumAmount, error, toggleState}) {
     return OrderState(
       order: order ?? this.order,
       totalAmount: totalAmount ?? this.totalAmount,
@@ -28,11 +30,12 @@ class OrderState extends Equatable {
       canCancel: canCancel ?? this.canCancel,
       minimumAmount: minimumAmount ?? this.minimumAmount,
       error: error ?? this.error,
+      toggleState: toggleState ?? this.toggleState,
     );
   }
 
   @override
-  List<Object> get props => [order, totalAmount, pageStatus, canConfirm, canCancel, minimumAmount, error];
+  List<Object> get props => [order, totalAmount, pageStatus, canConfirm, canCancel, minimumAmount, error, toggleState];
 }
 
 enum OrderPageStatus {
@@ -40,4 +43,5 @@ enum OrderPageStatus {
   loading,
   loaded,
   confirmError,
+  canNotChangeError,
 }

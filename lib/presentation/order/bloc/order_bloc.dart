@@ -102,32 +102,44 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   Future<void> _onAddProduct(AddProductEvent event, Emitter<OrderState> emit) async {
-    var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity + 1);
+    if (canChangeOrder) {
+      var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity + 1);
 
-    _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
-    _analyticsManager.logEvent(AddProductAnalyticsEvent(
-      productId: orderProduct.product.id,
-      productName: orderProduct.product.name,
-    ));
+      _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
+      _analyticsManager.logEvent(AddProductAnalyticsEvent(
+        productId: orderProduct.product.id,
+        productName: orderProduct.product.name,
+      ));
+    } else {
+      emit(state.copyWith(pageStatus: OrderPageStatus.canNotChangeError, toggleState: !state.toggleState));
+    }
   }
 
   Future<void> _onSubtractProduct(SubtractProductEvent event, Emitter<OrderState> emit) async {
-    var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity - 1);
+    if (canChangeOrder) {
+      var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity - 1);
 
-    _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
-    _analyticsManager.logEvent(SubtractProductAnalyticsEvent(
-      productId: orderProduct.product.id,
-      productName: orderProduct.product.name,
-    ));
+      _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
+      _analyticsManager.logEvent(SubtractProductAnalyticsEvent(
+        productId: orderProduct.product.id,
+        productName: orderProduct.product.name,
+      ));
+    } else {
+      emit(state.copyWith(pageStatus: OrderPageStatus.canNotChangeError, toggleState: !state.toggleState));
+    }
   }
 
   Future<void> _onDeleteProduct(DeleteProductEvent event, Emitter<OrderState> emit) async {
-    _orderRepository.deleteProduct(orderProduct: event.orderProduct);
+    if (canChangeOrder) {
+      _orderRepository.deleteProduct(orderProduct: event.orderProduct);
 
-    _analyticsManager.logEvent(DeleteProductAnalyticsEvent(
-      productId: event.orderProduct.product.id,
-      productName: event.orderProduct.product.name,
-    ));
+      _analyticsManager.logEvent(DeleteProductAnalyticsEvent(
+        productId: event.orderProduct.product.id,
+        productName: event.orderProduct.product.name,
+      ));
+    } else {
+      emit(state.copyWith(pageStatus: OrderPageStatus.canNotChangeError, toggleState: !state.toggleState));
+    }
   }
 
   Future<void> _onCancelOrder(CancelOrderEvent event, Emitter<OrderState> emit) async {

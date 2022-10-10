@@ -52,31 +52,48 @@ class ProductsView extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
 
-    return BlocBuilder<ProductsBloc, ProductsState>(
+    return BlocConsumer<OrderBloc, OrderState>(
+      listener: (context, state) {
+        switch (state.pageStatus) {
+          case OrderPageStatus.canNotChangeError:
+            {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(content: Text(S.can_not_change_order_error)),
+                );
+            }
+            break;
+        }
+      },
       builder: (context, state) {
-        return BaseView(
-          title: Header(
-            title: state.category.name.capitalizeSentence,
-            showBack: true,
-            onBack: () => Navigator.of(context).maybePop(),
-          ),
-          body: Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextField(
-                  onChanged: (query) => context.read<ProductsBloc>().add(ProductsSearchEvent(query: query)),
-                  decoration: InputDecoration(
-                    labelText: S.search,
-                  ),
+        return BlocBuilder<ProductsBloc, ProductsState>(
+          builder: (context, state) {
+            return BaseView(
+              title: Header(
+                title: state.category.name.capitalizeSentence,
+                showBack: true,
+                onBack: () => Navigator.of(context).maybePop(),
+              ),
+              body: Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextField(
+                      onChanged: (query) => context.read<ProductsBloc>().add(ProductsSearchEvent(query: query)),
+                      decoration: InputDecoration(
+                        labelText: S.search,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Expanded(
+                      child: ProductGridView(orderProducts: state.orderProducts),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: ProductGridView(orderProducts: state.orderProducts),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

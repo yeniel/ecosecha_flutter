@@ -44,5 +44,6 @@
   "loading_indicator": "Please wait",
   "confirm_order_error": "We can not confirm your order. Try again later",
   "search": "Search",
-  "privacy_policy": "Privacy policy"
+  "privacy_policy": "Privacy policy",
+  "can_not_change_order_error": "The period to change the order is closed"
 }
