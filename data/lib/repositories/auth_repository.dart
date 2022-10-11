@@ -2,12 +2,9 @@ import 'dart:async';
 
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
-  AuthRepository({required this.apiClient}) {
-    _initSharedPreferences();
-  }
+  AuthRepository({required this.apiClient});
 
   ApiClient apiClient;
 
@@ -15,15 +12,10 @@ class AuthRepository {
   String? _username;
   String? _password;
 
-  SharedPreferences? _prefs;
   final _controller = StreamController<AuthenticationStatus>();
 
   void dispose() {
     _controller.close();
-  }
-
-  Future<void> _initSharedPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
   }
 
   Stream<AuthenticationStatus> get status async* {
@@ -43,9 +35,9 @@ class AuthRepository {
 
   JwtDto? get jwt {
       if (_jwtDto == null) {
-        var jwtFromSharedPreferences = _prefs?.getString(jwtKey);
+        var jwtFromSharedPreferences = Prefs.getString(Prefs.jwtKey);
 
-        if (_prefs != null && jwtFromSharedPreferences != null) {
+        if (jwtFromSharedPreferences != null) {
           _jwtDto = JwtDto(value: jwtFromSharedPreferences);
         }
       }
@@ -55,9 +47,9 @@ class AuthRepository {
 
   String? get username {
     if (_username == null) {
-      var usernameFromSharedPreferences = _prefs?.getString(usernameKey);
+      var usernameFromSharedPreferences = Prefs.getString(Prefs.usernameKey);
 
-      if (_prefs != null && usernameFromSharedPreferences != null) {
+      if (usernameFromSharedPreferences != null) {
         _username = usernameFromSharedPreferences;
       }
     }
@@ -67,9 +59,9 @@ class AuthRepository {
 
   String? get password {
     if (_password == null) {
-      var passwordFromSharedPreferences = _prefs?.getString(passwordKey);
+      var passwordFromSharedPreferences = Prefs.getString(Prefs.passwordKey);
 
-      if (_prefs != null && passwordFromSharedPreferences != null && passwordFromSharedPreferences.isNotEmpty) {
+      if (passwordFromSharedPreferences != null && passwordFromSharedPreferences.isNotEmpty) {
         _password = passwordFromSharedPreferences;
       }
     }
@@ -101,7 +93,7 @@ class AuthRepository {
   }
 
   void logout() {
-    _prefs?.setString(passwordKey, '');
+    Prefs.setString(Prefs.passwordKey, '');
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
@@ -111,17 +103,17 @@ class AuthRepository {
     var jwtValue = _jwtDto?.value;
 
     if (jwtValue != null) {
-      _prefs?.setString(jwtKey, jwtValue);
+      Prefs.setString(Prefs.jwtKey, jwtValue);
     }
   }
 
   void _saveUsername(username) {
     _username = username;
-    _prefs?.setString(usernameKey, username);
+    Prefs.setString(Prefs.usernameKey, username);
   }
 
   void _savePassword(password) {
     _password = password;
-    _prefs?.setString(passwordKey, password);
+    Prefs.setString(Prefs.passwordKey, password);
   }
 }

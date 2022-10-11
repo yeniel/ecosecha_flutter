@@ -45,5 +45,6 @@
   "confirm_order_error": "We can not confirm your order. Try again later",
   "search": "Search",
   "privacy_policy": "Privacy policy",
-  "can_not_change_order_error": "The period to change the order is closed"
+  "can_not_change_order_error": "The period to change the order is closed",
+  "coachmark_order_tab": "In the initial tab you will see always your current order"
 }

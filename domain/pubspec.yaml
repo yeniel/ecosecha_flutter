@@ -12,8 +12,12 @@ dependencies:
   flutter:
     sdk: flutter
 
+  ###########################
+  # PLUGINS AND PACKAGES
+
   equatable: any
   rxdart: any
+  shared_preferences: any
 
 dev_dependencies:
   flutter_test:

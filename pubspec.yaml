@@ -39,6 +39,7 @@ dependencies:
   amplitude_flutter: any
   firebase_core: ^1.20.0
   firebase_crashlytics: ^2.8.6
+  tutorial_coach_mark: ^1.2.4
 
 dev_dependencies:
   flutter_test:

@@ -59,6 +59,8 @@ class BasketsView extends StatelessWidget {
                 );
             }
             break;
+          default:
+            break;
         }
       },
       builder: (context, state) {

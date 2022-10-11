@@ -35,4 +35,4 @@ export 'models/product.dart';
 export 'models/product_category.dart';
 export 'models/product_type.dart';
 export 'models/user.dart';
-export 'shared_preferences_keys.dart';
+export 'shared_preferences.dart';
