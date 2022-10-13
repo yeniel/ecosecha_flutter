@@ -41,5 +41,6 @@
   "privacy_policy": "Política de privacidad",
   "can_not_change_order_error": "Cerrado el plazo para cambiar el pedido",
   "coachmark_order_tab": "En la pestaña inicial siempre verás tu pedido actual",
-  "order_confirmation_message": "Pedido Confirmado"
+  "order_confirmation_message": "Pedido Confirmado",
+  "splash_page_message": "Validando usuario"
 }

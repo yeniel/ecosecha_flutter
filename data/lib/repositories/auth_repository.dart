@@ -25,7 +25,11 @@ class AuthRepository {
     if (jwt != null) {
       yield AuthenticationStatus.authenticated;
     } else if (name != null && pass != null) {
-      await login(username: name, password: pass);
+      try {
+        await login(username: name, password: pass);
+      } catch (error) {
+        yield AuthenticationStatus.unauthenticated;
+      }
     } else {
       yield AuthenticationStatus.unauthenticated;
     }
