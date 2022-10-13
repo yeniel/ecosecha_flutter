@@ -24,6 +24,7 @@
   "blog_website": "blog website",
   "logout": "logout",
   "invalid_credentials_error": "Invalid credentials",
+  "server_error": "Service not available, try again later",
   "name": "name",
   "delivery_group": "Delivery group",
   "email": "email",
@@ -46,5 +47,6 @@
   "search": "Search",
   "privacy_policy": "Privacy policy",
   "can_not_change_order_error": "The period to change the order is closed",
-  "coachmark_order_tab": "In the initial tab you will see always your current order"
+  "coachmark_order_tab": "In the initial tab you will see always your current order",
+  "order_confirmation_message": "Order Confirmed"
 }

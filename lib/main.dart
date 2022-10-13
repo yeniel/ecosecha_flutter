@@ -36,12 +36,6 @@ void main() async {
           debug: true
       );
 
-      await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-        if (!isAllowed) {
-          AwesomeNotifications().requestPermissionToSendNotifications();
-        }
-      });
-
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );

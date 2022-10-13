@@ -24,6 +24,7 @@
   "blog_website": "blog",
   "logout": "salir",
   "invalid_credentials_error": "Usuario y contraseña no válidos",
+  "server_error": "Servicio no disponible, inténtelo más tarde",
   "name": "nombre",
   "delivery_group": "Grupo de reparto",
   "email": "correo",
@@ -39,5 +40,6 @@
   "search": "Buscar",
   "privacy_policy": "Política de privacidad",
   "can_not_change_order_error": "Cerrado el plazo para cambiar el pedido",
-  "coachmark_order_tab": "En la pestaña inicial siempre verás tu pedido actual"
+  "coachmark_order_tab": "En la pestaña inicial siempre verás tu pedido actual",
+  "order_confirmation_message": "Pedido Confirmado"
 }

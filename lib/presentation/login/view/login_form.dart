@@ -3,7 +3,6 @@ import 'package:ecosecha_flutter/presentation/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:formz/formz.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -13,11 +12,17 @@ class LoginForm extends StatelessWidget {
 
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status == LoginStatus.submissionFailureInvalidCredentials) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(content: Text(S.invalid_credentials_error)),
+            );
+        } else if (state.status == LoginStatus.submissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(S.server_error)),
             );
         }
       },
@@ -93,7 +98,7 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        if (state.status.isSubmissionInProgress || state.status.isSubmissionSuccess) {
+        if (state.status == LoginStatus.submissionInProgress || state.status == LoginStatus.submissionSuccess) {
           return const Center(child: CircularProgressIndicator());
         } else {
           return ElevatedButton(

@@ -50,8 +50,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         var status = OrderPageStatus.init;
         String? error;
 
-        configureLocalNotifications(date: order.date);
-
         _initialOrder ??= Order(
           products: List.from(order.products),
           date: order.date,
@@ -162,46 +160,62 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   Future<void> _onConfirmOrder(ConfirmOrderEvent event, Emitter<OrderState> emit) async {
+    await configureLocalNotifications(date: state.order.date);
+
     emit(state.copyWith(pageStatus: OrderPageStatus.loading));
     var response = await _orderRepository.confirmOrder();
 
     if (response) {
-      emit(state.copyWith(pageStatus: OrderPageStatus.loaded, canConfirm: false));
+      emit(state.copyWith(pageStatus: OrderPageStatus.confirmationOk, canConfirm: false));
     } else {
-      emit(state.copyWith(pageStatus: OrderPageStatus.confirmError));
+      emit(state.copyWith(pageStatus: OrderPageStatus.confirmationError));
     }
 
     _analyticsManager.logEvent(ConfirmOrderAnalyticsEvent(success: response));
   }
 
-  void configureLocalNotifications({required String date}) {
-    var orderDate = DateFormat('dd/MM/yyyy').parse(date);
-    var endDate = orderDate.subtract(const Duration(days: 2, hours: 12));
+  Future<void> configureLocalNotifications({required String date}) async {
+    if (await isNotificationsAllowed()) {
+      await AwesomeNotifications().cancelAll();
 
-    if (endDate.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch) {
-      endDate = endDate.add(const Duration(days: 7));
+      var orderDate = DateFormat('dd/MM/yyyy').parse(date);
+      var endDate = orderDate.add(const Duration(days: 4, hours: 12));
+
+      if (endDate.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch) {
+        endDate = endDate.add(const Duration(days: 7));
+      }
+
+      unawaited(
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: 1,
+            channelKey: 'basic_channel',
+            title: 'Ecosecha',
+            body: '¡Último día para modificar tu pedido!',
+            wakeUpScreen: true,
+            category: NotificationCategory.Reminder,
+            notificationLayout: NotificationLayout.BigText,
+            autoDismissible: false,
+          ),
+          schedule: NotificationCalendar(
+            weekday: endDate.weekday,
+            hour: endDate.hour,
+            allowWhileIdle: true,
+            repeats: true,
+            preciseAlarm: true,
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<bool> isNotificationsAllowed() async {
+    var isAllowed = await AwesomeNotifications().isNotificationAllowed();
+
+    if (!isAllowed) {
+      isAllowed = await AwesomeNotifications().requestPermissionToSendNotifications();
     }
 
-    unawaited(
-      AwesomeNotifications().createNotification(
-        content: NotificationContent(
-          id: 1,
-          channelKey: 'basic_channel',
-          title: 'Ecosecha',
-          body: '¡Último día para modificar tu pedido!',
-          wakeUpScreen: true,
-          category: NotificationCategory.Reminder,
-          notificationLayout: NotificationLayout.BigText,
-          autoDismissible: false,
-        ),
-        schedule: NotificationCalendar(
-          weekday: endDate.weekday,
-          hour: endDate.hour,
-          allowWhileIdle: true,
-          repeats: true,
-          preciseAlarm: true,
-        ),
-      ),
-    );
+    return isAllowed;
   }
 }

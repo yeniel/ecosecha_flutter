@@ -41,7 +41,7 @@ class OrderState extends Equatable {
 enum OrderPageStatus {
   init,
   loading,
-  loaded,
-  confirmError,
+  confirmationOk,
+  confirmationError,
   canNotChangeError,
 }

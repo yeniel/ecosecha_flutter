@@ -50,12 +50,29 @@ class OrderView extends StatelessWidget {
                 DialogBuilder(context).showLoadingIndicator(context: context, text: S.loading_indicator);
               }
               break;
-            case OrderPageStatus.loaded:
+            case OrderPageStatus.confirmationOk:
               {
                 DialogBuilder(context).hideOpenDialog();
+                AlertDialog(
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text(S.order_confirmation_message),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
               }
               break;
-            case OrderPageStatus.confirmError:
+            case OrderPageStatus.confirmationError:
               {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()

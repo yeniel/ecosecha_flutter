@@ -81,6 +81,8 @@ class AuthRepository {
       if (error is ExpiredToken || error is ApiError) {
         throw InvalidCredentials();
       }
+
+      throw ApiError();
     });
   }
 

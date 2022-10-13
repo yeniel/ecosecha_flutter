@@ -29,9 +29,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) {
     final username = Username.dirty(event.username);
+    final formzStatus = Formz.validate([state.password, username]);
+    final loginStatus = _mapFormzStatusToLoginStatus(formzStatus);
+
     emit(state.copyWith(
       username: username,
-      status: Formz.validate([state.password, username]),
+      status: loginStatus,
     ));
   }
 
@@ -40,10 +43,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) {
     final password = Password.dirty(event.password);
+    final formzStatus = Formz.validate([password, state.username]);
+    final loginStatus = _mapFormzStatusToLoginStatus(formzStatus);
 
     emit(state.copyWith(
       password: password,
-      status: Formz.validate([password, state.username]),
+      status: loginStatus,
     ));
   }
 
@@ -51,8 +56,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginSubmitted event,
     Emitter<LoginState> emit,
   ) async {
-    if (state.status.isValidated) {
-      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    final formzStatus = FormzStatus.values[state.status.index];
+
+    if (formzStatus.isValidated) {
+      var loginStatus = _mapFormzStatusToLoginStatus(FormzStatus.submissionInProgress);
+      AnalyticsEvent event;
+
+      emit(state.copyWith(status: loginStatus));
 
       try {
         await _authRepository.login(
@@ -60,12 +70,41 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: state.password.value,
         );
 
-        emit(state.copyWith(status: FormzStatus.submissionSuccess));
-        _analyticsManager.logEvent(LoginAnalyticsEvent());
+        loginStatus = _mapFormzStatusToLoginStatus(FormzStatus.submissionSuccess);
+        event = LoginAnalyticsEvent();
       } catch (error) {
-        emit(state.copyWith(status: FormzStatus.submissionFailure));
-        _analyticsManager.logEvent(LoginErrorEvent(error: error.toString()));
+        if (error is InvalidCredentials) {
+          loginStatus = LoginStatus.submissionFailureInvalidCredentials;
+        } else if (error is ApiError) {
+          loginStatus = LoginStatus.submissionFailure;
+        } else {
+          loginStatus = _mapFormzStatusToLoginStatus(FormzStatus.invalid);
+        }
+
+        event = LoginErrorEvent(error: error.toString());
       }
+
+      emit(state.copyWith(status: loginStatus));
+      _analyticsManager.logEvent(event);
+    }
+  }
+
+  LoginStatus _mapFormzStatusToLoginStatus(FormzStatus formzStatus) {
+    switch (formzStatus) {
+      case FormzStatus.pure:
+        return LoginStatus.pure;
+      case FormzStatus.valid:
+        return LoginStatus.valid;
+      case FormzStatus.invalid:
+        return LoginStatus.invalid;
+      case FormzStatus.submissionInProgress:
+        return LoginStatus.submissionSuccess;
+      case FormzStatus.submissionFailure:
+        return LoginStatus.submissionFailure;
+      case FormzStatus.submissionCanceled:
+        return LoginStatus.submissionCanceled;
+      default:
+        return LoginStatus.pure;
     }
   }
 }
