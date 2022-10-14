@@ -6,7 +6,7 @@ class DialogBuilder {
 
   final BuildContext context;
 
-  void showLoadingIndicator({required BuildContext context, required String text}) {
+  void showLoadingIndicator({required String text}) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -20,7 +20,37 @@ class DialogBuilder {
     );
   }
 
-  void hideOpenDialog() {
-    Navigator.of(context).maybePop();
+  Future<void> showSimpleDialog({required String text}) async {
+    var alertDialog = AlertDialog(
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text(text),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('OK'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+
+    return showAlertDialog(alertDialog);
+  }
+
+  Future<void> showAlertDialog(AlertDialog alertDialog) async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) => alertDialog
+    );
+  }
+
+  Future<bool> hideOpenDialog() async {
+    return Navigator.of(context).maybePop();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/basket_product_list/view/basket_product_list_page.dart';
@@ -43,33 +45,17 @@ class OrderView extends StatelessWidget {
     return BaseView(
       title: Header(title: S.order.capitalizeSentence),
       body: BlocConsumer<OrderBloc, OrderState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           switch (state.pageStatus) {
             case OrderPageStatus.loading:
               {
-                DialogBuilder(context).showLoadingIndicator(context: context, text: S.loading_indicator);
+                DialogBuilder(context).showLoadingIndicator(text: S.loading_indicator);
               }
               break;
             case OrderPageStatus.confirmationOk:
               {
-                DialogBuilder(context).hideOpenDialog();
-                AlertDialog(
-                  content: SingleChildScrollView(
-                    child: ListBody(
-                      children: <Widget>[
-                        Text(S.order_confirmation_message),
-                      ],
-                    ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('OK'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
+                await DialogBuilder(context).hideOpenDialog();
+                unawaited(DialogBuilder(context).showSimpleDialog(text: S.order_confirmation_message));
               }
               break;
             case OrderPageStatus.confirmationError:

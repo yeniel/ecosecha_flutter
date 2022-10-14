@@ -1,6 +1,3 @@
-ERRORES
-- Revisar el error devuelto al poner mal usuario y contraseña en http_api_client.dart
-
 FEATURES
 - Poner Buscar Categorías. Que busque en todas la categorias quitando la lista de categorias y poniendo el GridView de productos
 - Onboarding
