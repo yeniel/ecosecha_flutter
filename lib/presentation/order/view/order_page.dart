@@ -278,11 +278,11 @@ class OrderActionButtons extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         OutlinedButton(
-          onPressed: state.canCancel || true ? () => bloc.add(const CancelOrderEvent()) : null,
+          onPressed: state.canCancel ? () => bloc.add(const CancelOrderEvent()) : null,
           child: Text(S.cancel_order),
         ),
         ElevatedButton(
-          onPressed: state.canConfirm || true ? () => bloc.add(const ConfirmOrderEvent()) : null,
+          onPressed: state.canConfirm ? () => bloc.add(const ConfirmOrderEvent()) : null,
           child: Text(S.confirm),
         ),
         if (state.error.isNotEmpty) WarningMessage(error: state.error),
