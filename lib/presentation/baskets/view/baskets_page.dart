@@ -31,6 +31,7 @@ class BasketsPage extends StatelessWidget {
             orderRepository: context.read<OrderRepository>(),
             userRepository: context.read<UserRepository>(),
             companyRepository: context.read<CompanyRepository>(),
+            authRepository: context.read<AuthRepository>(),
             analyticsManager: context.read<AnalyticsManager>(),
           )..add(const OrderInitEvent()),
         ),
@@ -65,7 +66,7 @@ class BasketsView extends StatelessWidget {
       },
       builder: (context, state) {
         return BaseView(
-          title: Header(title: S.baskets.capitalizeSentence),
+          title: Header(title: S.baskets),
           body: BlocBuilder<BasketsBloc, BasketsState>(
             builder: (context, state) {
               return Expanded(

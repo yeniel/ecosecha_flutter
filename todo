@@ -1,15 +1,13 @@
 ERRORES
-- No sale validando usuario en Android
+- Anonymous Login: - En Zona de Reparto podría poner "Aquí iría tu zona de reparto"
 
 FEATURES
+- En el icono de la tab order poner un badge (círculo rojo) con el número de items de pedido
 - Poner Buscar Categorías. Que busque en todas la categorias quitando la lista de categorias y poniendo el GridView de productos
 - Onboarding
+- Una slide con los puntos de reparto
+- Sugerir punto de reparto según el gps o dirección que introduzca el usuario
 - Registro de nuevos usuarios
-- Permitir al final entrar sin cuenta. El botón podría ser "Entrar sin cuenta para echar un vistazo". Hago login con mi cuenta y así el usuario puede ver como es la aplicación.
-    Cosas que tendría que cambiar:
-    - En Zona de Reparto podría poner "Aquí iría tu zona de reparto"
-    - Info de mi usuario podría poner valores por defecto
-    - Los botones confirmar y cancelar deberían redirigir a pantalla de crear cuenta
 - Guardar pedido no cofirmado en firestore
 - Widget con la cesta y los extras
 - Notificacion: Si no ha cambiado la cesta por defecto (NO TENGO LA CESTA POR DEFECTO DEL USUARIO)

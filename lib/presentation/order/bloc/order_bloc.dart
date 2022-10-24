@@ -17,10 +17,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     required OrderRepository orderRepository,
     required CompanyRepository companyRepository,
     required UserRepository userRepository,
+    required AuthRepository authRepository,
     required AnalyticsManager analyticsManager,
   })  : _orderRepository = orderRepository,
         _companyRepository = companyRepository,
         _userRepository = userRepository,
+        _authRepository = authRepository,
         _analyticsManager = analyticsManager,
         super(OrderState()) {
     on<OrderInitEvent>(_onOrderInit);
@@ -29,11 +31,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<DeleteProductEvent>(_onDeleteProduct);
     on<CancelOrderEvent>(_onCancelOrder);
     on<ConfirmOrderEvent>(_onConfirmOrder);
+    on<OrderSignInEvent>(_onOrderSignIn);
+    on<OrderSignUpEvent>(_onOrderSignUp);
   }
 
   final OrderRepository _orderRepository;
   final CompanyRepository _companyRepository;
   final UserRepository _userRepository;
+  final AuthRepository _authRepository;
   final AnalyticsManager _analyticsManager;
   Order? _initialOrder;
 
@@ -45,6 +50,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     await emit.forEach<Order>(
       _orderRepository.order,
       onData: (order) {
+        var isAnonymousLogin = Prefs.getBool(Prefs.anonymousLogin) ?? false;
         var totalAmount = _calculateTotalAmount(order);
         var company = _companyRepository.company;
         var status = OrderPageStatus.init;
@@ -79,6 +85,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           canConfirm: canConfirm,
           canCancel: canCancel,
           minimumAmount: company?.minimumAmount,
+          isAnonymousLogin: isAnonymousLogin,
           pageStatus: status,
           error: error,
         );
@@ -141,25 +148,37 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   Future<void> _onCancelOrder(CancelOrderEvent event, Emitter<OrderState> emit) async {
-    var company = _companyRepository.company;
+    if (state.isAnonymousLogin) {
+      emit(state.copyWith(pageStatus: OrderPageStatus.isAnonymousLoginError));
+      return;
+    }
+
+    var email = _companyRepository.company?.email;
     var user = _userRepository.user;
     var subject = 'Cancelar Pedido';
     var body = 'Hola: Quisiera cancelar mi pedido.\n\nUsuario: ${user?.id}\nEmail: ${user?.email}';
 
     var url = Uri(
       scheme: 'mailto',
-      path: company?.email,
-      query: 'subject=$subject&body=$body',
+      path: email,
+      query: encodeQueryParameters(
+        <String, String>{
+          'subject': subject,
+          'body': body,
+        },
+      ),
     );
 
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    }
-
+    await launchUrl(url);
     _analyticsManager.logEvent(CancelOrderAnalyticsEvent());
   }
 
   Future<void> _onConfirmOrder(ConfirmOrderEvent event, Emitter<OrderState> emit) async {
+    if (state.isAnonymousLogin) {
+      emit(state.copyWith(pageStatus: OrderPageStatus.isAnonymousLoginError));
+      return;
+    }
+
     await configureLocalNotifications(date: state.order.date);
 
     emit(state.copyWith(pageStatus: OrderPageStatus.loading));
@@ -217,5 +236,25 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     }
 
     return isAllowed;
+  }
+
+  Future<void> _onOrderSignIn(OrderSignInEvent event, Emitter<OrderState> emit) async {
+    _authRepository.logout();
+    _analyticsManager.logEvent(OpenLoginFromOrderEvent());
+  }
+
+  Future<void> _onOrderSignUp(OrderSignUpEvent event, Emitter<OrderState> emit) async {
+    final emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: _companyRepository.company?.email,
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'Nuevo Cliente',
+        'body':
+            'Hola:\n\nMe gustaría apuntarme como cliente.\n\n¿Me podrían mandar información sobre las diferentes modalidades de Grupos de Consumo, Cestas y A la carta?\n\nTambién sobre los puntos de reparto que tienen actualmente.\n\n Un saludo y muchas gracias.\n\n\nMensaje enviado desde la App\n'
+      }),
+    );
+
+    await launchUrl(emailLaunchUri);
+    _analyticsManager.logEvent(SignUpFromOrderEvent());
   }
 }

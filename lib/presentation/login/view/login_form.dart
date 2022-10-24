@@ -40,6 +40,8 @@ class LoginForm extends StatelessWidget {
             _PasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
             _LoginButton(),
+            const Padding(padding: EdgeInsets.all(12)),
+            _SkipButton(),
           ],
         ),
       ),
@@ -59,7 +61,7 @@ class _UsernameInput extends StatelessWidget {
           key: const Key('loginForm_usernameInput_textField'),
           onChanged: (username) => context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           decoration: InputDecoration(
-            labelText: S.user.capitalizeSentence,
+            labelText: S.user,
             errorText: state.username.invalid ? S.invalidUser : null,
           ),
         );
@@ -81,7 +83,7 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: S.password.capitalizeSentence,
+            labelText: S.password,
             errorText: state.password.invalid ? S.invalidPassword : null,
           ),
         );
@@ -98,18 +100,43 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        if (state.status == LoginStatus.submissionInProgress || state.status == LoginStatus.submissionSuccess) {
+        if (!state.isAnonymousLogin &&
+            (state.status == LoginStatus.submissionInProgress || state.status == LoginStatus.submissionSuccess)) {
           return const Center(child: CircularProgressIndicator());
         } else {
           return ElevatedButton(
             key: const Key('loginForm_continue_raisedButton'),
-            child: Text(S.login.capitalizeSentence),
-            onPressed: state.status.isValidated
+            child: Text(S.login),
+            onPressed: state.status.isValidated && !state.isAnonymousLogin
                 ? () {
-                    context.read<LoginBloc>().add(const LoginSubmitted());
+                    context.read<LoginBloc>().add(const LoginSubmitted(isAnonymousLogin: false));
                   }
                 : null,
           );
+        }
+      },
+    );
+  }
+}
+
+class _SkipButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var S = AppLocalizations.of(context)!;
+
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        if (state.isAnonymousLogin &&
+            (state.status == LoginStatus.submissionInProgress || state.status == LoginStatus.submissionSuccess)) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return ElevatedButton(
+              key: const Key('skipLoginForm_continue_raisedButton'),
+              child: Text(S.skipLogin),
+              onPressed: () {
+                context.read<LoginBloc>().add(const LoginSubmitted(isAnonymousLogin: true));
+              });
         }
       },
     );

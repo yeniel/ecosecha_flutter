@@ -36,7 +36,7 @@ class CategoriesView extends StatelessWidget {
     var S = AppLocalizations.of(context)!;
 
     return BaseView(
-      title: Header(title: S.categories.capitalizeSentence),
+      title: Header(title: S.categories),
       body: Expanded(
         child: BlocBuilder<CategoriesBloc, CategoriesState>(
           builder: (context, state) {

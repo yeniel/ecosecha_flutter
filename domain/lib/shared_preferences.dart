@@ -5,6 +5,7 @@ class Prefs {
   static const String usernameKey = 'username';
   static const String passwordKey = 'password';
   static const String showCoachmarksKey = 'showCoachmarks';
+  static const String anonymousLogin = 'anonymousLogin';
 
   static SharedPreferences? _prefs;
 

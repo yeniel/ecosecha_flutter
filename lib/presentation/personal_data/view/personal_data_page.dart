@@ -50,17 +50,17 @@ class PersonalDataView extends StatelessWidget {
                 tiles: [
                   ListTile(
                     leading: const Icon(Icons.account_circle_rounded),
-                    title: Text(S.user.capitalizeSentence),
+                    title: Text(S.user),
                     subtitle: Text(state.user.id.toString()),
                   ),
                   ListTile(
                     leading: const Icon(Icons.account_box_rounded),
-                    title: Text(S.name.capitalizeSentence),
+                    title: Text(S.name),
                     subtitle: Text(state.user.name ?? S.not_defined),
                   ),
                   ListTile(
                     leading: const Icon(Icons.email_rounded),
-                    title: Text(S.email.capitalizeSentence),
+                    title: Text(S.email),
                     subtitle: Text(state.user.email ?? S.not_defined),
                   ),
                   ListTile(

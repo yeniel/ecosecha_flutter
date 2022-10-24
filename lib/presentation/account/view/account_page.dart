@@ -39,9 +39,10 @@ class AccountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
+    var isAnonymousLogin = Prefs.getBool(Prefs.anonymousLogin) ?? false;
 
     return BaseView(
-      title: Header(title: S.account.capitalizeSentence),
+      title: Header(title: S.account),
       body: Expanded(
         child: BlocBuilder<AccountBloc, AccountState>(
           builder: (context, state) {
@@ -54,19 +55,21 @@ class AccountView extends StatelessWidget {
                     children: ListTile.divideTiles(
                       context: context,
                       tiles: [
-                        ListTile(
-                          leading: const Icon(Icons.account_box_rounded),
-                          title: Text(S.personal_data),
-                          onTap: () => Navigator.of(context).push(PersonalDataPage.route()),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.list_alt_rounded),
-                          title: Text(S.order_history),
-                          onTap: () => Navigator.of(context).push(OrderHistoryPage.route()),
-                        ),
+                        if (!isAnonymousLogin)
+                          ListTile(
+                            leading: const Icon(Icons.account_box_rounded),
+                            title: Text(S.personal_data),
+                            onTap: () => Navigator.of(context).push(PersonalDataPage.route()),
+                          ),
+                        if (!isAnonymousLogin)
+                          ListTile(
+                            leading: const Icon(Icons.list_alt_rounded),
+                            title: Text(S.order_history),
+                            onTap: () => Navigator.of(context).push(OrderHistoryPage.route()),
+                          ),
                         ListTile(
                           leading: const Icon(Icons.contact_phone_outlined),
-                          title: Text(S.contact.capitalizeSentence),
+                          title: Text(S.contact),
                           onTap: () => Navigator.of(context).push(ContactPage.route()),
                         ),
                         ListTile(
@@ -80,7 +83,7 @@ class AccountView extends StatelessWidget {
                         ),
                         ListTile(
                           leading: const Icon(Icons.web),
-                          title: Text(S.blog_website.capitalizeSentence),
+                          title: Text(S.blog_website),
                           onTap: () {
                             final _url = Uri.parse(state.blogUrl);
 
@@ -89,18 +92,19 @@ class AccountView extends StatelessWidget {
                         ),
                         ListTile(
                           leading: const Icon(Icons.privacy_tip),
-                          title: Text(S.privacy_policy.capitalizeSentence),
+                          title: Text(S.privacy_policy),
                           onTap: () {
                             final _url = Uri.parse(Constants.privacyPolicyUrl);
 
                             launchUrl(_url);
                           },
                         ),
-                        ListTile(
-                          leading: const Icon(Icons.logout_rounded),
-                          title: Text(S.logout.capitalizeSentence),
-                          onTap: () => context.read<AccountBloc>().add(const AccountLogoutEvent()),
-                        ),
+                        if (!isAnonymousLogin)
+                          ListTile(
+                            leading: const Icon(Icons.logout_rounded),
+                            title: Text(S.logout),
+                            onTap: () => context.read<AccountBloc>().add(const AccountLogoutEvent()),
+                          ),
                       ],
                     ).toList(),
                   ),

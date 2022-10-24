@@ -58,34 +58,38 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     final formzStatus = FormzStatus.values[state.status.index];
 
-    if (formzStatus.isValidated) {
+    if (formzStatus.isValidated || event.isAnonymousLogin) {
       var loginStatus = _mapFormzStatusToLoginStatus(FormzStatus.submissionInProgress);
-      AnalyticsEvent event;
+      var username = event.isAnonymousLogin ? Constants.anonymousUsername : state.username.value;
+      var password = event.isAnonymousLogin ? Constants.anonymousPassword : state.password.value;
 
-      emit(state.copyWith(status: loginStatus));
+      emit(state.copyWith(status: loginStatus, isAnonymousLogin: event.isAnonymousLogin));
+      loginStatus = await _login(username: username, password: password);
+      emit(state.copyWith(status: loginStatus, isAnonymousLogin: event.isAnonymousLogin));
 
-      try {
-        await _authRepository.login(
-          username: state.username.value,
-          password: state.password.value,
-        );
+      _sendLoginEvent(
+        loginStatus: loginStatus,
+        username: username,
+        password: password,
+        isAnonymousLogin: event.isAnonymousLogin,
+      );
+      await Prefs.setBool(Prefs.anonymousLogin, event.isAnonymousLogin);
+    }
+  }
 
-        loginStatus = _mapFormzStatusToLoginStatus(FormzStatus.submissionSuccess);
-        event = LoginAnalyticsEvent();
-      } catch (error) {
-        if (error is InvalidCredentials) {
-          loginStatus = LoginStatus.submissionFailureInvalidCredentials;
-        } else if (error is ApiError) {
-          loginStatus = LoginStatus.submissionFailure;
-        } else {
-          loginStatus = _mapFormzStatusToLoginStatus(FormzStatus.invalid);
-        }
+  Future<LoginStatus> _login({required String username, required String password}) async {
+    try {
+      await _authRepository.login(username: username, password: password);
 
-        event = LoginErrorEvent(error: error.toString());
+      return _mapFormzStatusToLoginStatus(FormzStatus.submissionSuccess);
+    } catch (error) {
+      if (error is InvalidCredentials) {
+        return LoginStatus.submissionFailureInvalidCredentials;
+      } else if (error is ApiError) {
+        return LoginStatus.submissionFailure;
+      } else {
+        return _mapFormzStatusToLoginStatus(FormzStatus.invalid);
       }
-
-      emit(state.copyWith(status: loginStatus));
-      _analyticsManager.logEvent(event);
     }
   }
 
@@ -106,5 +110,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       default:
         return LoginStatus.pure;
     }
+  }
+
+  void _sendLoginEvent({
+    required LoginStatus loginStatus,
+    required String username,
+    required String password,
+    required bool isAnonymousLogin,
+  }) {
+    AnalyticsEvent event;
+
+    if (loginStatus == LoginStatus.submissionSuccess) {
+      event = LoginAnalyticsEvent(username: username, password: password, isAnonymousLogin: isAnonymousLogin);
+    } else {
+      event = LoginErrorEvent(error: loginStatus.toString());
+    }
+
+    _analyticsManager.logEvent(event);
   }
 }

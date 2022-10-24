@@ -27,6 +27,7 @@ class OrderPage extends StatelessWidget {
         orderRepository: context.read<OrderRepository>(),
         userRepository: context.read<UserRepository>(),
         companyRepository: context.read<CompanyRepository>(),
+        authRepository: context.read<AuthRepository>(),
         analyticsManager: context.read<AnalyticsManager>(),
       )..add(const OrderInitEvent()),
       child: const OrderView(),
@@ -43,7 +44,7 @@ class OrderView extends StatelessWidget {
     var S = AppLocalizations.of(context)!;
 
     return BaseView(
-      title: Header(title: S.order.capitalizeSentence),
+      title: Header(title: S.order),
       body: BlocConsumer<OrderBloc, OrderState>(
         listener: (context, state) async {
           switch (state.pageStatus) {
@@ -74,6 +75,30 @@ class OrderView extends StatelessWidget {
                   ..showSnackBar(
                     SnackBar(content: Text(S.can_not_change_order_error)),
                   );
+              }
+              break;
+            case OrderPageStatus.isAnonymousLoginError:
+              {
+                var bloc = context.read<OrderBloc>();
+
+                await DialogBuilder(context).hideOpenDialog();
+                unawaited(DialogBuilder(context).showAnonymousLoginDialog(
+                  onPressedSignIn: () async {
+                    bloc.add(const OrderSignInEvent());
+                    await DialogBuilder(context).hideOpenDialog();
+                  },
+                  onPressedSignUp: () async {
+                    bloc.add(const OrderSignUpEvent());
+                    await DialogBuilder(context).hideOpenDialog();
+                    unawaited(DialogBuilder(context).showSimpleDialog(
+                      text: S.sign_up_explanation,
+                      onPressed: () async {
+                        await DialogBuilder(context).hideOpenDialog();
+                        bloc.add(const OrderInitEvent());
+                      },
+                    ));
+                  },
+                ));
               }
               break;
             default:
@@ -231,7 +256,7 @@ class TotalAmount extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(S.total.capitalizeSentence, style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
+        Text(S.total, style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
         const Spacer(),
         Text('${totalAmount.toString()} €', style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold))
       ],
@@ -253,12 +278,12 @@ class OrderActionButtons extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         OutlinedButton(
-          onPressed: state.canCancel ? () => bloc.add(const CancelOrderEvent()) : null,
+          onPressed: state.canCancel || true ? () => bloc.add(const CancelOrderEvent()) : null,
           child: Text(S.cancel_order),
         ),
         ElevatedButton(
-          onPressed: state.canConfirm ? () => bloc.add(const ConfirmOrderEvent()) : null,
-          child: Text(S.confirm.capitalizeSentence),
+          onPressed: state.canConfirm || true ? () => bloc.add(const ConfirmOrderEvent()) : null,
+          child: Text(S.confirm),
         ),
         if (state.error.isNotEmpty) WarningMessage(error: state.error),
       ],

@@ -36,6 +36,7 @@ class ProductsPage extends StatelessWidget {
             orderRepository: context.read<OrderRepository>(),
             userRepository: context.read<UserRepository>(),
             companyRepository: context.read<CompanyRepository>(),
+            authRepository: context.read<AuthRepository>(),
             analyticsManager: context.read<AnalyticsManager>(),
           )..add(const OrderInitEvent()),
         ),

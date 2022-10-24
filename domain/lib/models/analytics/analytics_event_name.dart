@@ -15,9 +15,12 @@ class AnalyticsEventName {
   static const contactPage = 'contactPage';
   static const contactPhoneTap = 'contactPhoneTap';
   static const contactEmailTap = 'contactEmailTap';
+  static const contactAddressTap = 'contactAddressTap';
   static const orderWebSiteTap = 'orderWebSiteTap';
   static const blogTap = 'blogTap';
   static const login = 'login';
   static const logout = 'logout';
+  static const openLoginFromOrder = 'openLoginFromOrder';
+  static const signUpFromOrder = 'signUpFromOrder';
   static const loginError = 'loginError';
 }

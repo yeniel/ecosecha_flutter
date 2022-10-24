@@ -26,5 +26,10 @@ class LoginPasswordChanged extends LoginEvent {
 }
 
 class LoginSubmitted extends LoginEvent {
-  const LoginSubmitted();
+  const LoginSubmitted({required this.isAnonymousLogin});
+
+  final bool isAnonymousLogin;
+
+  @override
+  List<Object> get props => [isAnonymousLogin];
 }

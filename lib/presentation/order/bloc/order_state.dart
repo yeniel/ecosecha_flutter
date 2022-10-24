@@ -8,6 +8,7 @@ class OrderState extends Equatable {
     this.canConfirm = true,
     this.canCancel = true,
     this.minimumAmount = 0,
+    this.isAnonymousLogin = false,
     this.error = '',
     this.toggleState = true,
   });
@@ -18,10 +19,21 @@ class OrderState extends Equatable {
   final bool canConfirm;
   final bool canCancel;
   final int minimumAmount;
+  final bool isAnonymousLogin;
   final String error;
   final bool toggleState;
 
-  OrderState copyWith({order, totalAmount, pageStatus, canConfirm, canCancel, minimumAmount, error, toggleState}) {
+  OrderState copyWith({
+    order,
+    totalAmount,
+    pageStatus,
+    canConfirm,
+    canCancel,
+    minimumAmount,
+    isAnonymousLogin,
+    error,
+    toggleState,
+  }) {
     return OrderState(
       order: order ?? this.order,
       totalAmount: totalAmount ?? this.totalAmount,
@@ -29,6 +41,7 @@ class OrderState extends Equatable {
       canConfirm: canConfirm ?? this.canConfirm,
       canCancel: canCancel ?? this.canCancel,
       minimumAmount: minimumAmount ?? this.minimumAmount,
+      isAnonymousLogin: isAnonymousLogin ?? this.isAnonymousLogin,
       error: error ?? this.error,
       toggleState: toggleState ?? this.toggleState,
     );
@@ -44,4 +57,5 @@ enum OrderPageStatus {
   confirmationOk,
   confirmationError,
   canNotChangeError,
+  isAnonymousLoginError,
 }
