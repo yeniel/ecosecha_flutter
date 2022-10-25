@@ -131,7 +131,7 @@ class _SkipButton extends StatelessWidget {
             (state.status == LoginStatus.submissionInProgress || state.status == LoginStatus.submissionSuccess)) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          return ElevatedButton(
+          return OutlinedButton(
               key: const Key('skipLoginForm_continue_raisedButton'),
               child: Text(S.skipLogin),
               onPressed: () {

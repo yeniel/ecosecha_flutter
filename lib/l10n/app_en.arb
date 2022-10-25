@@ -1,7 +1,7 @@
 {
   "appName": "Ecosecha",
   "loginHead": "Login",
-  "skipLogin": "Guest",
+  "skipLogin": "Skip for now",
   "loginBody": "Username and password you received in the email from Ecosecha",
   "user": "User",
   "invalidUser": "invalid username",
