@@ -5,4 +5,5 @@ class Constants {
   static const String addressUrl = 'https://goo.gl/maps/EhmPhGTN6i5epfCr7';
   static const String anonymousUsername = '2529';
   static const String anonymousPassword = 'lavapies2012';
+  static const String supportEmail = "y3ni3l@gmail.com";
 }

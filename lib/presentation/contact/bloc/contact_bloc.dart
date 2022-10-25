@@ -43,7 +43,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   Future<void> _onContactEmailTapEvent(ContactEmailTapEvent event, Emitter<ContactState> emit) async {
     final emailLaunchUri = Uri(
       scheme: 'mailto',
-      path: state.company.email,
+      path: Constants.supportEmail,
       query: encodeQueryParameters(<String, String>{
         'subject': 'Duda o sugerencia desde la App',
         'body': 'Hola:\n\n'
