@@ -1,7 +1,7 @@
 {
   "appName": "Ecosecha",
   "loginHead": "Identifícate",
-  "skipLogin": "Ir a la tienda",
+  "skipLogin": "Invitado",
   "loginBody": "Utiliza el usuario y contraseña que recibiste en el email de Ecosecha",
   "user": "Usuario",
   "invalidUser": "usuario no válido",
@@ -46,5 +46,6 @@
   "anonymous_login_error": "¿Todavía no eres cliente?",
   "anonymous_login_sign_in": "Ya soy cliente",
   "anonymous_login_sign_up": "Crear cuenta",
-  "sign_up_explanation": "Cuando su cuenta esté creada recibirá un email con el usuario y contraseña con el que podrá realizar sus pedidos"
+  "sign_up_explanation": "Cuando su cuenta esté creada recibirá un email con el usuario y contraseña con el que podrá realizar sus pedidos",
+  "not_available": "No disponible"
 }

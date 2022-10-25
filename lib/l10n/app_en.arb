@@ -1,7 +1,7 @@
 {
   "appName": "Ecosecha",
   "loginHead": "Login",
-  "skipLogin": "Go to store",
+  "skipLogin": "Guest",
   "loginBody": "Username and password you received in the email from Ecosecha",
   "user": "User",
   "invalidUser": "invalid username",
@@ -54,5 +54,6 @@
   "anonymous_login_error": "Are you already a customer?",
   "anonymous_login_sign_in": "Yes, I'm",
   "anonymous_login_sign_up": "Sign up",
-  "sign_up_explanation": "When your account is ready you will receive an email with your user and password"
+  "sign_up_explanation": "When your account is ready you will receive an email with your user and password",
+  "not_available": "Not available"
 }

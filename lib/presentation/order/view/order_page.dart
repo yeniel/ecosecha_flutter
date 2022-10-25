@@ -106,6 +106,9 @@ class OrderView extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          var deliveryDate = state.isAnonymousLogin ? S.not_available : state.order.date;
+          var deliveryGroup = state.isAnonymousLogin ? S.not_available : state.order.deliveryGroup;
+
           return Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,14 +116,14 @@ class OrderView extends StatelessWidget {
                 Row(
                   children: [
                     Text(S.order_delivery_address_label, style: textTheme.subtitle1),
-                    Text(state.order.deliveryGroup, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
+                    Text(deliveryGroup, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
                     Text(S.order_delivery_date_label, style: textTheme.subtitle1),
-                    Text(state.order.date, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
+                    Text(deliveryDate, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
                   ],
                 ),
                 const SizedBox(height: 8),
