@@ -3,7 +3,6 @@ import 'package:ecosecha_flutter/presentation/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:formz/formz.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -13,11 +12,17 @@ class LoginForm extends StatelessWidget {
 
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status == LoginStatus.submissionFailureInvalidCredentials) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(content: Text(S.invalid_credentials_error)),
+            );
+        } else if (state.status == LoginStatus.submissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(S.server_error)),
             );
         }
       },
@@ -35,6 +40,8 @@ class LoginForm extends StatelessWidget {
             _PasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
             _LoginButton(),
+            _SignUpButton(),
+            _SkipButton(),
           ],
         ),
       ),
@@ -54,7 +61,7 @@ class _UsernameInput extends StatelessWidget {
           key: const Key('loginForm_usernameInput_textField'),
           onChanged: (username) => context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           decoration: InputDecoration(
-            labelText: S.user.capitalizeSentence,
+            labelText: S.user,
             errorText: state.username.invalid ? S.invalidUser : null,
           ),
         );
@@ -76,7 +83,7 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: S.password.capitalizeSentence,
+            labelText: S.password,
             errorText: state.password.invalid ? S.invalidPassword : null,
           ),
         );
@@ -93,18 +100,66 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        if (state.status.isSubmissionInProgress || state.status.isSubmissionSuccess) {
+        if (!state.isAnonymousLogin &&
+            (state.status == LoginStatus.submissionInProgress || state.status == LoginStatus.submissionSuccess)) {
           return const Center(child: CircularProgressIndicator());
         } else {
           return ElevatedButton(
-            key: const Key('loginForm_continue_raisedButton'),
-            child: Text(S.login.capitalizeSentence),
-            onPressed: state.status.isValidated
+            key: const Key('LoginForm_loginButton'),
+            child: Text(S.login),
+            onPressed: state.status.isValidated && !state.isAnonymousLogin
                 ? () {
-                    context.read<LoginBloc>().add(const LoginSubmitted());
+                    context.read<LoginBloc>().add(const LoginSubmitted(isAnonymousLogin: false));
                   }
                 : null,
           );
+        }
+      },
+    );
+  }
+}
+
+class _SignUpButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var S = AppLocalizations.of(context)!;
+
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return ElevatedButton(
+          key: const Key('LoginForm_signUpButton'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange,
+          ),
+          child: Text(S.login_form_sign_up),
+          onPressed: () {
+            context.read<LoginBloc>().add(const LoginSignUp());
+          },
+        );
+      },
+    );
+  }
+}
+
+class _SkipButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var S = AppLocalizations.of(context)!;
+
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        if (state.isAnonymousLogin &&
+            (state.status == LoginStatus.submissionInProgress || state.status == LoginStatus.submissionSuccess)) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return OutlinedButton(
+              key: const Key('LoginForm_skipButton'),
+              child: Text(S.skipLogin),
+              onPressed: () {
+                context.read<LoginBloc>().add(const LoginSubmitted(isAnonymousLogin: true));
+              });
         }
       },
     );

@@ -99,7 +99,7 @@ class ProductGridViewButtons extends StatelessWidget {
             height: 32,
             child: OutlinedButton(
               onPressed: () => bloc.add(AddProductEvent(orderProduct: orderProduct)),
-              child: Text(S.add.capitalizeSentence),
+              child: Text(S.add),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),

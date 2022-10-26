@@ -1,32 +1,35 @@
-- Error con "http://pedidos.ecosecha.org/imagenes/Melon piel sapo.jpg"
+ERRORES
+- Accesibilidad. En Google Play mirar el informe: Pruebas -> Informe Previo al Lanzamiento -> Detales -> Accesibilidad
 
-- Al buscar en Frutas por "ma" sale error:
-The following HttpExceptionWithStatus was thrown resolving an image codec:
-HttpException: Invalid statusCode: 403, uri = http://pedidos.ecosecha.org/imagenes/
-
-When the exception was thrown, this was the stack:
-Image provider: CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0)
- Image key: CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0): CachedNetworkImageProvider("http://pedidos.ecosecha.org/imagenes/", scale: 1.0)
-
-- Codemagic
-- Tests
-
+FEATURES
+- Campaña de promoción. Google Play -> Crecimiento -> Presencia -> Ficha -> Empezar
+- En el icono de la tab order poner un badge (círculo rojo) con el número de items de pedido
 - Poner Buscar Categorías. Que busque en todas la categorias quitando la lista de categorias y poniendo el GridView de productos
-- Guardar pedido no cofirmado en firestore
-- En Contacto si le das a la direccion que abra google maps
-- Registro de nuevos usuarios
 - Onboarding
+- Una slide con los puntos de reparto
+- Sugerir punto de reparto según el gps o dirección que introduzca el usuario
+- Registro de nuevos usuarios
+- Guardar pedido no cofirmado en firestore
 - Widget con la cesta y los extras
 - Notificacion: Si no ha cambiado la cesta por defecto (NO TENGO LA CESTA POR DEFECTO DEL USUARIO)
-- BaseBloc: https://medium.com/flutter-community/mixins-and-base-classes-a-recipe-for-success-in-flutter-bc3fbb5da670
 
+MEJORAS CÓDIGO
+- Codemagic con .yaml
+- Scripts o cliente para lanzar codemagic
+- Tests
+- BaseBloc: https://medium.com/flutter-community/mixins-and-base-classes-a-recipe-for-success-in-fluttºer-bc3fbb5da670
 
 EMPRESA ECOSECHA
-
 - Url Política de privacidad
+- No hay forma de saber si un pedido está confirmado. El json que me llega no sé si tiene el pedido por defecto o un
+pedido modificado por el usuario.
+
 - Cuando se cancela un pedido llega mdoPedidosExtras.cesta == "NO" pero no sé si es porque ese usuario no tiene cesta
 por defecto o porque la ha cancelado.
+cesta == "NO" también llega cuando se cierra el plazo para hacer el pedido
 Además el campo "fecha" se queda con la fecha de la semana anterior y entonces el mensaje (mdoConsumidor.validacion)
 de que no se puede cambiar la cesta pone esa fecha anterior.
 Cuando esto esté arreglado podré cancelar la notificación semanal y volverla a poner cuando vuelva a tener pedido (esto es automático a la siguiente semana?)
+
 - Campo con la fecha cuando se abre el plazo para hacer el pedido
+- La imagen http://pedidos.ecosecha.org/imagenes/Melon%20piel%20sapo.jpg no existe

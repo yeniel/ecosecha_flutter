@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation/basket_product_list/view/basket_product_list_page.dart';
@@ -25,6 +27,7 @@ class OrderPage extends StatelessWidget {
         orderRepository: context.read<OrderRepository>(),
         userRepository: context.read<UserRepository>(),
         companyRepository: context.read<CompanyRepository>(),
+        authRepository: context.read<AuthRepository>(),
         analyticsManager: context.read<AnalyticsManager>(),
       )..add(const OrderInitEvent()),
       child: const OrderView(),
@@ -41,22 +44,71 @@ class OrderView extends StatelessWidget {
     var S = AppLocalizations.of(context)!;
 
     return BaseView(
-      title: Header(title: S.order.capitalizeSentence),
+      title: Header(title: S.order),
       body: BlocConsumer<OrderBloc, OrderState>(
-        listener: (context, state) {
-          if (state.pageStatus == OrderPageStatus.loading) {
-            DialogBuilder(context).showLoadingIndicator(context: context, text: S.loading_indicator);
-          } else if (state.pageStatus == OrderPageStatus.loaded) {
-            DialogBuilder(context).hideOpenDialog();
-          } else if (state.pageStatus == OrderPageStatus.confirmError) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(content: Text(S.confirm_order_error)),
-              );
+        listener: (context, state) async {
+          switch (state.pageStatus) {
+            case OrderPageStatus.loading:
+              {
+                DialogBuilder(context).showLoadingIndicator(text: S.loading_indicator);
+              }
+              break;
+            case OrderPageStatus.confirmationOk:
+              {
+                await DialogBuilder(context).hideOpenDialog();
+                unawaited(DialogBuilder(context).showSimpleDialog(text: S.order_confirmation_message));
+              }
+              break;
+            case OrderPageStatus.confirmationError:
+              {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(content: Text(S.confirm_order_error)),
+                  );
+              }
+              break;
+            case OrderPageStatus.canNotChangeError:
+              {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(content: Text(S.can_not_change_order_error)),
+                  );
+              }
+              break;
+            case OrderPageStatus.isAnonymousLoginError:
+              {
+                var bloc = context.read<OrderBloc>();
+
+                await DialogBuilder(context).hideOpenDialog();
+                unawaited(DialogBuilder(context).showAnonymousLoginDialog(
+                  onPressedSignIn: () async {
+                    bloc.add(const OrderSignInEvent());
+                    await DialogBuilder(context).hideOpenDialog();
+                  },
+                  onPressedSignUp: () async {
+                    bloc.add(const OrderSignUpEvent());
+                    await DialogBuilder(context).hideOpenDialog();
+                    unawaited(DialogBuilder(context).showSimpleDialog(
+                      text: S.sign_up_explanation,
+                      onPressed: () async {
+                        await DialogBuilder(context).hideOpenDialog();
+                        bloc.add(const OrderInitEvent());
+                      },
+                    ));
+                  },
+                ));
+              }
+              break;
+            default:
+              break;
           }
         },
         builder: (context, state) {
+          var deliveryDate = state.isAnonymousLogin ? S.not_available : state.order.date;
+          var deliveryGroup = state.isAnonymousLogin ? S.not_available : state.order.deliveryGroup;
+
           return Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,14 +116,14 @@ class OrderView extends StatelessWidget {
                 Row(
                   children: [
                     Text(S.order_delivery_address_label, style: textTheme.subtitle1),
-                    Text(state.order.deliveryGroup, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
+                    Text(deliveryGroup, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
                     Text(S.order_delivery_date_label, style: textTheme.subtitle1),
-                    Text(state.order.date, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
+                    Text(deliveryDate, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -207,7 +259,7 @@ class TotalAmount extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(S.total.capitalizeSentence, style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
+        Text(S.total, style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
         const Spacer(),
         Text('${totalAmount.toString()} €', style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold))
       ],
@@ -229,15 +281,14 @@ class OrderActionButtons extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         OutlinedButton(
-          onPressed: state.canConfirm ? () => bloc.add(const CancelOrderEvent()) : null,
+          onPressed: state.canCancel ? () => bloc.add(const CancelOrderEvent()) : null,
           child: Text(S.cancel_order),
         ),
         ElevatedButton(
-          onPressed: state.canCancel ? () => bloc.add(const ConfirmOrderEvent()) : null,
-          child: Text(S.confirm.capitalizeSentence),
+          onPressed: state.canConfirm ? () => bloc.add(const ConfirmOrderEvent()) : null,
+          child: Text(S.confirm),
         ),
-        if (state.error.isNotEmpty)
-          WarningMessage(error: state.error),
+        if (state.error.isNotEmpty) WarningMessage(error: state.error),
       ],
     );
   }
@@ -272,4 +323,3 @@ class WarningMessage extends StatelessWidget {
     );
   }
 }
-

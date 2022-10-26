@@ -51,3 +51,17 @@ class ConfirmOrderEvent extends OrderEvent {
   @override
   List<Object?> get props => [];
 }
+
+class OrderSignInEvent extends OrderEvent {
+  const OrderSignInEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class OrderSignUpEvent extends OrderEvent {
+  const OrderSignUpEvent();
+
+  @override
+  List<Object?> get props => [];
+}

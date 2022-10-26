@@ -17,10 +17,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     required OrderRepository orderRepository,
     required CompanyRepository companyRepository,
     required UserRepository userRepository,
+    required AuthRepository authRepository,
     required AnalyticsManager analyticsManager,
   })  : _orderRepository = orderRepository,
         _companyRepository = companyRepository,
         _userRepository = userRepository,
+        _authRepository = authRepository,
         _analyticsManager = analyticsManager,
         super(OrderState()) {
     on<OrderInitEvent>(_onOrderInit);
@@ -29,11 +31,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<DeleteProductEvent>(_onDeleteProduct);
     on<CancelOrderEvent>(_onCancelOrder);
     on<ConfirmOrderEvent>(_onConfirmOrder);
+    on<OrderSignInEvent>(_onOrderSignIn);
+    on<OrderSignUpEvent>(_onOrderSignUp);
   }
 
   final OrderRepository _orderRepository;
   final CompanyRepository _companyRepository;
   final UserRepository _userRepository;
+  final AuthRepository _authRepository;
   final AnalyticsManager _analyticsManager;
   Order? _initialOrder;
 
@@ -45,12 +50,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     await emit.forEach<Order>(
       _orderRepository.order,
       onData: (order) {
+        var isAnonymousLogin = Prefs.getBool(Prefs.anonymousLogin) ?? false;
         var totalAmount = _calculateTotalAmount(order);
         var company = _companyRepository.company;
         var status = OrderPageStatus.init;
         String? error;
-
-        configureLocalNotifications(date: order.date);
 
         _initialOrder ??= Order(
           products: List.from(order.products),
@@ -81,6 +85,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           canConfirm: canConfirm,
           canCancel: canCancel,
           minimumAmount: company?.minimumAmount,
+          isAnonymousLogin: isAnonymousLogin,
           pageStatus: status,
           error: error,
         );
@@ -102,94 +107,153 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   Future<void> _onAddProduct(AddProductEvent event, Emitter<OrderState> emit) async {
-    var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity + 1);
+    if (canChangeOrder) {
+      var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity + 1);
 
-    _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
-    _analyticsManager.logEvent(AddProductAnalyticsEvent(
-      productId: orderProduct.product.id,
-      productName: orderProduct.product.name,
-    ));
+      _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
+      _analyticsManager.logEvent(AddProductAnalyticsEvent(
+        productId: orderProduct.product.id,
+        productName: orderProduct.product.name,
+      ));
+    } else {
+      emit(state.copyWith(pageStatus: OrderPageStatus.canNotChangeError, toggleState: !state.toggleState));
+    }
   }
 
   Future<void> _onSubtractProduct(SubtractProductEvent event, Emitter<OrderState> emit) async {
-    var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity - 1);
+    if (canChangeOrder) {
+      var orderProduct = event.orderProduct.copyWith(quantity: event.orderProduct.quantity - 1);
 
-    _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
-    _analyticsManager.logEvent(SubtractProductAnalyticsEvent(
-      productId: orderProduct.product.id,
-      productName: orderProduct.product.name,
-    ));
+      _orderRepository.addOrUpdateProduct(orderProduct: orderProduct);
+      _analyticsManager.logEvent(SubtractProductAnalyticsEvent(
+        productId: orderProduct.product.id,
+        productName: orderProduct.product.name,
+      ));
+    } else {
+      emit(state.copyWith(pageStatus: OrderPageStatus.canNotChangeError, toggleState: !state.toggleState));
+    }
   }
 
   Future<void> _onDeleteProduct(DeleteProductEvent event, Emitter<OrderState> emit) async {
-    _orderRepository.deleteProduct(orderProduct: event.orderProduct);
+    if (canChangeOrder) {
+      _orderRepository.deleteProduct(orderProduct: event.orderProduct);
 
-    _analyticsManager.logEvent(DeleteProductAnalyticsEvent(
-      productId: event.orderProduct.product.id,
-      productName: event.orderProduct.product.name,
-    ));
+      _analyticsManager.logEvent(DeleteProductAnalyticsEvent(
+        productId: event.orderProduct.product.id,
+        productName: event.orderProduct.product.name,
+      ));
+    } else {
+      emit(state.copyWith(pageStatus: OrderPageStatus.canNotChangeError, toggleState: !state.toggleState));
+    }
   }
 
   Future<void> _onCancelOrder(CancelOrderEvent event, Emitter<OrderState> emit) async {
-    var company = _companyRepository.company;
+    if (state.isAnonymousLogin) {
+      emit(state.copyWith(pageStatus: OrderPageStatus.isAnonymousLoginError));
+      return;
+    }
+
+    var email = _companyRepository.company?.email;
     var user = _userRepository.user;
     var subject = 'Cancelar Pedido';
     var body = 'Hola: Quisiera cancelar mi pedido.\n\nUsuario: ${user?.id}\nEmail: ${user?.email}';
 
     var url = Uri(
       scheme: 'mailto',
-      path: company?.email,
-      query: 'subject=$subject&body=$body',
+      path: email,
+      query: encodeQueryParameters(
+        <String, String>{
+          'subject': subject,
+          'body': body,
+        },
+      ),
     );
 
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    }
-
+    await launchUrl(url);
     _analyticsManager.logEvent(CancelOrderAnalyticsEvent());
   }
 
   Future<void> _onConfirmOrder(ConfirmOrderEvent event, Emitter<OrderState> emit) async {
+    if (state.isAnonymousLogin) {
+      emit(state.copyWith(pageStatus: OrderPageStatus.isAnonymousLoginError));
+      return;
+    }
+
+    await configureLocalNotifications(date: state.order.date);
+
     emit(state.copyWith(pageStatus: OrderPageStatus.loading));
     var response = await _orderRepository.confirmOrder();
 
     if (response) {
-      emit(state.copyWith(pageStatus: OrderPageStatus.loaded, canConfirm: false));
+      emit(state.copyWith(pageStatus: OrderPageStatus.confirmationOk, canConfirm: false));
     } else {
-      emit(state.copyWith(pageStatus: OrderPageStatus.confirmError));
+      emit(state.copyWith(pageStatus: OrderPageStatus.confirmationError));
     }
 
     _analyticsManager.logEvent(ConfirmOrderAnalyticsEvent(success: response));
   }
 
-  void configureLocalNotifications({required String date}) {
-    var orderDate = DateFormat('dd/MM/yyyy').parse(date);
-    var endDate = orderDate.subtract(const Duration(days: 2, hours: 12));
+  Future<void> configureLocalNotifications({required String date}) async {
+    if (await isNotificationsAllowed()) {
+      await AwesomeNotifications().cancelAll();
 
-    if (endDate.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch) {
-      endDate = endDate.add(const Duration(days: 7));
+      var orderDate = DateFormat('dd/MM/yyyy').parse(date);
+      var endDate = orderDate.add(const Duration(days: 4, hours: 12));
+
+      if (endDate.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch) {
+        endDate = endDate.add(const Duration(days: 7));
+      }
+
+      unawaited(
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: 1,
+            channelKey: 'basic_channel',
+            title: 'Ecosecha',
+            body: '¡Último día para modificar tu pedido!',
+            wakeUpScreen: true,
+            category: NotificationCategory.Reminder,
+            notificationLayout: NotificationLayout.BigText,
+            autoDismissible: false,
+          ),
+          schedule: NotificationCalendar(
+            weekday: endDate.weekday,
+            hour: endDate.hour,
+            allowWhileIdle: true,
+            repeats: true,
+            preciseAlarm: true,
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<bool> isNotificationsAllowed() async {
+    var isAllowed = await AwesomeNotifications().isNotificationAllowed();
+
+    if (!isAllowed) {
+      isAllowed = await AwesomeNotifications().requestPermissionToSendNotifications();
     }
 
-    unawaited(
-      AwesomeNotifications().createNotification(
-        content: NotificationContent(
-          id: 1,
-          channelKey: 'basic_channel',
-          title: 'Ecosecha',
-          body: '¡Último día para modificar tu pedido!',
-          wakeUpScreen: true,
-          category: NotificationCategory.Reminder,
-          notificationLayout: NotificationLayout.BigText,
-          autoDismissible: false,
-        ),
-        schedule: NotificationCalendar(
-          weekday: endDate.weekday,
-          hour: endDate.hour,
-          allowWhileIdle: true,
-          repeats: true,
-          preciseAlarm: true,
-        ),
-      ),
+    return isAllowed;
+  }
+
+  Future<void> _onOrderSignIn(OrderSignInEvent event, Emitter<OrderState> emit) async {
+    _authRepository.logout();
+    _analyticsManager.logEvent(OpenLoginFromOrderEvent());
+  }
+
+  Future<void> _onOrderSignUp(OrderSignUpEvent event, Emitter<OrderState> emit) async {
+    final emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: _companyRepository.company?.email,
+      query: encodeQueryParameters(<String, String>{
+        'subject': Constants.signUpSubject,
+        'body': Constants.signUpBody
+      }),
     );
+
+    await launchUrl(emailLaunchUri);
+    _analyticsManager.logEvent(SignUpFromOrderEvent());
   }
 }

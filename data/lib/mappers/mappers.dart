@@ -67,13 +67,20 @@ class Mappers {
 
   static _getProductImageUrl(ProductDto productDto) {
     var imageUrl = 'http://pedidos.ecosecha.org/imagenes/';
+    var imageBasename = '';
 
     if (productDto.image.startsWith('/')) {
       var file = File(productDto.image);
 
-      imageUrl += basename(file.path);
+      imageBasename = basename(file.path);
     } else {
-      imageUrl += productDto.image;
+      imageBasename = productDto.image;
+    }
+
+    if (imageBasename.isEmpty) {
+      imageUrl = Constants.productDefaultImage;
+    } else {
+      imageUrl += imageBasename.replaceAll(' ', '%20');
     }
 
     return imageUrl;

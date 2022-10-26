@@ -52,7 +52,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   }
 
   Future<void> _onProductsSearch(ProductsSearchEvent event, Emitter<ProductsState> emit) async {
-    _searchQuery = event.query;
+    _searchQuery = event.query.toLowerCase();
 
     emit(state.copyWith(products: _filterProductsBySearchQuery()));
   }

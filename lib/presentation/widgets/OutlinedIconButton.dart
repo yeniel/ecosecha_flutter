@@ -12,7 +12,7 @@ class OutlinedIconButton extends StatelessWidget {
       onPressed: onPressed,
       child: Icon(icon),
       style: OutlinedButton.styleFrom(
-        primary: Colors.orange,
+        foregroundColor: Colors.orange,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
           side: const BorderSide(color: Colors.white),

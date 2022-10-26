@@ -24,3 +24,10 @@ class ContactEmailTapEvent extends ContactEvent {
   @override
   List<Object?> get props => [];
 }
+
+class AddressTapEvent extends ContactEvent {
+  const AddressTapEvent();
+
+  @override
+  List<Object?> get props => [];
+}
