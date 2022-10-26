@@ -67,13 +67,20 @@ class Mappers {
 
   static _getProductImageUrl(ProductDto productDto) {
     var imageUrl = 'http://pedidos.ecosecha.org/imagenes/';
+    var imageBasename = '';
 
     if (productDto.image.startsWith('/')) {
       var file = File(productDto.image);
 
-      imageUrl += basename(file.path);
+      imageBasename = basename(file.path);
     } else {
-      imageUrl += productDto.image;
+      imageBasename = productDto.image;
+    }
+
+    if (imageBasename.isEmpty) {
+      imageUrl = Constants.productDefaultImage;
+    } else {
+      imageUrl += imageBasename.replaceAll(' ', '%20');
     }
 
     return imageUrl;
@@ -186,13 +193,38 @@ class Mappers {
   }
 
   static Product _getRelatedProduct({required BasketProductDto basketProductDto, required List<Product> productList}) {
-    var basketMainProductName = basketProductDto.name.split(' ').first;
-    var emptyProduct = Product.emptyWithDefaultImage;
+    var basketProductNameWords = basketProductDto.name.split(' ').map((e) => e.toLowerCase());
 
-    return productList.firstWhere(
-      (product) => product.name.contains(basketMainProductName),
-      orElse: () => emptyProduct,
-    );
+    var productsWithFirstWord = productList.where((product) {
+      return product.name.toLowerCase().contains(basketProductNameWords.first);
+    }).toList();
+
+    var wordCounter = 0;
+    var max = 0;
+    var selectedProduct = Product.emptyWithDefaultImage;
+
+    if (productsWithFirstWord.isNotEmpty) {
+      selectedProduct = productsWithFirstWord.first;
+    }
+
+    for (var product in productsWithFirstWord) {
+      var productNameWords = product.name.split(' ').map((e) => e.toLowerCase());
+
+      for (var word in productNameWords) {
+        if (basketProductNameWords.contains(word)) {
+          wordCounter++;
+        }
+      }
+
+      if (wordCounter > max) {
+        max = wordCounter;
+        selectedProduct = product;
+      }
+
+      wordCounter = 0;
+    }
+
+    return selectedProduct;
   }
 
   static List<Order> toOrderHistoryList({required List<OrderHistoryDto> orderHistoryDtoList}) {

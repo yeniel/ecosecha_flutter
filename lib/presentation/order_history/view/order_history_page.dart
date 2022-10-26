@@ -35,7 +35,7 @@ class OrderHistoryView extends StatelessWidget {
 
     return BaseView(
       title: Header(
-        title: S.order_history.capitalizeSentence,
+        title: S.order_history,
         showBack: true,
         onBack: () => Navigator.of(context).maybePop(),
       ),

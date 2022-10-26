@@ -22,8 +22,8 @@ class BasketsPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => BasketsBloc(
-              productsRepository: context.read<ProductsRepository>(),
-              orderRepository: context.read<OrderRepository>(),
+            productsRepository: context.read<ProductsRepository>(),
+            orderRepository: context.read<OrderRepository>(),
           )..add(const BasketsInitEvent()),
         ),
         BlocProvider(
@@ -31,6 +31,7 @@ class BasketsPage extends StatelessWidget {
             orderRepository: context.read<OrderRepository>(),
             userRepository: context.read<UserRepository>(),
             companyRepository: context.read<CompanyRepository>(),
+            authRepository: context.read<AuthRepository>(),
             analyticsManager: context.read<AnalyticsManager>(),
           )..add(const OrderInitEvent()),
         ),
@@ -47,15 +48,34 @@ class BasketsView extends StatelessWidget {
   Widget build(BuildContext context) {
     var S = AppLocalizations.of(context)!;
 
-    return BaseView(
-      title: Header(title: S.baskets.capitalizeSentence),
-      body: BlocBuilder<BasketsBloc, BasketsState>(
-        builder: (context, state) {
-          return Expanded(
-            child: ProductGridView(orderProducts: state.orderProducts),
-          );
-        },
-      ),
+    return BlocConsumer<OrderBloc, OrderState>(
+      listener: (context, state) {
+        switch (state.pageStatus) {
+          case OrderPageStatus.canNotChangeError:
+            {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(content: Text(S.can_not_change_order_error)),
+                );
+            }
+            break;
+          default:
+            break;
+        }
+      },
+      builder: (context, state) {
+        return BaseView(
+          title: Header(title: S.baskets),
+          body: BlocBuilder<BasketsBloc, BasketsState>(
+            builder: (context, state) {
+              return Expanded(
+                child: ProductGridView(orderProducts: state.orderProducts),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

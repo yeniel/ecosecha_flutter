@@ -15,7 +15,7 @@ class ElevatedIconButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         shadowColor: outlined ? Colors.transparent : Colors.orange,
         surfaceTintColor: outlined ? Colors.transparent : Colors.orange,
-        primary: outlined ? Colors.transparent : Colors.orange,
+        backgroundColor: outlined ? Colors.transparent : Colors.orange,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
           side: const BorderSide(color: Colors.orange),

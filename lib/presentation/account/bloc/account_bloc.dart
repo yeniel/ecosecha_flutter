@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 part 'account_event.dart';
 
@@ -26,11 +27,13 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   final CompanyRepository _companyRepository;
   final AnalyticsManager _analyticsManager;
 
-  void _onAccountInitEvent(AccountInitEvent event, Emitter<AccountState> emit) {
+  Future<void> _onAccountInitEvent(AccountInitEvent event, Emitter<AccountState> emit) async {
     var company = _companyRepository.company;
+    var packageInfo = await PackageInfo.fromPlatform();
+    var version = '${packageInfo.version}+${packageInfo.buildNumber}';
 
     if (company != null) {
-      emit(state.copyWith(ordersWebUrl: company.ordersWebUrl, blogUrl: company.blogUrl));
+      emit(state.copyWith(ordersWebUrl: company.ordersWebUrl, blogUrl: company.blogUrl, version: version));
     }
   }
 

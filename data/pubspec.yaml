@@ -25,7 +25,6 @@ dependencies:
   json_annotation: any
   equatable: any
   path: any
-  shared_preferences: any
   sqflite: any
 
 dev_dependencies:
