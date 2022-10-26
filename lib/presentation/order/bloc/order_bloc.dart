@@ -248,9 +248,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       scheme: 'mailto',
       path: _companyRepository.company?.email,
       query: encodeQueryParameters(<String, String>{
-        'subject': 'Nuevo Cliente',
-        'body':
-            'Hola:\n\nMe gustaría apuntarme como cliente.\n\n¿Me podrían mandar información sobre las diferentes modalidades de Grupos de Consumo, Cestas y A la carta?\n\nTambién sobre los puntos de reparto que tienen actualmente.\n\n Un saludo y muchas gracias.\n\n\nMensaje enviado desde la App\n'
+        'subject': Constants.signUpSubject,
+        'body': Constants.signUpBody
       }),
     );
 

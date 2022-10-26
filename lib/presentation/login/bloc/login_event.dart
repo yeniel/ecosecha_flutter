@@ -33,3 +33,10 @@ class LoginSubmitted extends LoginEvent {
   @override
   List<Object> get props => [isAnonymousLogin];
 }
+
+class LoginSignUp extends LoginEvent {
+  const LoginSignUp();
+
+  @override
+  List<Object> get props => [];
+}

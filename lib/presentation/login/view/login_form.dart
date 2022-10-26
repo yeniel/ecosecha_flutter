@@ -40,7 +40,7 @@ class LoginForm extends StatelessWidget {
             _PasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
             _LoginButton(),
-            const Padding(padding: EdgeInsets.all(12)),
+            _SignUpButton(),
             _SkipButton(),
           ],
         ),
@@ -105,7 +105,7 @@ class _LoginButton extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else {
           return ElevatedButton(
-            key: const Key('loginForm_continue_raisedButton'),
+            key: const Key('LoginForm_loginButton'),
             child: Text(S.login),
             onPressed: state.status.isValidated && !state.isAnonymousLogin
                 ? () {
@@ -114,6 +114,29 @@ class _LoginButton extends StatelessWidget {
                 : null,
           );
         }
+      },
+    );
+  }
+}
+
+class _SignUpButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var S = AppLocalizations.of(context)!;
+
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return ElevatedButton(
+          key: const Key('LoginForm_signUpButton'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange,
+          ),
+          child: Text(S.login_form_sign_up),
+          onPressed: () {
+            context.read<LoginBloc>().add(const LoginSignUp());
+          },
+        );
       },
     );
   }
@@ -132,7 +155,7 @@ class _SkipButton extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else {
           return OutlinedButton(
-              key: const Key('skipLoginForm_continue_raisedButton'),
+              key: const Key('LoginForm_skipButton'),
               child: Text(S.skipLogin),
               onPressed: () {
                 context.read<LoginBloc>().add(const LoginSubmitted(isAnonymousLogin: true));

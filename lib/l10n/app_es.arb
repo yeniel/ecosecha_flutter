@@ -47,5 +47,6 @@
   "anonymous_login_sign_in": "Ya soy cliente",
   "anonymous_login_sign_up": "Crear cuenta",
   "sign_up_explanation": "Cuando su cuenta esté creada recibirá un email con el usuario y contraseña con el que podrá realizar sus pedidos",
-  "not_available": "No disponible"
+  "not_available": "No disponible",
+  "login_form_sign_up": "Hacerme cliente"
 }

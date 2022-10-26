@@ -4,6 +4,7 @@ import 'package:domain/domain.dart';
 import 'package:ecosecha_flutter/presentation//login/login.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'login_event.dart';
 
@@ -19,6 +20,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginUsernameChanged>(_onUsernameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onSubmitted);
+    on<LoginSignUp>(_onSignUp);
   }
 
   final AuthRepository _authRepository;
@@ -127,5 +129,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     _analyticsManager.logEvent(event);
+  }
+
+  void _onSignUp(
+      LoginSignUp event,
+      Emitter<LoginState> emit,
+      ) async {
+    final emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: Constants.signUpEmail,
+      query: encodeQueryParameters(<String, String>{
+        'subject': Constants.signUpSubject,
+        'body': Constants.signUpBody
+      }),
+    );
+
+    await launchUrl(emailLaunchUri);
+    _analyticsManager.logEvent(SignUpFromOrderEvent());
   }
 }

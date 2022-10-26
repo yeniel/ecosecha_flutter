@@ -55,5 +55,6 @@
   "anonymous_login_sign_in": "Yes, I'm",
   "anonymous_login_sign_up": "Sign up",
   "sign_up_explanation": "When your account is ready you will receive an email with your user and password",
-  "not_available": "Not available"
+  "not_available": "Not available",
+  "login_form_sign_up": "Sign Up"
 }

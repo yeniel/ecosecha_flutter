@@ -5,4 +5,19 @@ class Constants {
   static const String addressUrl = 'https://goo.gl/maps/EhmPhGTN6i5epfCr7';
   static const String anonymousUsername = '2529';
   static const String anonymousPassword = 'lavapies2012';
+  static const String signUpEmail = 'info@ecosecha.org';
+  static const String signUpSubject = 'Nuevo Cliente';
+  static const String signUpBody = 'Hola:\n\n'
+      'Me gustaría apuntarme como cliente.\n\n'
+      '¿Me podrían mandar información sobre las diferentes modalidades de Grupos de Consumo, Cestas y A la carta?\n\n'
+      'También sobre los puntos de reparto que tienen actualmente.\n\n'
+      'Nombre y apellidos:\n'
+      'Teléfono y correo electrónico:\n'
+      'Grupo de consumo donde quieres recibir tus pedidos:\n'
+      'Fecha de tu primer pedido:\n'
+      'Deseas combinar PEDIDO A LA CARTA con formato CESTAS ECOSECHA? (SI O NO)\n'
+      'A que cesta ECOSECHA te quieres asociar?:\n'
+      'Periodicidad de reparto de la cesta (semanal o quincenal):\n\n\n'
+      'Un saludo y muchas gracias.\n\n\n'
+      'Mensaje enviado desde la App\n';
 }
