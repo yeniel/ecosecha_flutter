@@ -17,7 +17,7 @@ class SplashPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('assets/app_icon.png'),
-            LoadingIndicator(text: S.splash_page_message),
+            LoadingIndicator(),
           ],
         ),
       ),

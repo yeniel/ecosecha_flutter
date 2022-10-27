@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class LoadingIndicator extends StatelessWidget {
-  LoadingIndicator({this.text = ''});
+  LoadingIndicator({this.text});
 
-  final String text;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
-    var displayedText = text;
+    final displayedText = text;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -16,7 +16,8 @@ class LoadingIndicator extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _getLoadingIndicator(),
-          _getText(displayedText: displayedText, context: context),
+          if (displayedText != null)
+            _getText(displayedText: displayedText, context: context),
         ],
       ),
     );
