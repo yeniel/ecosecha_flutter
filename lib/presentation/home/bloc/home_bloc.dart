@@ -17,8 +17,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeSetTabEvent>(_onHomeSetTab);
 
     var user = _userRepository.user;
+    var isAnonymousLogin = Prefs.getBool(Prefs.anonymousLogin) ?? false;
 
-    if (user != null) {
+    if (user != null && !isAnonymousLogin) {
       _analyticsManager.setUserId(user.id.toString());
     }
   }
