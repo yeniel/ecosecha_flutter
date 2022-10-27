@@ -41,6 +41,7 @@ class _AppViewState extends State<AppView> {
     listenLocalNotifications();
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
