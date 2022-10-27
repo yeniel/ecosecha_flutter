@@ -59,11 +59,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     final formzStatus = FormzStatus.values[state.status.index];
+    final username = event.isAnonymousLogin ? Constants.anonymousUsername : state.username.value;
+    final password = event.isAnonymousLogin ? Constants.anonymousPassword : state.password.value;
 
     if (formzStatus.isValidated || event.isAnonymousLogin) {
       var loginStatus = _mapFormzStatusToLoginStatus(FormzStatus.submissionInProgress);
-      var username = event.isAnonymousLogin ? Constants.anonymousUsername : state.username.value;
-      var password = event.isAnonymousLogin ? Constants.anonymousPassword : state.password.value;
 
       emit(state.copyWith(status: loginStatus, isAnonymousLogin: event.isAnonymousLogin));
       loginStatus = await _login(username: username, password: password);
@@ -125,7 +125,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (loginStatus == LoginStatus.submissionSuccess) {
       event = LoginAnalyticsEvent(username: username, password: password, isAnonymousLogin: isAnonymousLogin);
     } else {
-      event = LoginErrorEvent(error: loginStatus.toString());
+      event = LoginErrorEvent(error: loginStatus.toString(), isAnonymousLogin: isAnonymousLogin);
     }
 
     _analyticsManager.logEvent(event);
