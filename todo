@@ -2,7 +2,6 @@ ERRORES
 - Accesibilidad. En Google Play mirar el informe: Pruebas -> Informe Previo al Lanzamiento -> Detales -> Accesibilidad
 
 FEATURES
-- Campaña de promoción. Google Play -> Crecimiento -> Presencia -> Ficha -> Empezar
 - En el icono de la tab order poner un badge (círculo rojo) con el número de items de pedido
 - Poner Buscar Categorías. Que busque en todas la categorias quitando la lista de categorias y poniendo el GridView de productos
 - Onboarding
