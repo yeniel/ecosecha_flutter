@@ -23,7 +23,7 @@ class Header extends StatelessWidget {
         Expanded(
           child: AutoSizeText(
             title.capitalizeFirstOfEach,
-            style: textTheme.headline4,
+            style: textTheme.headlineMedium,
             minFontSize: 12,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

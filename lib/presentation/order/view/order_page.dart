@@ -115,15 +115,15 @@ class OrderView extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(S.order_delivery_address_label, style: textTheme.subtitle1),
-                    Text(deliveryGroup, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
+                    Text(S.order_delivery_address_label, style: textTheme.titleMedium),
+                    Text(deliveryGroup, style: textTheme.titleMedium?.copyWith(color: Colors.green)),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Text(S.order_delivery_date_label, style: textTheme.subtitle1),
-                    Text(deliveryDate, style: textTheme.subtitle1?.copyWith(color: Colors.green)),
+                    Text(S.order_delivery_date_label, style: textTheme.titleMedium),
+                    Text(deliveryDate, style: textTheme.titleMedium?.copyWith(color: Colors.green)),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -164,7 +164,7 @@ class OrderProductsWidget extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             S.minimum_amount(minimumAmount),
-            style: textTheme.headline6,
+            style: textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
         ],
@@ -206,7 +206,7 @@ class OrderProductWidget extends StatelessWidget {
                       children: [
                         Text(
                           orderProduct.product.name,
-                          style: textTheme.bodyText1,
+                          style: textTheme.bodyLarge,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 3,
                         ),
@@ -215,9 +215,9 @@ class OrderProductWidget extends StatelessWidget {
                           children: [
                             Text(
                               '${orderProduct.product.price}€',
-                              style: textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+                              style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                            Text(S.order_price_per_unit_label, style: textTheme.bodyText1),
+                            Text(S.order_price_per_unit_label, style: textTheme.bodyLarge),
                           ],
                         ),
                       ],
@@ -259,9 +259,9 @@ class TotalAmount extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(S.total, style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
+        Text(S.total, style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const Spacer(),
-        Text('${totalAmount.toString()} €', style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold))
+        Text('${totalAmount.toString()} €', style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold))
       ],
     );
   }
@@ -316,7 +316,7 @@ class WarningMessage extends StatelessWidget {
               padding: EdgeInsets.only(right: 8.0),
               child: Icon(Icons.error_outline_rounded),
             ),
-            Expanded(child: Text(error, style: textTheme.subtitle1)),
+            Expanded(child: Text(error, style: textTheme.titleMedium)),
           ],
         ),
       ),

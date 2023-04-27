@@ -51,7 +51,7 @@ class ProductView extends StatelessWidget {
             const SizedBox(height: 8),
             GridText(
               product.name,
-              style: textTheme.bodyText1,
+              style: textTheme.bodyLarge,
               overflow: TextOverflow.ellipsis,
               minLines: productNameLines,
               maxLines: productNameLines,
@@ -61,9 +61,9 @@ class ProductView extends StatelessWidget {
               children: [
                 Text(
                   '${product.price}€',
-                  style: textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+                  style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                Text(S.order_price_per_unit_label, style: textTheme.bodyText1),
+                Text(S.order_price_per_unit_label, style: textTheme.bodyLarge),
               ],
             ),
             const Spacer(),

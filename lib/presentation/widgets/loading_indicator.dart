@@ -34,7 +34,7 @@ class LoadingIndicator extends StatelessWidget {
 
     return Text(
       displayedText,
-      style: textTheme.bodyText1,
+      style: textTheme.bodyLarge,
       textAlign: TextAlign.center,
     );
   }

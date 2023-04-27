@@ -27,7 +27,7 @@ class ProductQuantity extends StatelessWidget {
       children: [
         Text(
           orderProduct.quantity.toString() + S.order_quantity_label,
-          style: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold, color: Colors.brown),
+          style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: Colors.brown),
           textAlign: TextAlign.right,
         ),
         const Spacer(),

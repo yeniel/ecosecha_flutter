@@ -32,8 +32,8 @@ class LoginForm extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(S.loginHead, style: textTheme.headline4, textAlign: TextAlign.center),
-            Text(S.loginBody, style: textTheme.bodyText1, textAlign: TextAlign.center),
+            Text(S.loginHead, style: textTheme.headlineMedium, textAlign: TextAlign.center),
+            Text(S.loginBody, style: textTheme.bodyLarge, textAlign: TextAlign.center),
             const SizedBox(height: 8),
             _UsernameInput(),
             const Padding(padding: EdgeInsets.all(12)),
