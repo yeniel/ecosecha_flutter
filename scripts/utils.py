@@ -1,14 +1,15 @@
 import subprocess
+import shlex
 
 def exec(command, quiet=False, cwd="."):
-    process = subprocess.Popen(command.split(" "), stdout = subprocess.PIPE, stderr = subprocess.PIPE, cwd=cwd)
-    output = process.communicate()[0]
+    process = subprocess.Popen(shlex.split(command), stdout = subprocess.PIPE, stderr = subprocess.PIPE, cwd=cwd)
+    stdout, stderr = process.communicate()
+
     global returnCode
+
     returnCode = process.returncode
-    error = process.communicate()[1]
-    process.wait()
 
-    if error and not quiet:
-        print(error, flush=True)
-
-    return output.decode('utf_8')
+    if returnCode == 0:
+        return stdout.decode('utf_8')
+    else:
+        print(f"Command failed with return code {returnCode} and output:\n{stderr.decode('utf-8')}")
