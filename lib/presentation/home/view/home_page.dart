@@ -124,11 +124,11 @@ class _HomeViewState extends State<HomeView> {
             align: ContentAlign.top,
             builder: (context, controller) {
               return Container(
-                child: Column(
+                child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'En la pestaña inicial siempre verás tu pedido actual',
                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                     ),
@@ -152,11 +152,11 @@ class _HomeViewState extends State<HomeView> {
             align: ContentAlign.top,
             builder: (context, controller) {
               return Container(
-                child: Column(
+                child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'Aquí podrás consultar todas las cestas que tenemos',
                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                     ),
@@ -180,11 +180,11 @@ class _HomeViewState extends State<HomeView> {
             align: ContentAlign.top,
             builder: (context, controller) {
               return Container(
-                child: Column(
+                child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'Además de las cestas podrás añadir productos extra a tus pedidos',
                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                     ),
