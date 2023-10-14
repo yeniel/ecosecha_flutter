@@ -56,13 +56,17 @@ class OrderRepository {
         "htmlPedido": await _getHtmlPedido()
       };
 
-      return apiClient.post(path: 'grabarpedido', body: body).then((response) {
-        if (kDebugMode) {
-          print(response);
-        }
+      try {
+        return apiClient.post(path: 'grabarpedido', body: body).then((response) {
+          if (kDebugMode) {
+            print(response);
+          }
 
-        return Future.value(true);
-      });
+          return Future.value(true);
+        });
+      } catch (e) {
+        return Future.value(false);
+      }
     } else {
       return Future.value(false);
     }

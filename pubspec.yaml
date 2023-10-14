@@ -29,7 +29,6 @@ dependencies:
   flutter_bloc: any
   auto_route: any
   equatable: any
-  formz: any
   flutter_launcher_icons: any
   cached_network_image: any
   font_awesome_flutter: any
@@ -37,10 +36,12 @@ dependencies:
   url_launcher: any
   awesome_notifications: any
   amplitude_flutter: any
-  firebase_core: ^1.20.0
-  firebase_crashlytics: ^2.8.6
+  firebase_core: any
+  firebase_core_platform_interface: any #4.5.1
+  firebase_crashlytics: any
+  package_info_plus: any
+  formz: 0.4.1
   tutorial_coach_mark: ^1.2.4
-  package_info_plus: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 {
   "appName": "Ecosecha",
   "loginHead": "Identifícate",
-  "skipLogin": "Más tarde",
+  "skipLogin": "Invitado",
   "loginBody": "Utiliza el usuario y contraseña que recibiste en el email de Ecosecha",
   "user": "Usuario",
   "invalidUser": "usuario no válido",
