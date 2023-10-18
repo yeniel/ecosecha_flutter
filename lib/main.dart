@@ -31,7 +31,7 @@ void main() async {
           channelGroups: [
             NotificationChannelGroup(
                 channelGroupName: 'Basic group',
-                channelGroupkey: 'basic_channel_group',
+                channelGroupKey: 'basic_channel_group',
             )
           ],
           debug: true
