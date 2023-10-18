@@ -195,7 +195,9 @@ class Mappers {
   static Product _getRelatedProduct({required BasketProductDto basketProductDto, required List<Product> productList}) {
     var basketProductNameWords = basketProductDto.name.split(' ').map((e) => e.toLowerCase());
 
-    var productsWithFirstWord = productList.where((product) {
+    basketProductNameWords = _sanitizeBasketProductNameWords(basketProductNameWords: basketProductNameWords.toList());
+
+    var productsMatchWithBasketProductNameFirstWord = productList.where((product) {
       return product.name.toLowerCase().contains(basketProductNameWords.first);
     }).toList();
 
@@ -203,11 +205,11 @@ class Mappers {
     var max = 0;
     var selectedProduct = Product.emptyWithDefaultImage;
 
-    if (productsWithFirstWord.isNotEmpty) {
-      selectedProduct = productsWithFirstWord.first;
+    if (productsMatchWithBasketProductNameFirstWord.isNotEmpty) {
+      selectedProduct = productsMatchWithBasketProductNameFirstWord.first;
     }
 
-    for (var product in productsWithFirstWord) {
+    for (var product in productsMatchWithBasketProductNameFirstWord) {
       var productNameWords = product.name.split(' ').map((e) => e.toLowerCase());
 
       for (var word in productNameWords) {
@@ -225,6 +227,22 @@ class Mappers {
     }
 
     return selectedProduct;
+  }
+
+  static List<String> _sanitizeBasketProductNameWords({required List<String> basketProductNameWords}) {
+    var wrongNames = {
+      'berenejsna': 'berenjena',
+      'berenejena': 'berenjena'
+    };
+
+    return basketProductNameWords.map((name) {
+      if (wrongNames.keys.contains(name)) {
+        return wrongNames[name] ?? name;
+      }
+
+      return name;
+    }).toList();
+
   }
 
   static List<Order> toOrderHistoryList({required List<OrderHistoryDto> orderHistoryDtoList}) {
