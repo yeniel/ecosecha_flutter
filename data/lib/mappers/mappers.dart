@@ -170,6 +170,8 @@ class Mappers {
         return 'bread';
       case 24:
         return 'vegetable';
+      case 8:
+        return 'juice';
       default:
         return 'none';
     }

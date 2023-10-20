@@ -89,6 +89,8 @@ class CategoryMenuItemView extends StatelessWidget {
         return FontAwesomeIcons.breadSlice;
       case 'vegetable':
         return FontAwesomeIcons.carrot;
+      case 'juice':
+        return FontAwesomeIcons.bottleDroplet;
       default:
         return FontAwesomeIcons.carrot;
     }
