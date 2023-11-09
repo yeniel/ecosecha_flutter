@@ -47,3 +47,4 @@ app.*.map.json
 /android/key.properties
 
 ios/Runner/GoogleService-Info.plist
+lib/presentation/others/api_keys.dart
