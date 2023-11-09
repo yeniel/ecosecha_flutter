@@ -39,6 +39,7 @@ class _HomeViewState extends State<HomeView> {
   GlobalKey keyOrderTab = GlobalKey();
   GlobalKey keyBasketsTab = GlobalKey();
   GlobalKey keyProductsTab = GlobalKey();
+  GlobalKey keyAccountTab = GlobalKey();
 
   @override
   void initState() {
@@ -85,6 +86,7 @@ class _HomeViewState extends State<HomeView> {
               icon: const Icon(Icons.add_shopping_cart_rounded),
             ),
             _HomeTabButton(
+              key: keyAccountTab,
               groupValue: selectedTab,
               value: HomeTab.account,
               icon: const Icon(Icons.manage_accounts_rounded),
@@ -168,6 +170,7 @@ class _HomeViewState extends State<HomeView> {
         ],
       ),
     );
+
     targets.add(
       TargetFocus(
         identify: 'keyProductsTab',
@@ -186,6 +189,36 @@ class _HomeViewState extends State<HomeView> {
                   children: <Widget>[
                     Text(
                       'Además de las cestas podrás añadir productos extra a tus pedidos',
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+
+    targets.add(
+      TargetFocus(
+        identify: 'keyAccountTab',
+        keyTarget: keyAccountTab,
+        alignSkip: Alignment.bottomRight,
+        enableOverlayTab: true,
+        enableTargetTab: true,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) {
+              return Container(
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Aquí podrás ver toda la información de tu cuenta',
                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ],
