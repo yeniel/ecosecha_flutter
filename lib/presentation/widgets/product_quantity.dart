@@ -35,7 +35,6 @@ class ProductQuantity extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              width: 56,
               height: 32,
               child: ElevatedIconButton(
                 onPressed: orderProduct.quantity == 1 ? onPressedDelete : onPressedSubtract,
@@ -45,7 +44,6 @@ class ProductQuantity extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Container(
-              width: 56,
               height: 32,
               child: ElevatedIconButton(
                 onPressed: onPressedAdd,

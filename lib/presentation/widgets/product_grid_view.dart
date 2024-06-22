@@ -17,7 +17,7 @@ class ProductGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
-      childAspectRatio: (0.75),
+      childAspectRatio: (0.70),
       primary: false,
       crossAxisSpacing: 10,
       mainAxisSpacing: 20,

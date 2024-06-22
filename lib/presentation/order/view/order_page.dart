@@ -191,7 +191,7 @@ class OrderProductWidget extends StatelessWidget {
 
     return GestureDetector(
       child: Container(
-        height: 80,
+        height: 112,
         child: Column(
           children: [
             Expanded(
