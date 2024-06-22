@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GridText extends Text {
-  const GridText(super.data, {
+  const GridText(
+    super.data, {
     super.key,
     super.style,
     super.strutStyle,
@@ -10,13 +11,12 @@ class GridText extends Text {
     super.locale,
     super.softWrap,
     super.overflow,
-    super.textScaleFactor,
     this.minLines = 0,
     super.maxLines,
     super.semanticsLabel,
     super.textWidthBasis,
     super.textHeightBehavior,
-  }) : assert(minLines >= 0),
+  })  : assert(minLines >= 0),
         super();
 
   final int minLines;
@@ -31,14 +31,13 @@ class GridText extends Text {
       children: [
         displayText,
         Text(
-          '\n'* (minLines - 1),
+          '\n' * (minLines - 1),
           style: style,
           strutStyle: strutStyle,
           textAlign: textAlign,
           textDirection: textDirection,
           locale: locale,
           softWrap: softWrap,
-          textScaleFactor: textScaleFactor,
           maxLines: maxLines,
           textHeightBehavior: textHeightBehavior,
         ),
