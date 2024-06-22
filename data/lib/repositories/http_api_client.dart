@@ -10,7 +10,7 @@ class HttpApiClient implements ApiClient {
     client = RetryClient(Client());
   }
 
-  final String _host = 'http://46.26.119.128:8081/';
+  final String _host = 'https://81.0.53.24:8443/';
   final String _basePath = 'WebServicesGneisServer/rest/';
   late RetryClient client;
 
