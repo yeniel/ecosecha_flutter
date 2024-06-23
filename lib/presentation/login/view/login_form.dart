@@ -38,7 +38,8 @@ class LoginForm extends StatelessWidget {
           _PasswordInput(),
           const Padding(padding: EdgeInsets.all(12)),
           _LoginButton(),
-          _SignUpButton(),
+          // TODO: Add a feature flag to show this button
+          // _SignUpButton(),
           _SkipButton(),
         ],
       ),
