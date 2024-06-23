@@ -1,7 +1,7 @@
 name: ecosecha_flutter
 description: Ecosecha
 publish_to: none
-version: 1.0.4+15
+version: 1.0.4+16
 
 environment:
   sdk: '^3.1.0'
